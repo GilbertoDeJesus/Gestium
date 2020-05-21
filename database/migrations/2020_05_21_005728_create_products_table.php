@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
             $table->foreign('provider_id')->references('id')->on('providers');
-            //$table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 
