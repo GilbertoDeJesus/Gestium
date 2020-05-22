@@ -22,7 +22,6 @@ class CreateExpensesTable extends Migration
             $table->timestamps();
 
             $table->foreign('deliverer_id')->references('id')->on('deliverers');
-            $table->foreign('expense_type_id')->references('id')->on('expense_types');
         });
     }
 
