@@ -17,7 +17,8 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('telefono');
-            $table->string('colonia');
+            $table->string('direccion');
+            $table->string('establecimiento');
             $table->string('email');
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
