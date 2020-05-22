@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->decimal('precio_compra',8,2);
             $table->decimal('precio_venta',8,2);
             $table->integer('stock');
+            $table->integer('stock_minimo');
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('provider_id');
             $table->timestamps();
