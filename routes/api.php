@@ -19,7 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResources([
-    'user' => 'API\UsersController',
+    'users' => 'API\UsersController',
+    'customers' => 'API\CustomerController',
+    'routes' => 'API\RouteController'
 ]);
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');
