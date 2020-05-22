@@ -17,7 +17,7 @@ class CreateProvidersTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('telefono')->unique();
-            $table->string('correo')->unique();
+            $table->string('email');
             $table->timestamps();
         });
     }

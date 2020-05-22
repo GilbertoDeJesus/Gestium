@@ -16,8 +16,8 @@ class CreateDeliverersTable extends Migration
         Schema::create('deliverers', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('apaterno');
-            $table->string('amaterno');
+            $table->string('aPaterno');
+            $table->string('aMaterno');
             $table->date('fecha_nacimiento');
             $table->date('fecha_contratacion');
             $table->string('telfono')->unique();
