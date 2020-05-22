@@ -15,10 +15,11 @@ class CreateRoutesTable extends Migration
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('deliverer_id');
             $table->string('municipio');
-            $table->string('colonia');
-            $table->string('calle');
             $table->timestamps();
+
+            $table->foreign('deliverer_id')->references('id')->on('deliverers');
         });
     }
 
