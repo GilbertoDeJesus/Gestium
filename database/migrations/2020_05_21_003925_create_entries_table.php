@@ -16,6 +16,7 @@ class CreateEntriesTable extends Migration
         Schema::create('entries', function (Blueprint $table) {
             $table->id();
             $table->string('observacion');
+            $table->date('fecha_entrada');
             $table->unsignedBigInteger('provider_id');
             $table->timestamps();
 
