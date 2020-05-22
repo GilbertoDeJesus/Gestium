@@ -18,8 +18,9 @@ class CreateCreditsTable extends Migration
             $table->double('monto',8,2);
             $table->string('descripción');
             $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
+
+            $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
 

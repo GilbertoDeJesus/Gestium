@@ -13,7 +13,7 @@ class CreateExpenseTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expense-types', function (Blueprint $table) {
+        Schema::create('expense_types', function (Blueprint $table) {
             $table->id();
             $table->string('descripcion');
             $table->double('monto',8,2);
