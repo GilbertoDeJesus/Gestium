@@ -10,7 +10,7 @@ class Customer extends Model
         return $this->hasOne(Credit::class);
     }
     public function route(){
-        return $this->hasOne(Route::class);
+        return $this->belongsTo(Route::class);
     }
     public function sale(){
         return $this->hasMany(Sale::class);

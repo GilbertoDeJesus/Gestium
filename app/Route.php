@@ -11,7 +11,7 @@ class Route extends Model
         return $this->belongsToMany(Deliverer::class);
     }
     public function customer(){
-        return $this->belongsTo(Customer::class);
+        return $this->hasMany(Customer::class);
     }
-    
+
 }

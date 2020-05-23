@@ -10,6 +10,6 @@ class Entry extends Model
         return $this->belongsToMany(Product::class);
     }
     public function provider(){
-        return $this->hasOne(Provider::class);
+        return $this->belongsTo(Provider::class);
     }
 }
