@@ -7,4 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Route extends Model
 {
     protected $guarded = [];
+    public function deliverer(){
+        return $this->belongsToMany(Deliverer::class);
+    }
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
+    
 }
