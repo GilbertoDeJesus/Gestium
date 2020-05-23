@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeliverersRoutesTable extends Migration
+class CreateDelivererRouteTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDeliverersRoutesTable extends Migration
      */
     public function up()
     {
-        Schema::create('deliverers_routes', function (Blueprint $table) {
+        Schema::create('deliverer_route', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('deliverer_id');
             $table->unsignedBigInteger('route_id');
@@ -31,6 +31,6 @@ class CreateDeliverersRoutesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deliverers_routes');
+        Schema::dropIfExists('deliverer_route');
     }
 }

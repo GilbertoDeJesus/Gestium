@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReturnsTable extends Migration
+class CreateProductSaleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateReturnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('returns', function (Blueprint $table) {
+        Schema::create('product_sale', function (Blueprint $table) {
             $table->id();
-            $table->id('cantidad');
-            $table->date('fecha');
-            $table->string('observacion');
-            $table->boolean('cambio');
-            $table->boolean('merma');
+            $table->integer('cantidad');
+            $table->decimal('precio_venta',6,2);
+            $table->decimal('precio_compra',6,2);
+            $table->decimal('monto',6,2);
+            $table->unsignedBigInteger('product_depurate_id');
             $table->unsignedBigInteger('sale_id');
             $table->timestamps();
-            
+
+            $table->foreign('product_depurate_id')->references('id')->on('depurate_product');
             $table->foreign('sale_id')->references('id')->on('sales');
         });
     }
@@ -34,6 +35,6 @@ class CreateReturnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('returns');
+        Schema::dropIfExists('product_sale');
     }
 }

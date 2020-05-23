@@ -15,10 +15,10 @@ class CreateDepuratesTable extends Migration
     {
         Schema::create('depurates', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha')->required();
-            $table->unsignedBigInteger('provider_id');
+            $table->date('fecha_salida');
+            $table->unsignedBigInteger('deliverer_id');
             $table->timestamps();
-            $table->foreign('provider_id')->references('id')->on('providers');
+            $table->foreign('deliverer_id')->references('id')->on('deliverers');
         });
     }
 
