@@ -19,6 +19,6 @@ class Deliverer extends Model
         return $this->hasMany(Sale::class);
     }
     public function route(){
-        return $this->belongsToMany(Route::class);
+        return $this->belongsToMany(Route::class)->withTimestamps();
     }
 }
