@@ -18,7 +18,6 @@ class CreateRoutesTable extends Migration
             $table->unsignedBigInteger('deliverer_id');
             $table->string('municipio');
             $table->timestamps();
-
             $table->foreign('deliverer_id')->references('id')->on('deliverers');
         });
     }

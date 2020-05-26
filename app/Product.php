@@ -18,4 +18,6 @@ class Product extends Model
     public function sale(){
         return $this->belongsToMany(Sale::class);
     }
+    protected $guarded = [];
+
 }

@@ -21,4 +21,5 @@ class Deliverer extends Model
     public function route(){
         return $this->belongsToMany(Route::class);
     }
+    protected $guarded = [];
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Customer;
-use Illuminate\Http\Request;
+use App\Bond;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class BondController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,13 +26,10 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        return Customer::create([
-            'route_id' => $request['route_id'],
-            'nombre' => $request['nombre'],
-            'telefono' => $request['telefono'],
-            'email' => $request['email'],
-            'establecimiento' => $request['observacion'],
-            'direccion' => $request['direccion']
+        return Bond::create([
+            'goal_id' => $request['goal_id'],
+            'porcentaje' => $request['porcentaje'],
+            'cantidad' => $request['cantidad']
         ]);
     }
 
@@ -67,6 +64,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
 }

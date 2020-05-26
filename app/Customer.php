@@ -15,4 +15,6 @@ class Customer extends Model
     public function sale(){
         return $this->hasMany(Sale::class);
     }
+    protected $guarded = [];
+
 }

@@ -12,4 +12,5 @@ class Entry extends Model
     public function provider(){
         return $this->belongsTo(Provider::class);
     }
+    protected $guarded = [];
 }

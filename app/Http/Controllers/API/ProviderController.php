@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Customer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Provider;
+use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class ProviderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,13 +26,10 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        return Customer::create([
-            'route_id' => $request['route_id'],
+        return Provider::create([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
-            'email' => $request['email'],
-            'establecimiento' => $request['observacion'],
-            'direccion' => $request['direccion']
+            'email' => $request['email']
         ]);
     }
 
@@ -67,6 +64,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
 }

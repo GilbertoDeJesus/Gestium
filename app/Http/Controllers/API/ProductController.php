@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Customer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Product;
+use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,13 +26,17 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        return Customer::create([
-            'route_id' => $request['route_id'],
+        return Product::create([
+            'provider_id' => $request['provider_id'],
+            'unit_id' => $request['unit_id'],
             'nombre' => $request['nombre'],
-            'telefono' => $request['telefono'],
-            'email' => $request['email'],
-            'establecimiento' => $request['observacion'],
-            'direccion' => $request['direccion']
+            'meta' => $request['meta'],
+            'descripcion' => $request['descripcion'],
+            'precio_compra' => $request['precio_compra'],
+            'precio_venta' => $request['precio_venta'],
+            'stock' => $request['stock'],
+            'stock_minimo' => $request['stock_minimo'],
+            'status' => $request['status']
         ]);
     }
 
@@ -67,6 +71,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        
+        //
     }
 }
