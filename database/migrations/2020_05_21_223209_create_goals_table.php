@@ -19,9 +19,12 @@ class CreateGoalsTable extends Migration
             $table->string('nombre_producto');
             $table->integer('numero_kilos');
             $table->unsignedBigInteger('deliverer_id');
+            
+
             $table->timestamps();
 
             $table->foreign('deliverer_id')->references('id')->on('deliverers');
+            
         });
     }
 

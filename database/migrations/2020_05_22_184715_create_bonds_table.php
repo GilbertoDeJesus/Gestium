@@ -19,7 +19,6 @@ class CreateBondsTable extends Migration
             $table->decimal('cantidad',8,2);
             $table->unsignedBigInteger('goal_id');
             $table->timestamps();
-
             $table->foreign('goal_id')->references('id')->on('goals');
         });
     }

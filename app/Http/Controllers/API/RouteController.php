@@ -27,9 +27,8 @@ class RouteController extends Controller
     public function store(Request $request)
     {
         return Route::create([
+            'deliverer_id' => $request['deliverer_id'],
             'municipio' => $request['municipio'],
-            'colonia' => $request['colonia'],
-            'calle' => $request['calle']
         ]);
     }
 

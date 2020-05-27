@@ -21,7 +21,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResources([
     'users' => 'API\UsersController',
     'customers' => 'API\CustomerController',
-    'routes' => 'API\RouteController'
+    'routes' => 'API\RouteController',
+    'bonds' => 'API\BondController',
+    'goals' => 'API\GoalController',
+    'deliverers' => 'API\DelivererController',
+    'expenses' => 'API\ExpenseController',
+    'depurates' => 'API\DepurateController',
+    'sales' => 'API\SaleController',
+    'credits' => 'API\CreditController',
+    'payments' => 'API\PaymentController',
+    'products'=> 'API\ProductsController',
+    'entries'=> 'API\EntryController',
+    'providers' => 'API\Provider'
+
+
 ]);
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');

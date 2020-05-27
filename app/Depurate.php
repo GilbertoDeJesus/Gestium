@@ -14,4 +14,6 @@ class Depurate extends Model
      ->withPivot('cantidad')
      ->withTimestamps();
  }
+ protected $guarded = [];
+
 }

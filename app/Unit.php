@@ -9,4 +9,6 @@ class Unit extends Model
     public function product() {
         return $this->hasMany(Product::class);
     }
+    protected $guarded = [];
+
 }

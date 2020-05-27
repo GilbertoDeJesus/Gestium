@@ -24,4 +24,6 @@ class Product extends Model
         ->withPivot('cantidad', 'precio_venta','precio_compra','monto','product_depurate_id')
         ->withTimestamps();
     }
+    protected $guarded = [];
+
 }

@@ -9,4 +9,5 @@ class Payment extends Model
     public function credit(){
         return $this->belongsTo(Credit::class);
     }
+    protected $guarded = [];
 }

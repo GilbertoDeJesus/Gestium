@@ -12,4 +12,5 @@ class Credit extends Model
     public function payment(){
         return $this->hasMany(Payment::class);
     }
+    protected $guarded = [];
 }

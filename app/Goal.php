@@ -12,4 +12,5 @@ class Goal extends Model
     public function bond(){
         return $this->hasOne(Bond::class);
     }
+    protected $guarded = [];
 }
