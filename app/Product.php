@@ -15,15 +15,11 @@ class Product extends Model
         ->withTimestamps();
     }
     public function depurate(){
-        return $this->belongsToMany(Depurate::class)
-        ->withPivot('cantidad')
-        ->withTimestamps();
+        return $this->belongsToMany(Depurate::class)->using(DepurateProduct::class);
+
     }
-    public function sale(){
-        return $this->belongsToMany(Sale::class)
-        ->withPivot('cantidad', 'precio_venta','precio_compra','monto','product_depurate_id')
-        ->withTimestamps();
-    }
+
+
     protected $guarded = [];
 
 }

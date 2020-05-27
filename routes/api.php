@@ -30,9 +30,9 @@ Route::apiResources([
     'sales' => 'API\SaleController',
     'credits' => 'API\CreditController',
     'payments' => 'API\PaymentController',
-    'products'=> 'API\ProductsController',
+    'products'=> 'API\ProductController',
     'entries'=> 'API\EntryController',
-    'providers' => 'API\Provider'
+    'providers' => 'API\ProviderController'
 
 
 ]);

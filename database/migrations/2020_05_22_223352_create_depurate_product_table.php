@@ -15,12 +15,12 @@ class CreateDepurateProductTable extends Migration
     {
         Schema::create('depurate_product', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('products_id');
-            $table->unsignedBigInteger('depurates_id');
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('depurate_id');
             $table->integer('cantidad');
             $table->timestamps();
-            $table->foreign('products_id')->references('id')->on('products');
-            $table->foreign('depurates_id')->references('id')->on('depurates');
+            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('depurate_id')->references('id')->on('depurates');
 
         });
     }
