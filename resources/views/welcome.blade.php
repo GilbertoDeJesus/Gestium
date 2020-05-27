@@ -15,10 +15,16 @@
         <!-- Styles -->
         <style>
             html, body {
+                background: url(material/img/Home1.png)no-repeat center fixed;
+                background-repeat: no-repeat;
+	            -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
                 background-color: #fff;
-                color: #636b6f;
+                color: #fff;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
+                text-shadow: 2px 2px 2px #333232;
                 height: 100vh;
                 margin: 0;
             }
@@ -48,11 +54,12 @@
             }
 
             .title {
-                font-size: 84px;
+                font-size: 90px;
+
             }
 
             .links > a {
-                color: #636b6f;
+                color: #fff;
                 padding: 0 25px;
                 font-size: 13px;
                 font-weight: 600;
@@ -62,7 +69,22 @@
             }
 
             .m-b-md {
-                margin-bottom: 30px;
+                margin-bottom: 170px;
+                padding-bottom: 0px;
+            }
+
+            .mentop{
+                letter-spacing: .2rem;
+                 line-height: 120px;
+            }
+
+            .submenu{
+                font-size: 23px;
+                line-height: 0px;
+            }
+            .content .m-b-md .mentop{
+                padding: 0px;
+                margin: 0px;
             }
         </style>
     </head>
@@ -80,18 +102,10 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Gestium
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <p class="mentop">Gestium</p>
+                    <div class="subtitle">
+                        <p class="submenu">Aplicación de administración</p>
+                    </div>
                 </div>
             </div>
         </div>
