@@ -217,7 +217,7 @@
             },
             async save () {
                 if (this.editedIndex > -1) {
-                    const response = await axios.put(`api/user/${this.editedItem.id}`, this.editedItem)
+                    const response = await axios.put(`api/users/${this.editedItem.id}`, this.editedItem)
                     .catch(error => console.log(error));
                     if (response.data.validation_errors) {
                         Toast.fire({
@@ -233,7 +233,7 @@
                         })
                     }
                 } else {
-                    const response = await axios.post('/api/user',{
+                    const response = await axios.post('/api/users',{
                         'name': this.editedItem.name,
                         'email' : this.editedItem.email,
                         'password': this.editedItem.password
@@ -265,7 +265,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios.delete(`api/user/${this.editedItem.id}`).then(() => {
+                        axios.delete(`api/users/${this.editedItem.id}`).then(() => {
                             this.getResults();
                             Swal.fire(
                             'Eliminado!',
@@ -282,7 +282,7 @@
             },
 
             getResults() {
-                axios.get('api/user')
+                axios.get('api/users')
                 .then(response => {
                     this.desserts = response.data;
                     console.log(response.data)
