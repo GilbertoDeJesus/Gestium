@@ -15,7 +15,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+        return Unit::get();
     }
 
     /**

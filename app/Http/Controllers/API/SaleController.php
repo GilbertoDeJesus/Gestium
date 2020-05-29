@@ -15,7 +15,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        return Sale::get();
     }
 
     /**
