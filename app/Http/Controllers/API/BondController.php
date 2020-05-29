@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Bond;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BondController extends Controller
 {
@@ -53,7 +54,23 @@ class BondController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $bond = bond::findOrFail($id);
+        $validator = Validator ::make( $request->all(),[
+
+            'goal_id' => 'required|Integer',
+            'porcentaje' =>'required|numeric',
+            'cantidad'=>'required|numeric',
+        ]);
+        if($validator->fails()){
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+        $bond->update([
+            'goal_id' => $request['goal_id'],
+            'porcentaje' => $request['porcentaje'],
+            'cantidad' => $request['cantidad']
+        ]);
+        return $bond;
+
     }
 
     /**
@@ -64,6 +81,9 @@ class BondController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $bond = bond::findOrFail($id);
+        $bond->update([
+            'status' => false,
+        ]);
     }
 }

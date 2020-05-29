@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Provider;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class ProviderController extends Controller
 {
     /**
@@ -53,7 +53,22 @@ class ProviderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $provider = provider::findOrFail($id);
+        $validator= Validator ::make($request->all(),[
+            'nombre'=> 'required|max:40',
+            'telefono' =>'required|max:40',
+            'email' =>'required|max:40',
+        ]);
+        if($validator->fails()){
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+        $provider->update([
+            'nombre' => $request['nombre'],
+            'telefono' => $request['telefono'],
+            'email' => $request['email'],
+        ]);
+        return $provider;
+
     }
 
     /**
@@ -64,6 +79,9 @@ class ProviderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $provider = provider::findOrFail($id);
+        $provider->update([
+            'status'=>false,
+        ]);
     }
 }
