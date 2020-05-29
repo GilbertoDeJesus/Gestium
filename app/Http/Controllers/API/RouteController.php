@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Route;
+use Illuminate\Support\Facades\Validator;
 
 class RouteController extends Controller
 {
@@ -29,6 +30,7 @@ class RouteController extends Controller
         return Route::create([
             'deliverer_id' => $request['deliverer_id'],
             'municipio' => $request['municipio'],
+            'status'=>true
         ]);
     }
 
@@ -52,7 +54,23 @@ class RouteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $route = Route::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'deliverer_id' => 'required|Integer',
+            'municipio' => 'required|max:255'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $route->update([
+            'deliverer_id' => $request['deliverer_id'],
+            'municipio' => $request['municipio']
+             ]);
+     return $route;
     }
 
     /**
@@ -63,6 +81,9 @@ class RouteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $route = Route::findOrFail($id);
+        $route->update([
+            'status' => false
+        ]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
+use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use App\Sale;
@@ -30,7 +31,7 @@ class SaleController extends Controller
             'deliverer_id' => $request['deliverer_id'],
             'customer_id' => $request['customer_id'],
             'fecha' => $request['fecha'],
-            'monto' => $request['observacion'],
+            'monto' => $request['monto'],
             'observacion' => $request['observacion']
         ]);
     }
@@ -55,7 +56,29 @@ class SaleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $sale = Sale::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'deliverer_id' => 'required|Integer',
+            'customer_id' => 'required|Integer',
+            'fecha' =>'required|date',
+            'monto' => 'required|numeric',
+            'observacion' => 'required|max:255'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $sale->update([
+            'deliverer_id' => $request['deliverer_id'],
+            'customer_id' => $request['customer_id'],
+            'fecha' => $request['fecha'],
+            'monto' => $request['monto'],
+            'observacion' => $request['observacion']
+                              ]);
+     return $sale;
     }
 
     /**
@@ -66,6 +89,5 @@ class SaleController extends Controller
      */
     public function destroy($id)
     {
-        //
     }
 }

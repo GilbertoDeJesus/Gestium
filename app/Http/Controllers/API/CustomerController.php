@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -32,7 +33,8 @@ class CustomerController extends Controller
             'telefono' => $request['telefono'],
             'email' => $request['email'],
             'establecimiento' => $request['establecimiento'],
-            'direccion' => $request['direccion']
+            'direccion' => $request['direccion'],
+            'status'=> true
         ]);
     }
 
@@ -56,7 +58,32 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $customer = Customer::findOrFail($id);
 
+        $validator = Validator::make( $request->all(), [
+           'route_id' => 'required|Integer',
+            'nombre' => 'required|min:5',
+            'telefono' => 'nullable',
+            'email' => 'nullable|email',
+            'establecimiento' =>'required|max:255',
+            'direccion' => 'required|max:255',
+
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $customer->update([
+            'route_id' => $request['route_id'],
+            'nombre' => $request['nombre'],
+            'telefono' => $request['telefono'],
+            'email' => $request['email'],
+            'establecimiento' => $request['establecimiento'],
+            'direccion' => $request['direccion']
+                   ]);
+     return $customer;
     }
 
     /**
@@ -67,6 +94,10 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
+        $customer = Customer::findOrFail($id);
+        $customer->update([
+            'status' => false
+        ]);
 
     }
 }
