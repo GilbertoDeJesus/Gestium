@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Deliverer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DelivererController extends Controller
 {
@@ -33,7 +34,8 @@ class DelivererController extends Controller
             'fecha_nacimiento' => $request['fecha_nacimiento'],
             'fecha_contratacion' => $request['fecha_contratacion'],
             'telfono' => $request['telfono'],
-            'email' => $request['email']
+            'email' => $request['email'],
+            'status' => true
         ]);
     }
 
@@ -57,7 +59,33 @@ class DelivererController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $deliverer = deliverer::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'nombre' => 'required|min:3',
+            'aPaterno' => 'required|min:3',
+            'aMaterno' => 'required|min:3',
+            'fecha_nacimiento' => 'nullable|date',
+            'fecha_contratacion' => 'required|date',
+            'telfono' => 'nullable',
+            'email' => 'nullable|email',
+            
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+        $deliverer->update([
+            'nombre' => $request['nombre'],
+            'aPaterno' => $request['aPaterno'],
+            'aMaterno' => $request['aMaterno'],
+            'fecha_nacimiento' => $request['fecha_nacimiento'],
+            'fecha_contratacion' => $request['fecha_contratacion'],
+            'telfono' => $request['telfono'],
+            'email' => $request['email'],
+        ]);
+
+        return$deliverer;
     }
 
     /**
@@ -68,6 +96,9 @@ class DelivererController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deliverer = deliverer::findOrFail($id);
+        $deliverer->update([
+            'status' => false,
+        ]);
     }
 }

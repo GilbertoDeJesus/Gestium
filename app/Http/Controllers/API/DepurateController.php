@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Depurate;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DepurateController extends Controller
 {
@@ -52,7 +53,24 @@ class DepurateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $depurate = depurate::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'deliverer_id' => 'required|Integer',
+            'fecha_salida' => 'required|date',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $depurate->update([
+            'deliverer_id' => $request['deliverer_id'],
+            'fecha_salida' => $request['fecha_salida'],
+        ]);
+
+        return$depurate;
     }
 
     /**
@@ -63,6 +81,9 @@ class DepurateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $depurate = depurate::findOrFail($id);
+        $depurate->update([
+            'status' => false,
+        ]);
     }
 }

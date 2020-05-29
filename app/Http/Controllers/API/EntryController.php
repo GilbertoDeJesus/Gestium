@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Entry;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EntryController extends Controller
 {
@@ -53,7 +54,26 @@ class EntryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $entry = entry::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'provider_id' => 'required|Integer',
+            'observacion' => 'required|max:200',
+            'fecha_entrada' => 'required|date',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $entry->update([
+            'provider_id' => $request['provider_id'],
+            'observacion' => $request['observacion'],
+            'fecha_entrada' => $request['fecha_entrada'],
+        ]);
+
+        return$entry;
     }
 
     /**
@@ -64,6 +84,9 @@ class EntryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $entry = entry::findOrFail($id);
+        $entry->update([
+            'status' => false,
+        ]);
     }
 }
