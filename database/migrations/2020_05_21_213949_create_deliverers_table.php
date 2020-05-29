@@ -18,10 +18,11 @@ class CreateDeliverersTable extends Migration
             $table->string('nombre');
             $table->string('aPaterno');
             $table->string('aMaterno');
-            $table->date('fecha_nacimiento');
+            $table->date('fecha_nacimiento')->NULL;
             $table->date('fecha_contratacion');
-            $table->string('telfono')->unique();
-            $table->string('email')->unique();
+            $table->string('telfono')->NULL;
+            $table->string('email')->NULL;
+            $table->boolean('status')->TRUE;
             $table->timestamps();
         });
     }
