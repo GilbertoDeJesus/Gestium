@@ -15,7 +15,7 @@ class DelivererController extends Controller
      */
     public function index()
     {
-        //
+        return Deliverer::get();
     }
 
     /**

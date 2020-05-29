@@ -15,7 +15,7 @@ class DepurateController extends Controller
      */
     public function index()
     {
-        //
+        return Depurate::get();
     }
 
     /**

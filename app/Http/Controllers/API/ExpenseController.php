@@ -15,7 +15,7 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        return Expense::get();
     }
 
     /**

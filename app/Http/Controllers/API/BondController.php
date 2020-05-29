@@ -15,7 +15,7 @@ class BondController extends Controller
      */
     public function index()
     {
-        //
+        return Bond::get();
     }
 
     /**

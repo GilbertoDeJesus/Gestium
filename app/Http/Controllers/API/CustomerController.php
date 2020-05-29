@@ -15,7 +15,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return Customer::get();
     }
 
     /**
@@ -31,7 +31,7 @@ class CustomerController extends Controller
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
             'email' => $request['email'],
-            'establecimiento' => $request['observacion'],
+            'establecimiento' => $request['establecimiento'],
             'direccion' => $request['direccion']
         ]);
     }
@@ -56,7 +56,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -67,6 +67,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        
+
     }
 }
