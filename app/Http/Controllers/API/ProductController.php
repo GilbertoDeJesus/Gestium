@@ -37,7 +37,7 @@ class ProductController extends Controller
             'precio_venta' => $request['precio_venta'],
             'stock' => $request['stock'],
             'stock_minimo' => $request['stock_minimo'],
-            'status' => $request['status']
+            'status' => true
         ]);
     }
 
@@ -64,9 +64,9 @@ class ProductController extends Controller
         $product = product::findOrFail($id);
         $validator = Validator ::make( $request->all(),[
             'provider_id'=> 'required|Integer',
-            'unit_id' => 'required |unit_id|Integer',
+            'unit_id' => 'required |Integer',
             'nombre' => 'required|max:200',
-            'meta' => 'required|Byte',
+            'meta' => 'required|boolean',
             'descripcion' =>'required|max:200',
             'precio_compra' => 'required|numeric',
             'precio_venta'=>'required|numeric',

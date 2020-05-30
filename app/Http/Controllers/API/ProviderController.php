@@ -29,7 +29,8 @@ class ProviderController extends Controller
         return Provider::create([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
-            'email' => $request['email']
+            'email' => $request['email'],
+            'status'=> true
         ]);
     }
 
