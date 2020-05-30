@@ -33,7 +33,7 @@ class DelivererController extends Controller
             'aMaterno' => $request['aMaterno'],
             'fecha_nacimiento' => $request['fecha_nacimiento'],
             'fecha_contratacion' => $request['fecha_contratacion'],
-            'telfono' => $request['telfono'],
+            'telefono' => $request['telefono'],
             'email' => $request['email'],
             'status' => true
         ]);
@@ -67,7 +67,7 @@ class DelivererController extends Controller
             'aMaterno' => 'required|min:3',
             'fecha_nacimiento' => 'nullable|date',
             'fecha_contratacion' => 'required|date',
-            'telfono' => 'nullable',
+            'telefono' => 'nullable',
             'email' => 'nullable|email',
             
         ]);
@@ -81,7 +81,7 @@ class DelivererController extends Controller
             'aMaterno' => $request['aMaterno'],
             'fecha_nacimiento' => $request['fecha_nacimiento'],
             'fecha_contratacion' => $request['fecha_contratacion'],
-            'telfono' => $request['telfono'],
+            'telefono' => $request['telefono'],
             'email' => $request['email'],
         ]);
 

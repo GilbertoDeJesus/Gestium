@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Expense;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -53,8 +54,28 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $expense = expense::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'deliverer_id' => 'nullable|Integer',
+            'descripcion' => 'required|max:200',
+            'monto' => 'required|numeric',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $expense->update([
+            'deliverer_id' => $request['deliverer_id'],
+            'descripcion' => $request['descripcion'],
+            'monto' => $request['monto'],
+        ]);
+
+        return$expense;
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -64,6 +85,9 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $expense = expense::findOrFail($id);
+        $expense->update([
+            'status' => false,
+        ]);
     }
 }

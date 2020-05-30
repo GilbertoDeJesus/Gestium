@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Goal;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class GoalController extends Controller
@@ -54,7 +55,28 @@ class GoalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $goal = goal::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'deliverer_id' => 'required|Integer',
+            'producto_meta' => 'required|boolean',
+            'nombre_producto' => 'required|max:200',
+            'numero_kilos' => 'required|Integer',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $goal->update([
+            'deliverer_id' => $request['deliverer_id'],
+            'producto_meta' => $request['producto_meta'],
+            'nombre_producto' => $request['nombre_producto'],
+            'numero_kilos' => $request['numero_kilos'],
+        ]);
+
+        return$goal;
     }
 
     /**
@@ -65,6 +87,9 @@ class GoalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $goal = goal::findOrFail($id);
+        $goal->update([
+            'status' => false,
+        ]);
     }
 }
