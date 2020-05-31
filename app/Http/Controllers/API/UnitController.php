@@ -27,7 +27,7 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         return Unit::create([
-            'unidad' => $request['unidad'],     
+            'tipo' => $request['tipo'],     
         ]);
     }
 
