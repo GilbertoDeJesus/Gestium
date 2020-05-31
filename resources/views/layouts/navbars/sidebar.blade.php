@@ -11,41 +11,97 @@
   <div class="sidebar-wrapper">
     <ul class="nav">
         <li class="nav-item">
-            <router-link to="/home" class="nav-link" title="Home">
-                <i class="material-icons">home</i>
-                <p>Home</p>
+            <router-link to="/home" class="nav-link" title="Usuarios">
+                <i class="material-icons">account_box</i>
+                <p>Usuarios</p>
             </router-link>
           </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#customers" aria-expanded="true">
           {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
-          <i class="material-icons">widgets</i>
-          <p>{{ __('Dropdown Menu') }}
+          <i class="material-icons">supervised_user_circle</i>
+          <p>{{ __('Clientes') }}
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse" id="laravelExample">
+        <div class="collapse" id="customers">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_component" class="nav-link" title="Testing">
-                    <i class="material-icons">extension</i>
-                    <p>Testing</p>
+                <router-link to="/test_component" class="nav-link" title="Registro de clientes">
+                    <i class="material-icons">folder_shared</i>
+                    <p>Registros</p>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_component" class="nav-link" title="About">
-                    <i class="material-icons">content_paste</i>
-                    <p>About</p>
+                <router-link to="/about_component" class="nav-link" title="Creditos">
+                    <i class="material-icons">payment</i>
+                    <p>Creditos</p>
                 </router-link>
             </li>
           </ul>
         </div>
       </li>
       <li class="nav-item">
-        <router-link to="/example_component" class="nav-link" title="Example">
-            <i class="material-icons">assignment</i>
-            <p>Example</p>
+        <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="true">
+          {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
+          <i class="material-icons">supervised_user_circle</i>
+          <p>{{ __('Productos') }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="products">
+          <ul class="nav">
+            <li class="nav-item">
+                <router-link to="/test_com" class="nav-link" title="Registro de clientes">
+                    <i class="material-icons">domain</i>
+                    <p>Almacen</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/about_com" class="nav-link" title="Creditos">
+                    <i class="material-icons">assignment_turned_in</i>
+                    <p>Salidas</p>
+                </router-link>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <router-link to="/providers" class="nav-link" title="Proveedores">
+            <i class="material-icons">store_mall_directory</i>
+            <p>Proveedores</p>
         </router-link>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#deliverer" aria-expanded="true">
+          {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
+          <i class="material-icons">local_shipping</i>
+          <p>{{ __('Repartidores') }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse" id="deliverer">
+          <ul class="nav">
+            <li class="nav-item">
+                <router-link to="/test_componen" class="nav-link" title="Registro de empleados">
+                    <i class="material-icons">folder_shared</i>
+                    <p>Registro de empleados</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/about_componen" class="nav-link" title="Rutas">
+                    <i class="material-icons">directions</i>
+                    <p>Rutas</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/about_compone" class="nav-link" title="Ventas">
+                    <i class="material-icons">shopping_cart</i>
+                    <p>Ventas</p>
+                </router-link>
+            </li>
+          </ul>
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ route('logout') }}"
