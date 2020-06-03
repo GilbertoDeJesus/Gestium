@@ -131,7 +131,13 @@
                             <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                             </template>
                             <template v-slot:no-data>
-                            <v-btn color="#ff5300" @click="initialize">Reset</v-btn>
+                            <v-alert
+                                justify="center"
+                                type="info"
+                                color="#ff5400"
+                                dense
+                                border="left"
+                                elevation="4">No hay proveedores registrados.</v-alert>
                             </template>
                         </v-data-table>
                     </v-col>
