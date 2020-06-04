@@ -160,7 +160,7 @@
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Telefono', value: 'telefono' },
                     { text: 'Email', value: 'email' },
-                    { text: 'Status', value: 'status' },
+                    { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 desserts: [],
@@ -280,6 +280,7 @@
                             'El proveedor ha sido desactivado.',
                             'success'
                             )
+
                         }).catch(() => {
                             Swal('Ocurrió un error', 'Algo salió mal con el servidor.', 'warning');
                         });

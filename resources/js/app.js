@@ -36,7 +36,7 @@ window.Toast = Toast;
 
 const routes = [
     { path: '/home', component: require('./components/HomeComponent.vue').default},
-    { path: '/providers', component: require('./components/ExampleComponent.vue').default},
+    { path: '/providers', component: require('./components/ProviderComponent.vue').default},
     { path: '/test_component', component: require('./components/TestComponent.vue').default},
     { path: '/about_component', component: require('./components/AboutComponent.vue').default},
 //    { path: '*', component: require('./components/404.vue').default}
@@ -58,7 +58,7 @@ const router = new VueRouter({
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('example-component', require('./components/ProviderComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
