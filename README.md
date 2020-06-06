@@ -1,3 +1,14 @@
+#Template Provided by
+<p align="center">##Ghost Enterprise</p>
+
+Este template proporciona:
+Laravel 7, VueJS 2.5.17 y Vuetify 2.2.28.
+La implementación de Laravel Passport.
+Laravel Material Dashboard.
+Componente Vue para Gestión de Usuarios.
+
+##Designado para el desarrollo del proyecto "Gestium"
+
 <p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
 
 <p align="center">
