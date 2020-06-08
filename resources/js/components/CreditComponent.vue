@@ -69,9 +69,9 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                    :rules="[required('email'), email_form()]"
-                                                        v-model="editedItem.email"
-                                                        label="E-mail"
+                                                    :rules="[required('descripcion'), minimum_length(8)]"
+                                                        v-model="editedItem.descripcion"
+                                                        label="Descripción"
                                                         type="text"
                                                         clearable
                                                         required
@@ -85,12 +85,12 @@
                                                     v-if="edit_mode"
                                                     >
                                                     <v-text-field
-                                                        v-model="editedItem.telefono"
+                                                        v-model="editedItem.monto"
                                                         :counter=true
                                                         type="text"
                                                         clearable
-                                                        label="Telefono"
-                                                        hint="*Solo si está seguro, min. 8 caracteres"
+                                                        label="Monto"
+                                                        hint="*Solo si está seguro"
                                                         persistent-hint
                                                     ></v-text-field>
                                                     </v-col>
@@ -102,12 +102,12 @@
                                                         v-if="!edit_mode"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(8)]"
-                                                        v-model="editedItem.telefono"
+                                                        :rules="[required('monto'), minimum_length(8)]"
+                                                        v-model="editedItem.monto"
                                                         :counter="15"
                                                         type="text"
                                                         clearable
-                                                        label="Telefono"
+                                                        label="Monto"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>

@@ -44,7 +44,7 @@
       <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="true">
           {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
-          <i class="material-icons">supervised_user_circle</i>
+          <i class="material-icons">local_mall</i>
           <p>{{ __('Productos') }}
             <b class="caret"></b>
           </p>
@@ -52,7 +52,7 @@
         <div class="collapse" id="products">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_com" class="nav-link" title="Registro de clientes">
+                <router-link to="/products" class="nav-link" title="Registro de productos">
                     <i class="material-icons">domain</i>
                     <p>Almacen</p>
                 </router-link>
@@ -83,7 +83,7 @@
         <div class="collapse" id="deliverer">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_componen" class="nav-link" title="Registro de empleados">
+                <router-link to="/deliverers" class="nav-link" title="Registro de empleados">
                     <i class="material-icons">folder_shared</i>
                     <p>Registro de empleados</p>
                 </router-link>
