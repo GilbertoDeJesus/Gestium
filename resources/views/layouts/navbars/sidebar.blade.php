@@ -27,13 +27,13 @@
         <div class="collapse" id="customers">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_component" class="nav-link" title="Registro de clientes">
+                <router-link to="/customers" class="nav-link" title="Registro de clientes">
                     <i class="material-icons">folder_shared</i>
                     <p>Registros</p>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_component" class="nav-link" title="Creditos">
+                <router-link to="/credits" class="nav-link" title="Creditos">
                     <i class="material-icons">payment</i>
                     <p>Creditos</p>
                 </router-link>

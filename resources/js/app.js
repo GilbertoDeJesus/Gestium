@@ -37,8 +37,8 @@ window.Toast = Toast;
 const routes = [
     { path: '/home', component: require('./components/HomeComponent.vue').default},
     { path: '/providers', component: require('./components/ProviderComponent.vue').default},
-    { path: '/test_component', component: require('./components/TestComponent.vue').default},
-    { path: '/about_component', component: require('./components/AboutComponent.vue').default},
+    { path: '/customers', component: require('./components/CustomerComponent.vue').default},
+    { path: '/credits', component: require('./components/CreditComponent.vue').default},
 //    { path: '*', component: require('./components/404.vue').default}
 ]
 
