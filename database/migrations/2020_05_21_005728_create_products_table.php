@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->integer('stock');
             $table->integer('stock_minimo');
             $table->boolean('status')->TRUE;
+            
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('provider_id');
             $table->timestamps();

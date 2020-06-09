@@ -17,6 +17,8 @@ class CreateCreditsTable extends Migration
             $table->id();
             $table->double('monto',8,2);
             $table->string('descripcion')->nullable();
+            $table->date('fecha')->nullable();
+            $table->double('tipoMovimiento')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->timestamps();
 

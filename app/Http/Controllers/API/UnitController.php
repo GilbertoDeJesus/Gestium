@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Unit;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class UnitController extends Controller
 {
     /**
@@ -51,7 +51,25 @@ class UnitController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $unit = Unit::findOrFail($id);
+
+        $validator = Validator::make( $request->all(), [
+            'tipo' => 'required|max:40',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['validation_errors' => $validator->errors()]);
+        }
+
+        $unit->update([
+            'deliverer_id' => $request['deliverer_id'],
+            'customer_id' => $request['customer_id'],
+            'fecha' => $request['fecha'],
+            'monto' => $request['monto'],
+            'observacion' => $request['observacion']
+                              ]);
+     return $unit;
     }
 
     /**
@@ -62,6 +80,7 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $unit = Unit::findOrFail($id);
+        $unit->delete();
     }
 }
