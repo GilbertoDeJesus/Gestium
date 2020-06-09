@@ -17,7 +17,7 @@
                             }">
                             <template v-slot:top>
                             <v-toolbar flat color="white">
-                                <v-toolbar-title class="purple--text font-weight-bold">Usuarios</v-toolbar-title>
+                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Usuarios</v-toolbar-title>
                                 <v-divider
                                 class="mx-4"
                                 inset
@@ -29,17 +29,17 @@
                                     label="Buscar"
                                     single-line
                                     hide-details
-                                    color="purple"
+                                    color="#ff5300"
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
                                 <v-dialog v-model="dialog" max-width="400px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="purple" dark class="mb-2" v-on="on">Nuevo usuario</v-btn>
+                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo usuario</v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
-                                    <span class="headline purple--text">{{ formTitle }}</span>
+                                    <span class="headline orange--text text--accent-4">{{ formTitle }}</span>
                                     </v-card-title>
 
                                 <v-card-text>
@@ -119,8 +119,8 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="purple darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="purple darken-1" :disabled="!valid" text @click="save">Save</v-btn>
+                                    <v-btn color="#ff5300" text @click="close">Cancel</v-btn>
+                                    <v-btn color="#ff5300" :disabled="!valid" text @click="save">Save</v-btn>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
@@ -131,7 +131,13 @@
                             <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                             </template>
                             <template v-slot:no-data>
-                            <v-btn color="purple" @click="initialize">Reset</v-btn>
+                            <v-alert
+                                justify="center"
+                                type="info"
+                                color="#ff5400"
+                                dense
+                                border="left"
+                                elevation="4">No hay proveedores registrados.</v-alert>
                             </template>
                         </v-data-table>
                     </v-col>
@@ -204,6 +210,9 @@
                 this.dialog = true
                 this.edit_mode = true
             },
+            initialize(){
+                this.$forceUpdate();
+            },
             close () {
                 this.$refs.form.reset()
                 this.dialog = false
@@ -259,7 +268,7 @@
                     text: "No podrás revertir esta acción!",
                     type: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#9c27b0',
+                    confirmButtonColor: '#ff5300',
                     cancelButtonColor: '#C1BCBB',
                     confirmButtonText: 'Si, elimínalo!',
                     cancelButtonText: 'Cancelar'
