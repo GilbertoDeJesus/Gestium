@@ -158,7 +158,7 @@
                                                     >
                                                         <template v-slot:activator="{ on }">
                                                         <v-text-field
-                                                            v-model="date1"
+                                                            v-model="editedItem.fecha_nacimiento"
                                                             label="Fecha de nacimiento"
                                                             prepend-icon="event"
                                                             readonly
@@ -190,7 +190,7 @@
                                                     >
                                                         <template v-slot:activator="{ on }">
                                                         <v-text-field
-                                                            v-model="date1"
+                                                            v-model="editedItem.fecha_contratacion"
                                                             label="Fecha de contratacion"
                                                             prepend-icon="event"
                                                             readonly
