@@ -41,6 +41,7 @@ const routes = [
     { path: '/credits', component: require('./components/CreditComponent.vue').default},
     { path: '/products', component: require('./components/ProductComponent.vue').default },
     { path: '/deliverers', component: require('./components/DelivererComponent.vue').default },
+    { path: '/routes', component: require('./components/RouteComponent.vue').default },
 //    { path: '*', component: require('./components/404.vue').default}
 ]
 

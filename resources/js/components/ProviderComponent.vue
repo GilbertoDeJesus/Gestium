@@ -37,13 +37,21 @@
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo Proveedor</v-btn>
                                 </template>
-                                <v-card>
-                                    <v-card-title>
-                                    <span class="headline orange--text text--accent-4">{{ formTitle }}</span>
-                                    </v-card-title>
+                                <v-card style="border-radius:20px;">
+                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">store</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                        </v-col>
+                                    </v-container>
 
-                                <v-card-text>
-                                    <v-container>
+                                <v-card-text style="padding-bottom:0px;">
+                                    <v-container style="padding-bottom:0px;">
                                         <v-form v-model="valid" ref="form">
                                             <v-container>
                                                 <v-row>
@@ -58,6 +66,7 @@
                                                         :counter="15"
                                                         label="Nombre"
                                                         type="text"
+                                                        prepend-icon="spellcheck"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -74,6 +83,7 @@
                                                         label="E-mail"
                                                         type="text"
                                                         clearable
+                                                        prepend-icon="email"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
@@ -92,6 +102,7 @@
                                                         label="Telefono"
                                                         hint="*Solo si está seguro, min. 8 caracteres"
                                                         persistent-hint
+                                                         prepend-icon="phone"
                                                     ></v-text-field>
                                                     </v-col>
 
@@ -108,6 +119,7 @@
                                                         type="text"
                                                         clearable
                                                         label="Telefono"
+                                                         prepend-icon="phone"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
@@ -118,9 +130,9 @@
                                 </v-card-text>
 
                                 <v-card-actions>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="#ff5300" text @click="close">Cancel</v-btn>
-                                    <v-btn color="#ff5300" :disabled="!valid" text @click="save">Save</v-btn>
+                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="save">Guardar</v-btn>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>

@@ -33,56 +33,49 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="450px">
+                                <v-dialog v-model="dialog" max-width="420px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo usuario &nbsp;<i class="material-icons">person_add</i></v-btn>
                                 </template>
+                                    <v-card style="border-radius:20px;">
 
-                                        <div>
-                                            <v-card class="align-items-center">
-                                                <v-toolbar dark color="#ff5300" style="text-align: center;">
-                                                    <i class="material-icons">account_box</i>&nbsp;<v-toolbar-title style="text-align: center;"><strong>{{ formTitle }}</strong></v-toolbar-title>
-                                                </v-toolbar>
+                                            <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                                <v-col
+                                                cols="12"
+                                                md="12"
+                                                sm="12">
+                                                    <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                        <i class="material-icons" style="font-size:85px;">account_box</i>
+                                                    </p>
+                                                    <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                                </v-col>
+                                            </v-container>
 
-                                            <v-card-text>
-                                                <v-container>
+                                            <v-card-text style="padding: 5px 40px 0px; border-radius:20px;">
+                                                <v-container style="padding-bottom:0px;">
                                                     <v-form v-model="valid" ref="form">
-                                                        <v-container>
+                                                        <v-container style="padding: 0px;">
                                                             <v-row>
-                                                                <v-row>
-                                                                    <v-col
-                                                                    cols="12"
-                                                                    md="3"
-                                                                    sm="3">
-                                                                    <i class="material-icons" style="font-size: 94px; align:center; color:#ff7500;">account_box</i>
-                                                                    </v-col>
-
-                                                                    <v-col
-                                                                    cols="12"
-                                                                    md="9"
-                                                                    sm="9">
-                                                                        <v-col
-                                                                        cols="12"
-                                                                        md="12"
-                                                                        sm="6"
-                                                                        >
-                                                                        <v-text-field
-                                                                            :rules="[required('nombre'), minimum_length(4)]"
-                                                                            v-model="editedItem.name"
-                                                                            :counter="15"
-                                                                            label="Nombre"
-                                                                            type="text"
-                                                                            clearable
-                                                                            required
-                                                                        ></v-text-field>
-                                                                        </v-col>
-                                                                    </v-col>
-                                                                </v-row>
 
                                                                 <v-col
                                                                 cols="12"
                                                                 md="12"
-                                                                sm="4"
+                                                                sm="12">
+                                                                    <v-text-field
+                                                                    :rules="[required('nombre'), minimum_length(4)]"
+                                                                    v-model="editedItem.name"
+                                                                    :counter="15"
+                                                                    label="Nombre"
+                                                                    type="text"
+                                                                    prepend-icon="account_circle"
+                                                                    clearable
+                                                                    required></v-text-field>
+                                                                </v-col>
+
+                                                                <v-col
+                                                                cols="12"
+                                                                md="12"
+                                                                sm="12"
                                                                 >
                                                                     <v-text-field
                                                                     :rules="[required('email'), email_form()]"
@@ -98,7 +91,7 @@
                                                                 <v-col
                                                                 cols="12"
                                                                 md="12"
-                                                                sm="6"
+                                                                sm="12"
                                                                 v-if="edit_mode"
                                                                 >
                                                                 <v-text-field
@@ -116,7 +109,7 @@
                                                                 <v-col
                                                                 cols="12"
                                                                 md="12"
-                                                                sm="6"
+                                                                sm="12"
                                                                     v-if="!edit_mode"
                                                                 >
                                                                 <v-text-field
@@ -139,11 +132,9 @@
                                             <v-card-actions>
                                                 <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
                                                 <v-spacer></v-spacer>
-                                                <v-btn dark color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
+                                                <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
                                             </v-card-actions>
-                                            </v-card>
-                                        </div>
-
+                                        </v-card>
                                 </v-dialog>
                             </v-toolbar>
                             </template>

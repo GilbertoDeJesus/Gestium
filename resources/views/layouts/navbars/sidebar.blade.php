@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="purple" data-background-color="white" data-image="{{ asset('material') }}/img/sidebar-3.jpg">
+<div class="sidebar" data-color="white" data-background-color="danger" data-image="{{ asset('material') }}/img/sidebar-3.jpg">
   <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
       Tip 2: you can also add an image using data-image tag
@@ -89,7 +89,7 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_componen" class="nav-link" title="Rutas">
+                <router-link to="/routes" class="nav-link" title="Rutas">
                     <i class="material-icons">directions</i>
                     <p>Rutas</p>
                 </router-link>
