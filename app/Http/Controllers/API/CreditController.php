@@ -32,6 +32,8 @@ class CreditController extends Controller
             'customer_id' => $request['customer_id'],
             'monto' => $request['monto'],
             'descripcion' => $request['descripcion'],
+            'fecha'=> $request['fecha'],
+            'tipoMovimiento'=> $request['tipoMovimiento'],
         ]);
     }
 
@@ -68,6 +70,8 @@ class CreditController extends Controller
             'customer_id' => $request['customer_id'],
                 'monto' => $request['monto'],
                 'descripcion' => $request['descripcion'],
+                'fecha'=> $request['fecha'],
+                'tipoMovimiento'=> $request['tipoMovimiento'],
         ]);
         return $credit;
     }

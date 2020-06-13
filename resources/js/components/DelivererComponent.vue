@@ -51,7 +51,7 @@
                                     </v-container>
 
                                 <v-card-text style="padding-bottom:0px;">
-                                    <v-container>
+                                    <v-container style="padding-bottom:0px;">
                                         <v-form v-model="valid" ref="form">
                                             <v-container>
                                                 <v-row>
@@ -217,7 +217,7 @@
                                                         required
                                                         color="#fd2d21"
                                                         @input="menu2 = false"
-                                                    ></v-date-picker>
+                                                        ></v-date-picker>
                                                     </v-dialog>
 
                                                     </v-col>

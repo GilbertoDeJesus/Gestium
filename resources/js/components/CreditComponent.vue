@@ -33,32 +33,77 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="400px">
+                                <v-dialog v-model="dialog" max-width="500px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo Credito</v-btn>
                                 </template>
-                                <v-card>
-                                    <v-card-title>
-                                    <span class="headline orange--text text--accent-4">{{ formTitle }}</span>
-                                    </v-card-title>
+                                <v-card style="border-radius:20px;">
 
-                                <v-card-text>
-                                    <v-container>
+                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">credit_card</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                        </v-col>
+                                    </v-container>
+
+                                <v-card-text style="padding-bottom:0px;">
+                                    <v-container style="padding-bottom:0px;">
                                         <v-form v-model="valid" ref="form">
                                             <v-container>
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
+                                                    md="6"
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
-                                                        v-model="editedItem.nombre"
+                                                        v-model="editedItem.customer_id"
                                                         :counter="15"
-                                                        label="Nombre"
+                                                        label="id cliente"
+                                                        type="text"
+                                                        prepend-icon="account_box"
+                                                        clearable
+                                                        required
+                                                    ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="6"
+                                                    v-if="edit_mode"
+                                                    >
+                                                    <v-text-field
+                                                        v-model="editedItem.monto"
+                                                        :counter=true
+                                                        type="number"
+                                                        clearable
+                                                        label="Monto"
+                                                        prepend-icon="attach_money"
+                                                        hint="*Solo si está seguro"
+                                                        persistent-hint
+                                                    ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="6"
+                                                        v-if="!edit_mode"
+                                                    >
+                                                    <v-text-field
+                                                        :rules="[required('monto'), minimum_length(1)]"
+                                                        v-model="editedItem.monto"
+                                                        :counter="15"
                                                         type="text"
                                                         clearable
+                                                        label="Monto"
+                                                        prepend-icon="attach_money"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
@@ -73,6 +118,7 @@
                                                         v-model="editedItem.descripcion"
                                                         label="Descripción"
                                                         type="text"
+                                                        prepend-icon="post_add"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -80,37 +126,73 @@
 
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    v-if="edit_mode"
-                                                    >
-                                                    <v-text-field
-                                                        v-model="editedItem.monto"
-                                                        :counter=true
-                                                        type="text"
-                                                        clearable
-                                                        label="Monto"
-                                                        hint="*Solo si está seguro"
-                                                        persistent-hint
-                                                    ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
+                                                    md="6"
                                                     sm="6"
                                                         v-if="!edit_mode"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('monto'), minimum_length(8)]"
-                                                        v-model="editedItem.monto"
+                                                        :rules="[minimum_length(1)]"
+                                                        v-model="editedItem.tipoMovimiento"
                                                         :counter="15"
+                                                        label="Tipo de Movimiento"
                                                         type="text"
+                                                        prepend-icon="account_balance"
                                                         clearable
-                                                        label="Monto"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="6"
+                                                        v-if="edit_mode"
+                                                    >
+                                                    <v-text-field
+                                                        v-model="editedItem.tipoMovimiento"
+                                                        :counter="15"
+                                                        label="Tipo de Movimiento"
+                                                        type="text"
+                                                        prepend-icon="account_balance"
+                                                        clearable
+                                                        required
+                                                    ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="12"
+                                                    >
+                                                    <v-dialog
+                                                        ref="dialog"
+                                                        v-model="menu1"
+                                                        :return-value.sync="date1"
+                                                        persistent
+                                                        width="290px"
+                                                    >
+                                                        <template v-slot:activator="{ on }">
+                                                        <v-text-field
+                                                            v-model="editedItem.fecha"
+                                                            label="Fecha de aprobación"
+                                                            prepend-icon="event"
+                                                            readonly
+                                                            v-on="on"
+                                                        ></v-text-field>
+                                                        </template>
+                                                        <v-date-picker
+                                                        :rules="[required('fecha')]"
+                                                        v-model="editedItem.fecha"
+                                                        locale="mx"
+                                                        type="date"
+                                                        format="YYYY-MM-dd"
+                                                        color="#fd2d21"
+                                                        required
+                                                        @input="menu1 = false"
+                                                    ></v-date-picker>
+                                                    </v-dialog>
+                                                    </v-col>
+
                                                 </v-row>
                                             </v-container>
                                         </v-form>
@@ -119,8 +201,10 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="#ff5300" text @click="close">Cancel</v-btn>
-                                    <v-btn color="#ff5300" :disabled="!valid" text @click="save">Save</v-btn>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
+
+                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
+                                    <v-spacer></v-spacer>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
@@ -156,27 +240,34 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                date1: new Date().toISOString().substr(0, 10),
+                menu1:false,
                 headers: [
-                    { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Nombre', value: 'customer_id' }, /*align: 'start', sortable: false,*/
                     { text: 'Monto', value: 'monto' },
                     { text: 'Descripcion', value: 'descripcion' },
-                    { text: 'Fecha de aprobación', value: 'created_at'},
+                    { text: 'Fecha de aprobación', value: 'fecha'},
+                    { text: 'Tipo de movimiento', value: 'tipoMovimiento'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 desserts: [],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
-                    nombre: '',
                     monto: '',
                     descripcion: '',
+                    fecha: '',
+                    tipoMovimiento: '',
+                    customer_id: '',
                     created_at: ''
                 },
                 defaultItem: {
                     id: '',
-                    nombre: '',
                     monto: '',
                     descripcion: '',
+                    fecha: '',
+                    tipoMovimiento: '',
+                    customer_id: '',
                     created_at: ''
                 },
                 required( propertyName ) {
@@ -241,9 +332,11 @@
                     }
                 } else {
                     const response = await axios.post('/api/credits',{
-                        'nombre': this.editedItem.nombre,
                         'monto': this.editedItem.monto,
-                        'descripcion' : this.editedItem.descripcion
+                        'descripcion' : this.editedItem.descripcion,
+                        'fecha': this.editedItem.fecha,
+                        'tipoMovimiento': this.editedItem.tipoMovimiento,
+                        'customer_id': this.editedItem.customer_id
                     }).catch(error => console.log("Error: " + error));
 
                     if (response) {
