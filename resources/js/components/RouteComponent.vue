@@ -61,15 +61,15 @@
                                                     sm="6"
                                                     >
 
-                                                    <v-select
-                                                    :items="nombres"
-                                                    v-model="editedItem.nombre"
-                                                    label="Seleccione el repartidor"
-                                                    item-text="title"
-                                                    prepend-icon="local_shipping"
-                                                    >
-
-                                                    </v-select>
+                                                    <v-text-field
+                                                    :rules="[required('nombre')]"
+                                                        v-model="editedItem.deliverer_id"
+                                                        label="Repartidor"
+                                                        type="text"
+                                                        clearable
+                                                        prepend-icon="local_shipping"
+                                                        required
+                                                    ></v-text-field>
                                                     </v-col>
 
                                                     <v-col
@@ -134,15 +134,17 @@
                 valid: false,
                 edit_mode: false,
                 headers: [
-                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Repartidor', value: 'deliverer_id:nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
+                nombres:[],
                 desserts: [],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
+                    deliverer_id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
@@ -150,6 +152,7 @@
                 },
                 defaultItem: {
                     id: '',
+                    deliverer_id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
@@ -218,9 +221,8 @@
                     }
                 } else {
                     const response = await axios.post('/api/routes',{
-                        'nombre': this.editedItem.nombre,
-                        'telefono': this.editedItem.telefono,
-                        'email' : this.editedItem.email,
+                        'deliverer_id': this.editedItem.deliverer_id,
+                        'municipio': this.editedItem.municipio,
                         'status': this.editedItem.status
                     }).catch(error => console.log("Error: " + error));
 

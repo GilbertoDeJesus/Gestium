@@ -37,13 +37,20 @@
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-4" v-on="on" >Nuevo Cliente</v-btn>
                                 </template>
-                                <v-card>
-                                    <v-card-title>
-                                    <span class="headline orange--text text--accent-4">{{ formTitle }}</span>
-                                    </v-card-title>
-
-                                <v-card-text>
-                                    <v-container>
+                                <v-card style="border-radius:20px;">
+                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">assignment_ind</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                        </v-col>
+                                    </v-container>
+                                <v-card-text style="padding-bottom:0px;">
+                                    <v-container style="padding-bottom:0px;">
                                         <v-form v-model="valid" ref="form">
                                             <v-container>
                                                 <v-row>
@@ -58,6 +65,7 @@
                                                         :counter="45"
                                                         label="Nombre"
                                                         type="text"
+                                                        prepend-icon="spellcheck"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -69,12 +77,12 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                    :rules="[required('email'), email_form()]"
+                                                    :rules="[email_form()]"
                                                         v-model="editedItem.email"
                                                         label="E-mail"
+                                                        prepend-icon="email"
                                                         type="text"
                                                         clearable
-                                                        required
                                                     ></v-text-field>
                                                     </v-col>
 
@@ -90,6 +98,7 @@
                                                         type="text"
                                                         clearable
                                                         label="Telefono"
+                                                        prepend-icon="phone"
                                                         hint="*Solo si está seguro, min. 8 caracteres"
                                                         persistent-hint
                                                     ></v-text-field>
@@ -102,13 +111,13 @@
                                                         v-if="!edit_mode"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(8)]"
+                                                        :rules="[required('nombre')]"
                                                         v-model="editedItem.telefono"
                                                         :counter="15"
                                                         type="text"
+                                                        prepend-icon="phone"
                                                         clearable
                                                         label="Telefono"
-                                                        required
                                                     ></v-text-field>
                                                     </v-col>
                                                     <v-col
@@ -122,6 +131,7 @@
                                                         :counter="45"
                                                         label="Dirección"
                                                         type="text"
+                                                        prepend-icon="location_on"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -137,6 +147,22 @@
                                                         :counter="30"
                                                         label="Establecimiento"
                                                         type="text"
+                                                        prepend-icon="store_mall_directory"
+                                                        clearable
+                                                        required
+                                                    ></v-text-field>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="6"
+                                                    >
+                                                    <v-text-field
+                                                        v-model="editedItem.route_id"
+                                                        :counter="20"
+                                                        label="Ruta"
+                                                        type="text"
+                                                        prepend-icon="explore"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -150,8 +176,10 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="#ff5300" text @click="close">Cancel</v-btn>
-                                    <v-btn color="#ff5300" :disabled="!valid" text @click="save">Save</v-btn>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
+
+                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
+                                    <v-spacer></v-spacer>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
@@ -206,7 +234,7 @@
                     email: '',
                     direccion: '',
                     establecimiento: '',
-                    ruta: '',
+                    route_id: '',
                     status: ''
                 },
                 defaultItem: {
@@ -216,7 +244,7 @@
                     email: '',
                     direccion: '',
                     establecimiento: '',
-                    ruta: '',
+                    route_id: '',
                     status: ''
                 },
                 required( propertyName ) {
@@ -283,8 +311,11 @@
                     const response = await axios.post('/api/customers',{
                         'nombre': this.editedItem.nombre,
                         'telefono': this.editedItem.telefono,
+                        'direccion': this.editedItem.direccion,
+                        'establecimiento': this.editedItem.establecimiento,
                         'email' : this.editedItem.email,
-                        'status': this.editedItem.status
+                        'status': this.editedItem.status,
+                        'route_id': this.editedItem.route_id
                     }).catch(error => console.log("Error: " + error));
 
                     if (response) {
