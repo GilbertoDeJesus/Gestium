@@ -32,6 +32,7 @@ class CreditController extends Controller
             'customer_id' => $request['customer_id'],
             'monto' => $request['monto'],
             'descripcion' => $request['descripcion'],
+            'status'=> true
         ]);
     }
 
@@ -60,6 +61,7 @@ class CreditController extends Controller
             'customer_id'=> 'required|Integer',
             'monto' =>'required|Integer',
             'descripcion' => 'required|max:200',
+
         ]);
         if($validator->fails()){
             return response()->json(['validation_errors' => $validator->errors()]);
