@@ -34,6 +34,7 @@ class CreditController extends Controller
             'descripcion' => $request['descripcion'],
             'fecha'=> $request['fecha'],
             'tipoMovimiento'=> $request['tipoMovimiento'],
+            'status'=> true
         ]);
     }
 
