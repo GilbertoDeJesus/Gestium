@@ -16,7 +16,7 @@ class DelivererController extends Controller
      */
     public function index()
     {
-        return Deliverer::get();
+        return Deliverer::where('status','=','1')->get();
     }
 
     /**
@@ -69,7 +69,7 @@ class DelivererController extends Controller
             'fecha_contratacion' => 'required|date',
             'telefono' => 'nullable',
             'email' => 'nullable|email',
-            
+
         ]);
 
         if ($validator->fails()) {

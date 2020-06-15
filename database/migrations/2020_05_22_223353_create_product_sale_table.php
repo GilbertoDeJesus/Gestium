@@ -23,7 +23,7 @@ class CreateProductSaleTable extends Migration
             $table->unsignedBigInteger('sale_id');
             $table->timestamps();
 
-            $table->foreign('product_depurate_id')->references('id')->on('depurate_product');
+
             $table->foreign('sale_id')->references('id')->on('sales');
         });
     }

@@ -655,7 +655,7 @@ button {
 
 button:focus {
   outline: 1px dotted;
-  outline: 5px auto -webkit-focus-ring-color;
+  outline: 1px auto;
 }
 
 input,
@@ -5555,7 +5555,7 @@ button.close {
   background-color: #ffffff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem;
+  border-radius: 0.9rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
   outline: 0;
 }
@@ -13151,7 +13151,7 @@ fieldset[disabled] .form-group .form-control {
   position: absolute;
   width: 100%;
   padding-top: 10px;
-  z-index: 1029;
+  z-index: 102;
 }
 
 .navbar .navbar-wrapper {
@@ -16638,7 +16638,7 @@ label {
   border: 0;
   margin-bottom: 30px;
   margin-top: 30px;
-  border-radius: 6px;
+  border-radius: 14px;
   color: #333333;
   background: #fff;
   width: 100%;
@@ -16946,7 +16946,7 @@ label {
 
 .card[class*="bg-"],
 .card[class*="bg-"] .card-body {
-  border-radius: 6px;
+  border-radius: 14px;
 }
 
 .card[class*="bg-"] h1 small,

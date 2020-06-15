@@ -17,7 +17,7 @@
                             }">
                             <template v-slot:top>
                             <v-toolbar flat color="white">
-                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Usuarios</v-toolbar-title>
+                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold" color="#007879">Usuarios</v-toolbar-title>
                                 <v-divider
                                 class="mx-4"
                                 inset
@@ -33,96 +33,108 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="400px">
+                                <v-dialog v-model="dialog" max-width="420px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo usuario</v-btn>
+                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo usuario &nbsp;<i class="material-icons">person_add</i></v-btn>
                                 </template>
-                                <v-card>
-                                    <v-card-title>
-                                    <span class="headline orange--text text--accent-4">{{ formTitle }}</span>
-                                    </v-card-title>
+                                    <v-card style="border-radius:20px;">
 
-                                <v-card-text>
-                                    <v-container>
-                                        <v-form v-model="valid" ref="form">
-                                            <v-container>
-                                                <v-row>
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
-                                                        v-model="editedItem.name"
-                                                        :counter="15"
-                                                        label="Nombre"
-                                                        type="text"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-text-field
-                                                    :rules="[required('email'), email_form()]"
-                                                        v-model="editedItem.email"
-                                                        label="E-mail"
-                                                        type="text"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    v-if="edit_mode"
-                                                    >
-                                                    <v-text-field
-                                                        v-model="editedItem.password"
-                                                        :counter=true
-                                                        type="password"
-                                                        clearable
-                                                        label="Nueva contraseña"
-                                                        hint="*Solo si está seguro, min. 8 caracteres"
-                                                        persistent-hint
-                                                    ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                        v-if="!edit_mode"
-                                                    >
-                                                    <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(8)]"
-                                                        v-model="editedItem.password"
-                                                        :counter="15"
-                                                        type="password"
-                                                        clearable
-                                                        label="Contraseña"
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
+                                            <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                                <v-col
+                                                cols="12"
+                                                md="12"
+                                                sm="12">
+                                                    <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                        <i class="material-icons" style="font-size:85px;">account_box</i>
+                                                    </p>
+                                                    <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                                </v-col>
                                             </v-container>
-                                        </v-form>
-                                    </v-container>
-                                </v-card-text>
 
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="#ff5300" text @click="close">Cancel</v-btn>
-                                    <v-btn color="#ff5300" :disabled="!valid" text @click="save">Save</v-btn>
-                                </v-card-actions>
-                                </v-card>
+                                            <v-card-text style="padding: 5px 40px 0px; border-radius:20px;">
+                                                <v-container style="padding-bottom:0px;">
+                                                    <v-form v-model="valid" ref="form">
+                                                        <v-container style="padding: 0px;">
+                                                            <v-row>
+
+                                                                <v-col
+                                                                cols="12"
+                                                                md="12"
+                                                                sm="12">
+                                                                    <v-text-field
+                                                                    :rules="[required('nombre'), minimum_length(4)]"
+                                                                    v-model="editedItem.name"
+                                                                    :counter="15"
+                                                                    label="Nombre"
+                                                                    type="text"
+                                                                    prepend-icon="account_circle"
+                                                                    clearable
+                                                                    required></v-text-field>
+                                                                </v-col>
+
+                                                                <v-col
+                                                                cols="12"
+                                                                md="12"
+                                                                sm="12"
+                                                                >
+                                                                    <v-text-field
+                                                                    :rules="[required('email'), email_form()]"
+                                                                    v-model="editedItem.email"
+                                                                    label="E-mail"
+                                                                    type="text"
+                                                                    prepend-icon="email"
+                                                                    clearable
+                                                                    required
+                                                                    ></v-text-field>
+                                                                </v-col>
+
+                                                                <v-col
+                                                                cols="12"
+                                                                md="12"
+                                                                sm="12"
+                                                                v-if="edit_mode"
+                                                                >
+                                                                <v-text-field
+                                                                    v-model="editedItem.password"
+                                                                    :counter=true
+                                                                    type="password"
+                                                                    clearable
+                                                                    label="Nueva contraseña"
+                                                                    prepend-icon="vpn_key"
+                                                                    hint="*Solo si está seguro, min. 8 caracteres"
+                                                                    persistent-hint
+                                                                ></v-text-field>
+                                                                </v-col>
+
+                                                                <v-col
+                                                                cols="12"
+                                                                md="12"
+                                                                sm="12"
+                                                                    v-if="!edit_mode"
+                                                                >
+                                                                <v-text-field
+                                                                    :rules="[required('nombre'), minimum_length(8)]"
+                                                                    v-model="editedItem.password"
+                                                                    :counter="15"
+                                                                    type="password"
+                                                                    clearable
+                                                                    label="Contraseña"
+                                                                    prepend-icon="vpn_key"
+                                                                    required
+                                                                ></v-text-field>
+                                                                </v-col>
+                                                            </v-row>
+                                                        </v-container>
+                                                    </v-form>
+                                                </v-container>
+                                            </v-card-text>
+
+                                            <v-card-actions>
+                                                <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
+                                                <v-spacer></v-spacer>
+                                                <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
                                 </v-dialog>
                             </v-toolbar>
                             </template>
@@ -131,7 +143,13 @@
                             <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                             </template>
                             <template v-slot:no-data>
-                            <v-btn color="#ff5300" @click="initialize">Reset</v-btn>
+                            <v-alert
+                                justify="center"
+                                type="info"
+                                color="#ff5400"
+                                dense
+                                border="left"
+                                elevation="4">No hay proveedores registrados.</v-alert>
                             </template>
                         </v-data-table>
                     </v-col>
@@ -203,6 +221,9 @@
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.dialog = true
                 this.edit_mode = true
+            },
+            initialize(){
+                this.$forceUpdate();
             },
             close () {
                 this.$refs.form.reset()

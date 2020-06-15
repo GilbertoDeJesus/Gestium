@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="purple" data-background-color="white" data-image="{{ asset('material') }}/img/sidebar-3.jpg">
+<div class="sidebar" data-color="white" data-background-color="danger" data-image="{{ asset('material') }}/img/sidebar-3.jpg">
   <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
       Tip 2: you can also add an image using data-image tag
@@ -27,13 +27,13 @@
         <div class="collapse" id="customers">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_component" class="nav-link" title="Registro de clientes">
+                <router-link to="/customers" class="nav-link" title="Registro de clientes">
                     <i class="material-icons">folder_shared</i>
                     <p>Registros</p>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_component" class="nav-link" title="Creditos">
+                <router-link to="/credits" class="nav-link" title="Creditos">
                     <i class="material-icons">payment</i>
                     <p>Creditos</p>
                 </router-link>
@@ -44,7 +44,7 @@
       <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="true">
           {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
-          <i class="material-icons">supervised_user_circle</i>
+          <i class="material-icons">local_mall</i>
           <p>{{ __('Productos') }}
             <b class="caret"></b>
           </p>
@@ -52,7 +52,7 @@
         <div class="collapse" id="products">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_com" class="nav-link" title="Registro de clientes">
+                <router-link to="/products" class="nav-link" title="Registro de productos">
                     <i class="material-icons">domain</i>
                     <p>Almacen</p>
                 </router-link>
@@ -83,13 +83,13 @@
         <div class="collapse" id="deliverer">
           <ul class="nav">
             <li class="nav-item">
-                <router-link to="/test_componen" class="nav-link" title="Registro de empleados">
+                <router-link to="/deliverers" class="nav-link" title="Registro de empleados">
                     <i class="material-icons">folder_shared</i>
                     <p>Registro de empleados</p>
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_componen" class="nav-link" title="Rutas">
+                <router-link to="/routes" class="nav-link" title="Rutas">
                     <i class="material-icons">directions</i>
                     <p>Rutas</p>
                 </router-link>

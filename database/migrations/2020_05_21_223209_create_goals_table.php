@@ -15,9 +15,10 @@ class CreateGoalsTable extends Migration
     {
         Schema::create('goals', function (Blueprint $table) {
             $table->id();
-            $table->boolean('producto_meta')->FALSE;
-            $table->string('nombre_producto');
             $table->integer('numero_kilos');
+            $table->integer('porcentaje');
+            $table->integer('progreso');
+            $table->double('bono_entregado');
             $table->unsignedBigInteger('deliverer_id');
             
 

@@ -13,11 +13,12 @@ class CreateDepurateProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('depurate_product', function (Blueprint $table) {
+        Schema::create('depurate_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('depurate_id');
             $table->integer('cantidad');
+            $table->double('tipoMovimiento');
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('depurate_id')->references('id')->on('depurates');
