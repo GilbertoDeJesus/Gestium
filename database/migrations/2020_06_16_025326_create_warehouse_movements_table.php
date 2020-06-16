@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepuratesTable extends Migration
+class CreateWarehouseMovementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDepuratesTable extends Migration
      */
     public function up()
     {
-        Schema::create('depurates', function (Blueprint $table) {
+        Schema::create('warehouse_movements', function (Blueprint $table) {
             $table->id();
             $table->date('fecha_salida');
             $table->unsignedBigInteger('deliverer_id');
@@ -29,6 +29,6 @@ class CreateDepuratesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depurates');
+        Schema::dropIfExists('warehouse_movements');
     }
 }

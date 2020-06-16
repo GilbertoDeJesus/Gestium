@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Depurate;
+use App\WarehouseMovement;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class DepurateController extends Controller
+class WarehouseMovementController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class DepurateController extends Controller
      */
     public function index()
     {
-        return Depurate::get();
+        return WarehouseMovement::get();
     }
 
     /**
@@ -27,7 +27,7 @@ class DepurateController extends Controller
      */
     public function store(Request $request)
     {
-        return Depurate::create([
+        return WarehouseMovement::create([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida']
         ]);
@@ -53,7 +53,7 @@ class DepurateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $depurate = depurate::findOrFail($id);
+        $warehousemovement = WarehouseMovement::findOrFail($id);
 
         $validator = Validator::make( $request->all(), [
             'deliverer_id' => 'required|Integer',
@@ -65,12 +65,12 @@ class DepurateController extends Controller
             return response()->json(['validation_errors' => $validator->errors()]);
         }
 
-        $depurate->update([
+        $warehousemovement->update([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida'],
         ]);
 
-        return$depurate;
+        return$warehousemovement;
     }
 
     /**
@@ -81,8 +81,8 @@ class DepurateController extends Controller
      */
     public function destroy($id)
     {
-        $depurate = depurate::findOrFail($id);
-        $depurate->update([
+        $warehousemovement = WarehouseMovement::findOrFail($id);
+        $warehousemovement->update([
             'status' => false,
         ]);
     }

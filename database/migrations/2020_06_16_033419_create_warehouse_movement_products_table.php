@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepurateProductTable extends Migration
+class CreateWarehouseMovementProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateDepurateProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('depurate_products', function (Blueprint $table) {
+        Schema::create('warehouse_movement_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('depurate_id');
+            $table->unsignedBigInteger('warehouse_movement_id');
             $table->integer('cantidad');
             $table->double('tipoMovimiento');
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('depurate_id')->references('id')->on('depurates');
-
+            $table->foreign('warehouse_movement_id')->references('id')->on('warehouse_movements');
         });
     }
 
@@ -33,6 +32,6 @@ class CreateDepurateProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('depurate_product');
+        Schema::dropIfExists('warehouse_movement_products');
     }
 }
