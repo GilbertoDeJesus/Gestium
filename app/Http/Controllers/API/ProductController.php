@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::get();
+        return Product::where('status','=','1')->get();
     }
 
     /**
