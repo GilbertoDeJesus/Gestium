@@ -19,6 +19,7 @@ class CreateCreditsTable extends Migration
             $table->string('descripcion')->nullable();
             $table->date('fecha')->nullable();
             $table->double('tipoMovimiento')->nullable();
+            $table->boolean('status');
             $table->unsignedBigInteger('customer_id');
             $table->timestamps();
 
