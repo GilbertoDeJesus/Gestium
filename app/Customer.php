@@ -16,5 +16,8 @@ class Customer extends Model
         return $this->hasMany(Sale::class);
     }
     protected $guarded = [];
+    protected $fillable = [
+        'nombre',
+    ];
 
 }

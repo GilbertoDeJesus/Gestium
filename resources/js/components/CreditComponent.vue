@@ -3,7 +3,7 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
-                    <v-col cols="10" sm="8" md="10">
+                    <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -70,6 +70,19 @@
                                                         clearable
                                                         required
                                                     ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="6"
+                                                    >
+                                                    <v-select
+                                                    :items="nombres"
+                                                    v-model="editedItem.customer_id"
+                                                    label="Seccc"
+                                                    >
+                                                    </v-select>
                                                     </v-col>
 
                                                     <v-col
@@ -238,6 +251,7 @@
                 dialog: false,
                 search: '',
                 loading: true,
+                nombres: [axios.get('api/customers/@GetNames')],
                 valid: false,
                 edit_mode: false,
                 date1: new Date().toISOString().substr(0, 10),
@@ -279,7 +293,13 @@
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
-                }
+                },
+                getNames(){
+                    axios.get('/api/customers')
+                    .then((response) =>{
+                        this.nombres=response.data;
+                    });
+                },
              }
         },
 
@@ -390,6 +410,7 @@
                     this.loading = false;
                 });
             },
+
         },
 
         created () {
