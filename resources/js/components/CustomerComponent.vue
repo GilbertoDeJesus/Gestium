@@ -3,7 +3,7 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
-                    <v-col cols="11" sm="9" md="11">
+                    <v-col cols="11" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -15,6 +15,18 @@
                             :footer-props="{
                                 'items-per-page-options': [7, 10, 20]
                             }">
+                            <template v-slot:item.created_at="{ item }">
+                               {{item.created_at | formatDateTime | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.nombre="{ item }">
+                                {{item.nombre | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.direccion="{ item }">
+                                {{item.direccion | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.establecimiento="{ item }">
+                                {{item.establecimiento | formatUpperCase}}
+                            </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Clientes</v-toolbar-title>

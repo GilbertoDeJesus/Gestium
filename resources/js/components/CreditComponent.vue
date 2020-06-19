@@ -61,28 +61,16 @@
                                                     md="6"
                                                     sm="6"
                                                     >
-                                                    <v-text-field
-                                                        v-model="editedItem.customer_id"
-                                                        :counter="15"
-                                                        label="id cliente"
-                                                        type="text"
-                                                        prepend-icon="account_box"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="6"
-                                                    sm="6"
-                                                    >
                                                     <v-select
-                                                    :items="nombres"
-                                                    v-model="editedItem.customer_id"
-                                                    label="Seccc"
-                                                    >
-                                                    </v-select>
+                                                        v-model="select"
+                                                        :items="nombres"
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        label="Selecccione al cliente"
+                                                        prepend-icon="local_shipping"
+                                                        persistent-hint
+                                                        return-object
+                                                        ></v-select>
                                                     </v-col>
 
                                                     <v-col
@@ -251,13 +239,16 @@
                 dialog: false,
                 search: '',
                 loading: true,
-                nombres: [axios.get('api/customers/@GetNames')],
                 valid: false,
                 edit_mode: false,
+                select: {
+                    id: '',
+                    nombre: '',
+                },
                 date1: new Date().toISOString().substr(0, 10),
                 menu1:false,
                 headers: [
-                    { text: 'Nombre', value: 'customer_id' }, /*align: 'start', sortable: false,*/
+                    { text: 'Nombre', value: 'select:nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Monto', value: 'monto' },
                     { text: 'Descripcion', value: 'descripcion' },
                     { text: 'Fecha de aprobación', value: 'fecha'},
@@ -265,6 +256,7 @@
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 desserts: [],
+                nombres: [],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
@@ -272,7 +264,6 @@
                     descripcion: '',
                     fecha: '',
                     tipoMovimiento: '',
-                    customer_id: '',
                     created_at: ''
                 },
                 defaultItem: {
@@ -281,7 +272,6 @@
                     descripcion: '',
                     fecha: '',
                     tipoMovimiento: '',
-                    customer_id: '',
                     created_at: ''
                 },
                 required( propertyName ) {
@@ -293,12 +283,6 @@
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
-                },
-                getNames(){
-                    axios.get('/api/customers')
-                    .then((response) =>{
-                        this.nombres=response.data;
-                    });
                 },
              }
         },
@@ -356,7 +340,7 @@
                         'descripcion' : this.editedItem.descripcion,
                         'fecha': this.editedItem.fecha,
                         'tipoMovimiento': this.editedItem.tipoMovimiento,
-                        'customer_id': this.editedItem.customer_id
+                        'customer_id': this.select.id,
                     }).catch(error => console.log("Error: " + error));
 
                     if (response) {
@@ -406,6 +390,12 @@
                 axios.get('api/credits')
                 .then(response => {
                     this.desserts = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+                axios.get('api/customers')
+                .then(response => {
+                    this.nombres = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });

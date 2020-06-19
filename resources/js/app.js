@@ -12,7 +12,10 @@ Vue.use(VueRouter)
 
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+import moment from 'moment';
+
 import Vuetify from "vuetify/lib";
+
 Vue.use(Vuetify,  {
     iconfont: 'md',
 
@@ -48,6 +51,18 @@ const routes = [
 const router = new VueRouter({
     mode: 'history',
     routes // short for `routes: routes`
+})
+
+Vue.filter('formatDateTime', function(date) {
+    return moment(date).locale('es').format('MMMM Do YYYY, h:mm a');
+})
+
+Vue.filter('formatDateTimeShort', function (date) {
+    return moment(date).locale('es').format('MMMM Do YYYY');
+})
+
+Vue.filter('formatUpperCase', function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 })
 
 /**

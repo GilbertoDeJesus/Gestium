@@ -3,7 +3,7 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
-                    <v-col cols="11" sm="9" md="11">
+                    <v-col cols="11" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -33,7 +33,7 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="550px">
+                                <v-dialog v-model="dialog" max-width="650px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-4" v-on="on" >Nuevo Producto</v-btn>
                                 </template>
@@ -43,11 +43,10 @@
                                         cols="12"
                                         md="12"
                                         sm="12">
-                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">local_mall</i>
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: 0px; font-size:35px;">
+                                                <i class="material-icons" style="font-size:45px;">local_mall</i><strong>{{ formTitle }}</strong>
                                             </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
-                                        </v-col>
+                                            </v-col>
                                     </v-container>
                                 <v-card-text style="padding-bottom:0px;">
                                     <v-container style="padding-bottom:0px;">
@@ -76,14 +75,16 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                    :rules="[required('unidad de medida')]"
-                                                        v-model="editedItem.unidadM"
-                                                        label="Unidad de medida"
+                                                     :rules="[required('proveedor')]"
+                                                        v-model="editItem.provider_id"
+                                                        prepend-icon="local_shipping"
+                                                        label="Proveedor"
                                                         type="number"
                                                         clearable
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
+
 
                                                     <v-col
                                                     cols="12"
@@ -110,7 +111,7 @@
                                                     :rules="[required('stock mínimo')]"
                                                         v-model="editedItem.stock_minimo"
                                                         label="Stock minimo"
-                                                        type="number"
+                                                        type="text"
                                                         prepend-icon="error_outline"
                                                         clearable
                                                         required
@@ -127,7 +128,7 @@
 
                                                         v-model="editedItem.precio_compra"
                                                         :counter=true
-                                                        type="price"
+                                                        type="text"
                                                         clearable
                                                         label="Precio de compra"
                                                         hint="*Solo si está seguro"
@@ -145,7 +146,7 @@
                                                     :rules="[required('precio de compra')]"
                                                         v-model="editedItem.precio_compra"
                                                         :counter="5"
-                                                        type="price"
+                                                        type="text"
                                                         clearable
                                                         prepend-icon="monetization_on"
                                                         label="Precio de compra"
@@ -161,7 +162,7 @@
                                                     <v-text-field
                                                         v-model="editedItem.precio_venta"
                                                         :counter=true
-                                                        type="number"
+                                                        type="text"
                                                         clearable
                                                         label="Precio de venta"
                                                         hint="*Solo si está seguro"
@@ -178,7 +179,7 @@
                                                         :rules="[required('precio de venta')]"
                                                         v-model="editedItem.precio_venta"
                                                         :counter="5"
-                                                        type="number"
+                                                        type="text"
                                                         clearable
                                                         label="Precio de venta"
                                                         prepend-icon="local_offer"
@@ -188,8 +189,8 @@
 
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
-                                                    sm="6"
+                                                    md="6"
+                                                    sm="12"
                                                     >
                                                     <v-text-field
                                                         :rules="[required('descripcion'), minimum_length(8)]"
@@ -204,23 +205,23 @@
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
-                                                    sm="6"
+                                                    md="4"
+                                                    sm="4"
                                                     >
                                                     <v-text-field
-                                                     :rules="[required('proveedor')]"
-                                                        v-model="editItem.provider_id"
-                                                        prepend-icon="local_shipping"
-                                                        label="Proveedor"
+                                                    :rules="[required('unidad de medida')]"
+                                                        v-model="editedItem.unidadM"
+                                                        label="Unidad de medida"
                                                         type="number"
+                                                        prepend-icon="how_to_vote"
                                                         clearable
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
-                                                    sm="6"
+                                                    md="2"
+                                                    sm="4"
                                                     >
                                                     <v-checkbox
                                                         v-model="editedItem.meta"
@@ -229,7 +230,6 @@
                                                         required
                                                     ></v-checkbox>
                                                     </v-col>
-
                                                 </v-row>
                                             </v-container>
                                         </v-form>

@@ -14,24 +14,6 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function GetNames()
-    {
-        /*$Customers= customer::all();
-        $data = [];
-        $data[0] = [
-            'id' => 0,
-            'text' => 'Seleccione',
-        ];
-        foreach ($Customers as $key => $value) {
-            $data[$key+1] =[
-                'id' => $value->id,
-                'text' => $value->nombre,
-            ];
-
-        }
-        return response()->json($data);*/
-        return Customer::select('nombre')->where('status','=','1')->get();
-    }
 
     public function index()
     {
