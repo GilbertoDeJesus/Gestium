@@ -3,7 +3,7 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
-                    <v-col cols="10" sm="8" md="10">
+                    <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -15,6 +15,12 @@
                             :footer-props="{
                                 'items-per-page-options': [7, 10, 20]
                             }">
+                            <template v-slot:item.created_at="{ item }">
+                               {{item.created_at | formatDateTime | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.municipio="{ item }">
+                                {{item.municipio | formatUpperCase}}
+                            </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Rutas</v-toolbar-title>
@@ -60,16 +66,17 @@
                                                     md="12"
                                                     sm="6"
                                                     >
+                                                    <v-select
+                                                        v-model="select"
 
-                                                    <v-text-field
-                                                    :rules="[required('nombre')]"
-                                                        v-model="editedItem.deliverer_id"
-                                                        label="Repartidor"
-                                                        type="text"
-                                                        clearable
+                                                        :items="nombres"
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        label="Selecccione al repartidor"
                                                         prepend-icon="local_shipping"
-                                                        required
-                                                    ></v-text-field>
+                                                        persistent-hint
+                                                        return-object
+                                                        ></v-select>
                                                     </v-col>
 
                                                     <v-col
@@ -133,18 +140,21 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                select: {
+                    id: '',
+                    nombre: '',
+                },
                 headers: [
-                    { text: 'Repartidor', value: 'deliverer_id:nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                nombres:[],
                 desserts: [],
+                nombres:[],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
-                    deliverer_id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
@@ -152,7 +162,6 @@
                 },
                 defaultItem: {
                     id: '',
-                    deliverer_id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
@@ -174,7 +183,7 @@
 
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
+                return this.editedIndex === -1 ? 'Nueva Ruta' : 'Editar registro'
             },
         },
 
@@ -221,7 +230,7 @@
                     }
                 } else {
                     const response = await axios.post('/api/routes',{
-                        'deliverer_id': this.editedItem.deliverer_id,
+                        'deliverer_id': this.select.id,
                         'municipio': this.editedItem.municipio,
                         'status': this.editedItem.status
                     }).catch(error => console.log("Error: " + error));
@@ -276,7 +285,14 @@
                     console.log(response.data)
                     this.loading = false;
                 });
+                axios.get('api/providers')
+                .then(response => {
+                    this.nombres = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
             },
+
         },
 
         created () {

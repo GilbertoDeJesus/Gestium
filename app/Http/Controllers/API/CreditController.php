@@ -28,6 +28,7 @@ class CreditController extends Controller
      */
     public function store(Request $request)
     {
+        $provider= Customer::all();
         return Credit::create([
             'customer_id' => $request['customer_id'],
             'monto' => $request['monto'],

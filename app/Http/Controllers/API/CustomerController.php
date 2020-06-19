@@ -14,6 +14,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         return Customer::where('status','=','1')->get();
@@ -85,6 +86,7 @@ class CustomerController extends Controller
                    ]);
      return $customer;
     }
+
 
     /**
      * Remove the specified resource from storage.
