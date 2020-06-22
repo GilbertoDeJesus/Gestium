@@ -393,18 +393,21 @@
                     console.log(response.data)
                     this.loading = false;
                 });
-                axios.get('api/customers')
+            },
+            getNames(){
+                 axios.get('api/customers')
                 .then(response => {
                     this.nombres = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
-            },
+            }
 
         },
 
         created () {
             this.getResults();
+            this.getNames();
         },
     }
 </script>

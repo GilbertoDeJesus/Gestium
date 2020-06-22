@@ -285,7 +285,7 @@
                     console.log(response.data)
                     this.loading = false;
                 });
-                axios.get('api/providers')
+                axios.get('api/deliverers')
                 .then(response => {
                     this.nombres = response.data;
                     console.log(response.data)

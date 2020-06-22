@@ -29,13 +29,13 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         return Customer::create([
-            'route_id' => $request['route_id'],
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
-            'email' => $request['email'],
-            'establecimiento' => $request['establecimiento'],
             'direccion' => $request['direccion'],
-            'status'=> true
+            'establecimiento' => $request['establecimiento'],
+            'email' => $request['email'],
+            'status'=> true,
+            'route_id' => $request['route_id'],
         ]);
     }
 
@@ -62,13 +62,12 @@ class CustomerController extends Controller
         $customer = Customer::findOrFail($id);
 
         $validator = Validator::make( $request->all(), [
-           'route_id' => 'required|Integer',
             'nombre' => 'required|min:5',
             'telefono' => 'nullable',
-            'email' => 'nullable|email',
-            'establecimiento' =>'required|max:255',
             'direccion' => 'required|max:255',
-
+            'establecimiento' =>'required|max:255',
+            'email' => 'nullable|email',
+            'route_id' => 'required|Integer',
             ]
         );
 
@@ -77,12 +76,12 @@ class CustomerController extends Controller
         }
 
         $customer->update([
-            'route_id' => $request['route_id'],
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
-            'email' => $request['email'],
+            'direccion' => $request['direccion'],
             'establecimiento' => $request['establecimiento'],
-            'direccion' => $request['direccion']
+            'email' => $request['email'],
+            'route_id' => $request['route_id'],
                    ]);
      return $customer;
     }
