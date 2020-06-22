@@ -58,7 +58,7 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_com" class="nav-link" title="Creditos">
+                <router-link to="/warehouse_movement" class="nav-link" title="Salidas">
                     <i class="material-icons">assignment_turned_in</i>
                     <p>Salidas</p>
                 </router-link>

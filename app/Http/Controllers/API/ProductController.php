@@ -51,6 +51,32 @@ class ProductController extends Controller
     {
         //
     }
+    public function updateS(Request $request)
+    {
+         $product =$request->input();
+        foreach($product as $producto){
+
+        $id_product= product::findOrFail($producto['id']);
+        $stock=$id_product->stock;
+        $stock_minimo=$id_product->stock_minimo;
+        $operacion=$stock-$stock_minimo;
+        if ($producto['cantidad']<=$operacion ){
+           $id_product->update([
+           'stock' => $stock - $producto['cantidad']
+                   ]);
+           }
+
+          }
+
+        /**$product = product::findOrFail($request['id']);
+        $stock=$product->stock;
+        if($request['cantidad']<=$stock){
+           $product->update([
+           'stock' => $stock - $request['cantidad']
+        ]);
+
+           }*/
+    }
 
     /**
      * Update the specified resource in storage.

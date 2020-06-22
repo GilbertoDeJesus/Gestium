@@ -35,6 +35,8 @@ Route::apiResources([
 
 
 ]);
+Route::put('updateS', 'API\ProductController@updateS');
+
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');
 Route::post('register', 'API\AuthController@register');
