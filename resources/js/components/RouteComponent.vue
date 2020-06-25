@@ -145,7 +145,7 @@
                     nombre: '',
                 },
                 headers: [
-                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },

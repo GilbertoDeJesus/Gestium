@@ -17,7 +17,7 @@ class CreditController extends Controller
      */
     public function index()
     {
-        return Credit::get();
+        return Credit::with('Customer')->get();
     }
 
     /**
