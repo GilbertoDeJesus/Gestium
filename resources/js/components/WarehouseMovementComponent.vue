@@ -6,7 +6,7 @@
                     <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
-                            :items="desserts"
+                            :items="salidas"
                             sort-by="calories"
                             class="elevation-3"
                             :search="search"
@@ -52,7 +52,7 @@
                                             <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
                                                 <i class="material-icons" style="font-size:85px;">assignment_turned_in</i>
                                             </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Nuevo registro</strong></p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
                                         </v-col>
                                     </v-container>
 
@@ -67,12 +67,29 @@
                                                     sm="6"
                                                     >
                                                     <v-select
-                                                        v-model="select"
+                                                        v-model="select_deliverer"
 
                                                         :items="nombres"
                                                         item-text="nombre"
                                                         item-value="id"
                                                         label="Seleccione al repartidor"
+                                                        prepend-icon="local_shipping"
+                                                        persistent-hint
+                                                        return-object
+                                                        ></v-select>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="6"
+                                                    >
+                                                    <v-select
+                                                        v-model="select_tipoM"
+                                                        :items="tipoMovimiento"
+
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        label="Seleccione el tipo de movimiento"
                                                         prepend-icon="local_shipping"
                                                         persistent-hint
                                                         return-object
@@ -110,7 +127,6 @@
                                                         @input="menu = false"
                                                         ></v-date-picker>
                                                     </v-dialog>
-
                                                     </v-col>
 
                                                     <v-col
@@ -119,7 +135,7 @@
                                                     sm="6"
                                                     >
                                                     <v-select
-                                                        v-model="select_p"
+                                                        v-model="select_product"
 
                                                         :items="productos"
                                                         item-text="nombre"
@@ -199,23 +215,28 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
-                select: {
+                select_deliverer: {
                     id: '',
                     nombre: '',
                 },
-                 select_p: {
+                 select_product: {
                     id: '',
                     nombre: '',
                 },
+                select_tipoM: { text: 'Salida', id: '1' },
+                tipoMovimiento: [
+                    { nombre: 'Salida', id: '1' },
+                    { nombre: 'Devolución', id: '0' },
+                ],
 
                 headers: [
-                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Producto', value: 'producto' },
+                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Producto', value: 'product_id' },
                     { text: 'Cantidad', value: 'cantidad'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                desserts: [],
+                salidas: [],
                 productosS:[],
                 nombres:[],
                 productos:[],
@@ -251,7 +272,7 @@
 
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'Nueva Ruta' : 'Editar registro'
+                return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
             },
         },
 
@@ -263,17 +284,17 @@
 
         methods: {
             add(){
-                var persona={id:this.select_p.id,cantidad:this.editedItem.cantidad}
+                var persona={id:this.select_product.id,cantidad:this.editedItem.cantidad}
                 this.productosS.push(persona);
-                    //this.productosS[index]
-             console.log(this.productosS)
-             this.select_p=[0];
-             this.select_p.id='';
+                console.log(this.productosS)
+                this.select_product=[0];
+                this.select_product.id='';
               this.editedItem.cantidad='';
 
             },
+
             editItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+                this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.dialog = true
                 this.edit_mode = true
@@ -290,29 +311,30 @@
                 }
             },
             async save () {
-                if (this.editedIndex > -1) {
-                   /* const response = await axios.put(`api/warehouse_movements/${this.editedItem.id}`, this.editedItem)
-                    .catch(error => console.log(error));
-                    if (response.data.validation_errors) {
-                        Toast.fire({
-                            icon: 'error',
-                            title: '¡Ocurrió un error, vuelve a intentarlo!'
-                        });
-                        console.log(response.data);
-                    } else {
+                    const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
+                        'fecha_salida': this.editedItem.fecha_salida,
+                        'deliverer_id': this.select_deliverer.id,
+                        'product_id': '1',
+                        'cantidad': this.editedItem.cantidad,
+                        'tipoMovimiento': this.select_tipoM.id,
+                    }).catch(error => console.log("Error: " + error));
+
+
+                   /*if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
+                       const response=await axios.put(`/api/updateS`,
+                        this.productosS).catch(error => console.log("Error: " + error));
+                        if (response) {
                         this.getResults();
                         Toast.fire({
                             icon: 'success',
-                            title: '¡Datos de la salida actualizados!'
+                            title: '¡Salida registrado!'
                         })
-                    }*/
-                } else {
-                    /*const response = await axios.post('/api/warehouse_movements',{
-                        'deliverer_id': this.select.id,
-                        'municipio': this.editedItem.municipio,
-                        'status': this.editedItem.status
-                    }).catch(error => console.log("Error: " + error));*/
-                    const response=await axios.put(`/api/updateS`,
+                        console.log(response.data);
+                        this.productosS=[];
+
+                    }
+                    }else{
+                       const response=await axios.put(`/api/returnProduct`,
                         this.productosS).catch(error => console.log("Error: " + error));
 
                     if (response) {
@@ -323,13 +345,24 @@
                         })
                         console.log(response.data);
                         this.productosS=[];
-                    }
-                }
 
+                     }
+                    }*/
+                    if (response) {
+                        this.getResults();
+                        Toast.fire({
+                            icon: 'success',
+                            title: '¡Salida registrado!'
+                        })
+                        console.log(response.data);
+                        this.productosS=[];
+
+                     }
                 this.close();
+
             },
             async deleteItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+                this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
                     title: '¿Estás seguro de desactivar esta salida?',
@@ -362,7 +395,7 @@
             getResults() {
                 axios.get('api/warehouse_movements')
                 .then(response => {
-                    this.desserts = response.data;
+                    this.salidas = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });

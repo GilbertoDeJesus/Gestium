@@ -280,7 +280,7 @@
                 headers: [
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Meta', value: 'meta' },
-                    { text: 'Unidad de medidad', value: 'unit_id' },
+                    { text: 'Unidad de medidad', value: 'unit.tipo' },
                     { text: 'Precio de Venta', value: 'precio_venta' },
                     { text: 'Stock', value: 'stock' },
                     { text: 'Descripción', value: 'descripcion' },
