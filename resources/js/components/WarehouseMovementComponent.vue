@@ -39,7 +39,7 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="500px">
+                                <v-dialog v-model="dialog" max-width="900px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Salida</v-btn>
                                 </template>
@@ -63,108 +63,169 @@
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
-                                                    sm="6"
+                                                    md="6"
+                                                    sm="12"
                                                     >
-                                                    <v-select
-                                                        v-model="select_deliverer"
+                                                    <v-row justify="center">
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-select
+                                                            v-model="select_provider"
 
-                                                        :items="nombres"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Seleccione al repartidor"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-select>
-                                                    </v-col>
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-select
-                                                        v-model="select_tipoM"
-                                                        :items="tipoMovimiento"
+                                                            :items="nombres"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Repartidor"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-select>
+                                                        </v-col>
 
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Seleccione el tipo de movimiento"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-select>
-                                                    </v-col>
-
-                                                      <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-dialog
-                                                        ref="dialog"
-                                                        v-model="menu"
-                                                        :return-value.sync="date1"
-                                                        persistent
-                                                        width="290px"
-                                                    >
-                                                        <template v-slot:activator="{ on }">
-                                                        <v-text-field
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-dialog
+                                                            ref="dialog"
+                                                            v-model="menu"
+                                                            :return-value.sync="date1"
+                                                            persistent
+                                                            width="290px"
+                                                        >
+                                                            <template v-slot:activator="{ on }">
+                                                            <v-text-field
+                                                                v-model="editedItem.fecha_salida"
+                                                                label="Fecha de salida"
+                                                                prepend-icon="event"
+                                                                readonly
+                                                                v-on="on"
+                                                            ></v-text-field>
+                                                            </template>
+                                                            <v-date-picker
+                                                            :rules="[required('fecha de salida')]"
                                                             v-model="editedItem.fecha_salida"
-                                                            label="Fecha de salida"
-                                                            prepend-icon="event"
-                                                            readonly
-                                                            v-on="on"
+                                                            locale="mx"
+                                                            format="YYYY-MM-dd"
+                                                            required
+                                                            color="#fd2d21"
+                                                            @input="menu = false"
+                                                            ></v-date-picker>
+                                                        </v-dialog>
+
+                                                        </v-col>
+
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-autocomplete
+                                                            v-model="select_product"
+
+                                                            :items="productos"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Producto"
+                                                            prepend-icon="local_mall"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
+                                                        </v-col>
+
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-text-field
+                                                            v-model="editedItem.cantidad"
+                                                            label="Cantidad"
+                                                            type="number"
+                                                            clearable
+                                                            prepend-icon="local_mall"
+                                                            required
                                                         ></v-text-field>
-                                                        </template>
-                                                        <v-date-picker
-                                                        :rules="[required('fecha de salida')]"
-                                                        v-model="editedItem.fecha_salida"
-                                                        locale="mx"
-                                                        format="YYYY-MM-dd"
-                                                        required
-                                                        color="#fd2d21"
-                                                        @input="menu = false"
-                                                        ></v-date-picker>
-                                                    </v-dialog>
+                                                        </v-col>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn dark class="ma-2" color="#ff5300" style="padding-right:4rem; padding-left:4rem;"  @click="add">Agregar</v-btn>
+                                                    </v-row>
                                                     </v-col>
-
                                                     <v-col
                                                     cols="12"
                                                     md="6"
-                                                    sm="6"
+                                                    sm="12"
                                                     >
-                                                    <v-select
-                                                        v-model="select_product"
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                            <v-data-table
+                                                            :headers="headers_productos"
+                                                            :items="productosS"
+                                                            dense
+                                                            >
 
-                                                        :items="productos"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Seleccione un producto"
-                                                        prepend-icon="local_mall"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-select>
+                                                             <template v-slot:item.actions="{ item }">
+                                                                <v-icon small class="mr-2" @click="editItemProduct(item)"> mdi-pencil </v-icon>
+                                                                <v-icon small @click="deleteItemProducts(item)"> mdi-delete </v-icon>
+
+                                                                <v-dialog
+                                                                    v-model="dialogEditProduct"
+                                                                    max-width="400px"
+                                                                >
+                                                                    <v-card>
+                                                                    <v-card-title>
+                                                                        <p>Editar Cantidad</p>
+                                                                    </v-card-title>
+                                                                    <v-card-text>
+                                                                        <v-text-field
+                                                                            v-model="editedItem.cantidad"
+                                                                            label="Ingrese la nueva Cantidad"
+                                                                            type="number"
+                                                                            clearable
+                                                                            prepend-icon="local_mall"
+                                                                            required
+                                                                        ></v-text-field>
+                                                                    </v-card-text>
+                                                                    <v-card-actions>
+                                                                        <v-btn
+                                                                        color="primary"
+                                                                        text
+                                                                        @click="cancelarEditar"
+                                                                        >
+                                                                        Cancelar
+                                                                        </v-btn>
+                                                                        <v-spacer></v-spacer>
+                                                                        <v-btn
+                                                                        color="primary"
+                                                                        text
+                                                                        @click="modifyQuantity(item)"
+                                                                        >
+                                                                        Guardar
+                                                                        </v-btn>
+                                                                    </v-card-actions>
+                                                                    </v-card>
+                                                                </v-dialog>
+                                                            </template>
+
+                                                            <template v-slot:no-data>
+                                                            <v-alert
+                                                                justify="center"
+                                                                type="info"
+                                                                color="#ff5400"
+                                                                dense
+                                                                border="left"
+                                                                elevation="4">No se ha realizado ninguna saida.</v-alert>
+                                                            </template>
+                                                            </v-data-table>
+                                                        </v-col>
                                                     </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="6"
-                                                    sm="6"
-                                                    >
-                                                    <v-text-field
-                                                    :rules="[required('cantidad')]"
-                                                        v-model="editedItem.cantidad"
-                                                        label="Cantidad"
-                                                        type="number"
-                                                        clearable
-                                                        prepend-icon="local_mall"
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
-                                                     <v-spacer></v-spacer>
-                                    <v-btn dark class="ma-2" color="#ff5300"   @click="add">Agregar</v-btn>
-
 
                                                 </v-row>
                                             </v-container>
@@ -208,6 +269,7 @@
         data() {
             return {
                 dialog: false,
+                dialogEditProduct: false,
                 search: '',
                   date: '',
                 date1: new Date().toISOString().substr(0, 10),
@@ -215,7 +277,7 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
-                select_deliverer: {
+                select_provider: {
                     id: '',
                     nombre: '',
                 },
@@ -223,12 +285,11 @@
                     id: '',
                     nombre: '',
                 },
-                select_tipoM: { text: 'Salida', id: '1' },
-                tipoMovimiento: [
-                    { nombre: 'Salida', id: '1' },
-                    { nombre: 'Devolución', id: '0' },
-                ],
-
+                salidaProducto:{
+                    id:'',
+                    nombre:'',
+                    cantidad:'',
+                },
                 headers: [
                     { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Producto', value: 'product_id' },
@@ -236,7 +297,12 @@
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                salidas: [],
+                headers_productos: [
+                    {text: 'Nombre', value: 'nombre'},
+                    {text: 'Cantidad', value: 'cantidad'},
+                    { text: 'Acciones', value: 'actions', sortable: false },
+                ],
+                desserts: [],
                 productosS:[],
                 nombres:[],
                 productos:[],
@@ -272,7 +338,7 @@
 
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
+                return this.editedIndex === -1 ? 'Nueva salida' : 'Editar registro'
             },
         },
 
@@ -284,12 +350,28 @@
 
         methods: {
             add(){
-                var persona={id:this.select_product.id,cantidad:this.editedItem.cantidad}
-                this.productosS.push(persona);
+                //var salidaProducto={id:this.select_product.id,nombre:this.select_product.nombre,cantidad:this.editedItem.cantidad}
+                this.salidaProducto={
+                    'id':this.select_product.id,
+                    'nombre':this.select_product.nombre,
+                    'cantidad':this.editedItem.cantidad
+                    }
+                this.productosS.push(this.salidaProducto);
+                    //this.productosS[index]
                 console.log(this.productosS)
                 this.select_product=[0];
                 this.select_product.id='';
-              this.editedItem.cantidad='';
+                this.editedItem.cantidad='';
+
+            },
+            modifyQuantity(item){
+                //this.editedIndex = this.productosS.indexOf(item)
+                this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
+                this.editedIndex = -1
+                this.editedItem.cantidad='';
+                //this.indexCantidad=null;
+                this.dialogEditProduct = false
+
 
             },
 
@@ -299,12 +381,28 @@
                 this.dialog = true
                 this.edit_mode = true
             },
+            editItemProduct (item) {
+                this.editedIndex = this.productosS.indexOf(item)
+                this.editedItem = Object.assign({}, item) // Clone an object
+                this.dialogEditProduct = true
+
+            },
+            deleteItemProducts(item) {
+                const index = this.productosS.indexOf(item)
+                confirm('¿Estas seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
+            },
+            cancelarEditar(){
+                this.editedItem.cantidad='';
+                this.dialogEditProduct= false
+            },
             close () {
                 this.$refs.form.reset()
                 this.dialog = false
+                this.productosS=[]
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
+                this.productosS=[]
                 })
                 if (this.edit_mode == true) {
                     this.edit_mode = false
@@ -399,12 +497,16 @@
                     console.log(response.data)
                     this.loading = false;
                 });
+            },
+            getDeliverers(){
                 axios.get('api/deliverers')
                 .then(response => {
                     this.nombres = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
+            },
+            getProducts(){
                 axios.get('api/products')
                 .then(response => {
                     this.productos = response.data;
@@ -417,6 +519,8 @@
 
         created () {
             this.getResults();
+            this.getDeliverers();
+            this.getProducts();
         },
     }
 </script>

@@ -15,6 +15,12 @@
                             :footer-props="{
                                 'items-per-page-options': [7, 10, 20]
                             }">
+                            <template v-slot:item.fecha="{ item }">
+                                {{item.fecha |  formatDateTimeShort | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.descripcion="{ item }">
+                                {{item.descripcion | formatUpperCase}}
+                            </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Creditos</v-toolbar-title>
@@ -248,7 +254,7 @@
                 date1: new Date().toISOString().substr(0, 10),
                 menu1:false,
                 headers: [
-                    { text: 'Nombre', value: 'select:nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Nombre', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Monto', value: 'monto' },
                     { text: 'Descripcion', value: 'descripcion' },
                     { text: 'Fecha de aprobación', value: 'fecha'},
@@ -393,18 +399,21 @@
                     console.log(response.data)
                     this.loading = false;
                 });
-                axios.get('api/customers')
+            },
+            getNames(){
+                 axios.get('api/customers')
                 .then(response => {
                     this.nombres = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
-            },
+            }
 
         },
 
         created () {
             this.getResults();
+            this.getNames();
         },
     }
 </script>
