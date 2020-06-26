@@ -118,6 +118,22 @@
                                                         </v-dialog>
 
                                                         </v-col>
+                                                        <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="6"
+                                                    >
+                                                    <v-select
+                                                        v-model="select_tipoM"
+                                                        :items="tipoMovimiento"
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        label="Seleccione el tipo de movimiento"
+                                                        prepend-icon="local_shipping"
+                                                        persistent-hint
+                                                        return-object
+                                                        ></v-select>
+                                                    </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -290,6 +306,11 @@
                     nombre:'',
                     cantidad:'',
                 },
+                select_tipoM: { text: 'Salida', id: '1' },
+                tipoMovimiento: [
+                    { nombre: 'Salida', id: '1' },
+                    { nombre: 'Devolución', id: '0' },
+                ],
                 headers: [
                     { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Producto', value: 'product_id' },
@@ -302,7 +323,7 @@
                     {text: 'Cantidad', value: 'cantidad'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                desserts: [],
+                salidas: [],
                 productosS:[],
                 nombres:[],
                 productos:[],
