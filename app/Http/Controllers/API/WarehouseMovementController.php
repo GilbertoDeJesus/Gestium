@@ -29,6 +29,10 @@ class WarehouseMovementController extends Controller
      */
     public function store(Request $request)
     {
+        return WarehouseMovement::create([
+            'deliverer_id' => $request['deliverer_id'],
+            'fecha_salida' => $request['fecha_salida'],
+        ]);
         $movement= WarehouseMovement::create([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida']
@@ -36,11 +40,11 @@ class WarehouseMovementController extends Controller
         $movement->get();
         $movementproduct= WarehouseMovementProduct::create([
             'product_id'=>$request['product_id'],
-            'warehouse:movement_id'=>$movement['id'],
+            'warehouse_movement_id'=>$movement['id'],
             'cantidad'=>$request['cantidad'],
             'tipoMovimineto'=>$request['tipoMovimiento']
         ]);
-
+        
     }
 
     /**

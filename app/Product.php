@@ -14,9 +14,10 @@ class Product extends Model
         ->withPivot('cantidad', 'precio_compra')
         ->withTimestamps();
     }
-    public function depurate(){
-        return $this->belongsToMany(Depurate::class)->using(DepurateProduct::class);
-
+    public function warehousemovement(){
+        return $this->belongsToMany(WarehouseMovement::class)->using(WarehouseMovementProduct::class)
+        ->withPivot('cantidad', 'tipo_movimiento')
+        ->withTimestamps();
     }
 
 

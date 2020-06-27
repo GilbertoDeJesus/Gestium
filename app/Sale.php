@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sale extends Model
 {
     public function product(){
-        return $this->belongsToMany(DepurateProduct::class)->using(ProductSale::class);
+        return $this->belongsToMany(WarehouseMovementProduct::class)->using(ProductSale::class);
     }
 
     public function customer(){
