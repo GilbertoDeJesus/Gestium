@@ -17,6 +17,7 @@ class CreateExpensesTable extends Migration
             $table->id();
             $table->string('descripcion')->nullable();
             $table->double('monto',8,2);
+            $table->boolean('status')->TRUE;
             $table->unsignedBigInteger('deliverer_id');
             $table->timestamps();
             $table->foreign('deliverer_id')->references('id')->on('deliverers');

@@ -14,9 +14,11 @@ class Product extends Model
         ->withPivot('cantidad', 'precio_compra')
         ->withTimestamps();
     }
-    public function warehouseMovement(){
-        return $this->belongsToMany(WarehouseMovement::class)->using(WarehouseMovementProduct::class)->withTimestamps();
 
+    public function warehousemovement(){
+        return $this->belongsToMany(WarehouseMovement::class)->using(ProductWarehouseMovement::class)
+        ->withPivot('cantidad', 'tipo_movimiento')
+        ->withTimestamps();
     }
 
 

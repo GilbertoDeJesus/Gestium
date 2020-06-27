@@ -17,12 +17,11 @@ class WarehouseMovementController extends Controller
      */
     public function index()
     {
-        //return  WarehouseMovement::with('Deliverer:id,nombre')->get();
        return  WarehouseMovement::with('Deliverer:id,nombre')
        ->join('product_warehouse_movement','warehouse_movements.id','=','product_warehouse_movement.warehouse_movement_id')
        ->select('warehouse_movements.deliverer_id', 'product_warehouse_movement.cantidad', 'product_warehouse_movement.product_id')
        ->get();
-      /*return  WarehouseMovementProduct::join('products',"product_warehouse_movement.product_id",'=','products.id')
+      /*return  ProductWarehouseMovement::join('products',"product_warehouse_movement.product_id",'=','products.id')
        ->get();*/
     }
 
@@ -34,6 +33,7 @@ class WarehouseMovementController extends Controller
      */
     public function store(Request $request)
     {
+
         $movement= WarehouseMovement::create([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida']

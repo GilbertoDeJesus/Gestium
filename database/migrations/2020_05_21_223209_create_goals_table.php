@@ -18,7 +18,8 @@ class CreateGoalsTable extends Migration
             $table->integer('numero_kilos');
             $table->integer('porcentaje');
             $table->integer('progreso');
-            $table->double('bono_entregado');
+            $table->boolean('bono_entregado');
+            $table->boolean('status')->TRUE;
             $table->unsignedBigInteger('deliverer_id');
             
 

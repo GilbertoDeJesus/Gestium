@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarehouseMovementProductsTable extends Migration
+class CreateProductWarehouseMovementTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWarehouseMovementProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('warehouse_movement_products', function (Blueprint $table) {
+        Schema::create('product_warehouse_movement', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('warehouse_movement_id');
@@ -32,6 +32,6 @@ class CreateWarehouseMovementProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warehouse_movement_products');
+        Schema::dropIfExists('product_warehouse_movement');
     }
 }

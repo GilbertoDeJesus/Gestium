@@ -11,7 +11,7 @@ class WarehouseMovement extends Model
 
     }
     public function product(){
-       return $this->belongsToMany(Product::class)->using(WarehouseMovementProduct::class)->withTimestamps();
+       return $this->belongsToMany(Product::class)->using(ProductWarehouseMovement::class);
    }
     protected $guarded = [];
 }
