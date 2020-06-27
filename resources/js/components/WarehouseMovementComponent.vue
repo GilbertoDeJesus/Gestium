@@ -432,22 +432,21 @@
             async save () {
                     const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
                         'fecha_salida': this.editedItem.fecha_salida,
-                        'deliverer_id': this.select_deliverer.id,
-                        'product_id': '1',
-                        'cantidad': this.editedItem.cantidad,
-                        'tipoMovimiento': this.select_tipoM.id,
+                        'deliverer_id': this.select_provider.id,
+                        'products':this.productosS,
+                        'tipoMovimiento': this.select_tipoM.id
                     }).catch(error => console.log("Error: " + error));
 
 
-                   /*if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
+                   if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
                        const response=await axios.put(`/api/updateS`,
                         this.productosS).catch(error => console.log("Error: " + error));
                         if (response) {
                         this.getResults();
-                        Toast.fire({
+                       /* Toast.fire({
                             icon: 'success',
                             title: '¡Salida registrado!'
-                        })
+                        })*/
                         console.log(response.data);
                         this.productosS=[];
 
@@ -458,15 +457,15 @@
 
                     if (response) {
                         this.getResults();
-                        Toast.fire({
+                       /* Toast.fire({
                             icon: 'success',
                             title: '¡Salida registrado!'
-                        })
+                        })*/
                         console.log(response.data);
                         this.productosS=[];
 
                      }
-                    }*/
+                    }
                     if (response) {
                         this.getResults();
                         Toast.fire({

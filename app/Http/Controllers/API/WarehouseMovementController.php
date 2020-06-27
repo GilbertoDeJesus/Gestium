@@ -17,8 +17,13 @@ class WarehouseMovementController extends Controller
      */
     public function index()
     {
-        return WarehouseMovement::with('Deliverer')->get();
-       // return WarehouseMovement::get();
+        //return  WarehouseMovement::with('Deliverer:id,nombre')->get();
+       return  WarehouseMovement::with('Deliverer:id,nombre')
+       ->join('product_warehouse_movement','warehouse_movements.id','=','product_warehouse_movement.warehouse_movement_id')
+       ->select('warehouse_movements.deliverer_id', 'product_warehouse_movement.cantidad', 'product_warehouse_movement.product_id')
+       ->get();
+      /*return  WarehouseMovementProduct::join('products',"product_warehouse_movement.product_id",'=','products.id')
+       ->get();*/
     }
 
     /**
@@ -32,14 +37,21 @@ class WarehouseMovementController extends Controller
         $movement= WarehouseMovement::create([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida']
+
         ]);
         $movement->get();
-        $movementproduct= WarehouseMovementProduct::create([
-            'product_id'=>$request['product_id'],
-            'warehouse:movement_id'=>$movement['id'],
-            'cantidad'=>$request['cantidad'],
-            'tipoMovimineto'=>$request['tipoMovimiento']
-        ]);
+        $product_id='';
+        $cantidad='';
+        foreach ( $request['products'] as $product) {
+            $product_id=$product['id'];
+            $cantidad=$product['cantidad'];
+        $movement_product=$movement->product()->attach( $product_id,['cantidad' =>$cantidad,
+        'tipoMovimiento' =>$request['tipoMovimiento']]);
+
+        }
+        return $movement_product;
+        return $movement;
+
 
     }
 
