@@ -143,6 +143,7 @@
                                                         sm="6"
                                                         >
                                                         <v-text-field
+
                                                             v-model="editedItem.cantidad"
                                                             label="Cantidad"
                                                             type="number"
@@ -178,6 +179,7 @@
                                                                 <v-dialog
                                                                     v-model="dialogEditProduct"
                                                                     max-width="400px"
+                                                                    :retain-focus="false"
                                                                 >
                                                                     <v-card>
                                                                     <v-card-title>
@@ -185,6 +187,7 @@
                                                                     </v-card-title>
                                                                     <v-card-text>
                                                                         <v-text-field
+                                                                            :retain-focus="false"
                                                                             v-model="editedItem.cantidad"
                                                                             label="Ingrese la nueva Cantidad"
                                                                             type="number"
@@ -384,6 +387,7 @@
                 this.editedIndex = this.productosS.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.dialogEditProduct = true
+
 
             },
             deleteItemProducts(item) {

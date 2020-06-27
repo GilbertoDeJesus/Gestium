@@ -64,9 +64,9 @@
                                                     <v-col
                                                     cols="12"
                                                     md="12"
-                                                    sm="6"
+                                                    sm="12"
                                                     >
-                                                    <v-select
+                                                    <v-autocomplete
                                                         v-model="select"
 
                                                         :items="nombres"
@@ -76,13 +76,13 @@
                                                         prepend-icon="local_shipping"
                                                         persistent-hint
                                                         return-object
-                                                        ></v-select>
+                                                        ></v-autocomplete>
                                                     </v-col>
 
                                                     <v-col
                                                     cols="12"
                                                     md="12"
-                                                    sm="6"
+                                                    sm="12"
                                                     >
                                                     <v-text-field
                                                     :rules="[required('nombre')]"
@@ -145,7 +145,7 @@
                     nombre: '',
                 },
                 headers: [
-                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
@@ -285,6 +285,8 @@
                     console.log(response.data)
                     this.loading = false;
                 });
+            },
+            getDeliverers(){
                 axios.get('api/deliverers')
                 .then(response => {
                     this.nombres = response.data;
@@ -297,6 +299,7 @@
 
         created () {
             this.getResults();
+            this.getDeliverers();
         },
     }
 </script>

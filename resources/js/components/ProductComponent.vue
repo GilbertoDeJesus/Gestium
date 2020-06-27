@@ -3,7 +3,7 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
-                    <v-col cols="11" sm="12" md="11">
+                    <v-col cols="12" sm="12" md="12">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -15,6 +15,15 @@
                             :footer-props="{
                                 'items-per-page-options': [7, 10, 20]
                             }">
+                            <template v-slot:item.created_at="{ item }">
+                               {{item.created_at | formatDateTime | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.nombre="{ item }">
+                                {{item.nombre | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.descripcion="{ item }">
+                                {{item.descripcion | formatUpperCase}}
+                            </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Productos</v-toolbar-title>
@@ -33,9 +42,9 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="650px">
+                                <v-dialog v-model="dialog" max-width="810px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-4" v-on="on" >Nuevo Producto</v-btn>
+                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo Producto &nbsp;<i class="material-icons">queue</i></v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -43,8 +52,11 @@
                                         cols="12"
                                         md="12"
                                         sm="12">
-                                            <p style="text-align: center; color:#ffffff; margin-bottom: 0px; font-size:35px;">
-                                                <i class="material-icons" style="font-size:45px;">local_mall</i><strong>{{ formTitle }}</strong>
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">local_mall</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;">
+                                                <strong>{{ formTitle }}</strong>
                                             </p>
                                             </v-col>
                                     </v-container>
@@ -55,7 +67,7 @@
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
                                                     >
                                                     <v-text-field
@@ -64,39 +76,41 @@
                                                         :counter="45"
                                                         label="Nombre"
                                                         type="text"
-                                                        prepend-icon="add_circle"
+                                                        prepend-icon="turned_in_not"
                                                         clearable
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
+
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
+                                                    v-if="edit_mode"
                                                     >
                                                     <v-text-field
-                                                     :rules="[required('proveedor')]"
-                                                        v-model="editItem.provider_id"
-                                                        prepend-icon="local_shipping"
-                                                        label="Proveedor"
+
+                                                        v-model="editedItem.stock"
+                                                        label="Stock"
                                                         type="number"
+                                                        prepend-icon="domain"
                                                         clearable
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
 
-
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
+                                                    v-if="!edit_mode"
                                                     >
                                                     <v-text-field
                                                     :rules="[required('stock')]"
                                                         v-model="editedItem.stock"
                                                         label="Stock"
                                                         type="number"
-                                                        prepend-icon="post_add"
+                                                        prepend-icon="domain"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -104,15 +118,15 @@
 
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
                                                     >
                                                     <v-text-field
                                                     :rules="[required('stock mínimo')]"
                                                         v-model="editedItem.stock_minimo"
                                                         label="Stock minimo"
-                                                        type="text"
-                                                        prepend-icon="error_outline"
+                                                        type="number"
+                                                        prepend-icon="insert_chart_outlined"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -120,7 +134,26 @@
 
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
+                                                    sm="6"
+                                                    >
+
+                                                    <v-autocomplete
+                                                        v-model="selectProvider"
+
+                                                        :items="providers"
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        label="Proveedor"
+                                                        prepend-icon="storefront"
+                                                        persistent-hint
+                                                        return-object
+                                                    ></v-autocomplete>
+                                                    </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="4"
                                                     sm="6"
                                                     v-if="edit_mode"
                                                     >
@@ -130,6 +163,7 @@
                                                         :counter=true
                                                         type="text"
                                                         clearable
+                                                        prepend-icon="attach_money"
                                                         label="Precio de compra"
                                                         hint="*Solo si está seguro"
                                                         persistent-hint
@@ -138,7 +172,7 @@
 
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
                                                         v-if="!edit_mode"
                                                     >
@@ -148,14 +182,14 @@
                                                         :counter="5"
                                                         type="text"
                                                         clearable
-                                                        prepend-icon="monetization_on"
+                                                        prepend-icon="attach_money"
                                                         label="Precio de compra"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
                                                     v-if="edit_mode"
                                                     >
@@ -165,13 +199,14 @@
                                                         type="text"
                                                         clearable
                                                         label="Precio de venta"
+                                                        prepend-icon="local_atm"
                                                         hint="*Solo si está seguro"
                                                         persistent-hint
                                                     ></v-text-field>                                                                                                    </v-col>
 
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="6"
                                                         v-if="!edit_mode"
                                                     >
@@ -182,14 +217,14 @@
                                                         type="text"
                                                         clearable
                                                         label="Precio de venta"
-                                                        prepend-icon="local_offer"
+                                                        prepend-icon="local_atm"
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
 
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="4"
                                                     sm="12"
                                                     >
                                                     <v-text-field
@@ -198,7 +233,7 @@
                                                         :counter="45"
                                                         label="Descripción"
                                                         type="text"
-                                                        prepend-icon="description"
+                                                        prepend-icon="format_align_justify"
                                                         clearable
                                                         required
                                                     ></v-text-field>
@@ -208,15 +243,18 @@
                                                     md="4"
                                                     sm="4"
                                                     >
-                                                    <v-text-field
-                                                    :rules="[required('unidad de medida')]"
-                                                        v-model="editedItem.unidadM"
+
+                                                    <v-autocomplete
+                                                        v-model="selectUnit"
+
+                                                        :items="units"
+                                                        item-text="tipo"
+                                                        item-value="id"
                                                         label="Unidad de medida"
-                                                        type="number"
-                                                        prepend-icon="how_to_vote"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
+                                                        prepend-icon="category"
+                                                        persistent-hint
+                                                        return-object
+                                                    ></v-autocomplete>
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
@@ -240,7 +278,7 @@
                                     <v-spacer></v-spacer>
                                     <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
 
-                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
+                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save"><i class="material-icons">save</i>Guardar</v-btn>
                                     <v-spacer></v-spacer>
                                 </v-card-actions>
                                 </v-card>
@@ -277,6 +315,14 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                selectProvider:{
+                    id: '',
+                    nombre: '',
+                },
+                selectUnit:{
+                    id: '',
+                    tipo: '',
+                },
                 headers: [
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Meta', value: 'meta' },
@@ -288,6 +334,8 @@
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 desserts: [],
+                providers:[],
+                units:[],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
@@ -384,8 +432,8 @@
                         'precio_venta' : this.editedItem.precio_venta,
                         'stock' : this.editedItem.stock,
                         'stock_minimo':this.editedItem.stock_minimo,
-                        'unit_id':this.editedItem.unidadM,
-                        'provider_id':this.editItem.provider_id,
+                        'unit_id':this.selectUnit.id,
+                        'provider_id':this.selectProvider.id,
                         'status': this.editedItem.status
                     }).catch(error => console.log("Error: " + error));
 
@@ -440,10 +488,28 @@
                     this.loading = false;
                 });
             },
+            getNameProviders(){
+                axios.get('api/providers')
+                .then(response => {
+                    this.providers = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
+            getTypeUnit(){
+                axios.get('api/units')
+                .then(response => {
+                    this.units = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
         },
 
         created () {
             this.getResults();
+            this.getNameProviders();
+            this.getTypeUnit();
         },
     }
 </script>
