@@ -63,7 +63,7 @@
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="5"
                                                     sm="12"
                                                     >
                                                     <v-row justify="center">
@@ -72,7 +72,7 @@
                                                         md="6"
                                                         sm="6"
                                                         >
-                                                        <v-select
+                                                        <v-autocomplete
                                                             v-model="select_deliverer"
 
                                                             :items="nombres"
@@ -82,7 +82,25 @@
                                                             prepend-icon="local_shipping"
                                                             persistent-hint
                                                             return-object
-                                                            ></v-select>
+                                                            ></v-autocomplete>
+                                                        </v-col>
+
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-autocomplete
+                                                            v-model="select_customer"
+
+                                                            :items="clientes"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Cliente"
+                                                            prepend-icon="assignment_ind"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
                                                         </v-col>
 
                                                         <v-col
@@ -119,21 +137,21 @@
 
                                                         </v-col>
                                                         <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-select
-                                                        v-model="select_tipoM"
-                                                        :items="tipoMovimiento"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Seleccione el tipo de movimiento"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="6"
+                                                        >
+                                                        <v-select
+                                                            v-model="select_tipoM"
+                                                            :items="tipoMovimiento"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Seleccione el tipo de movimiento"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
                                                         ></v-select>
-                                                    </v-col>
+                                                        </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -174,7 +192,7 @@
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="7"
                                                     sm="12"
                                                     >
                                                         <v-col
@@ -300,7 +318,11 @@
                     id: '',
                     nombre: '',
                 },
-                 select_product: {
+                select_product: {
+                    id: '',
+                    nombre: '',
+                },
+                select_customer:{
                     id: '',
                     nombre: '',
                 },
@@ -330,6 +352,7 @@
                 productosS:[],
                 nombres:[],
                 productos:[],
+                clientes:[],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -539,6 +562,14 @@
                     this.loading = false;
                 });
             },
+            getClientsNames(){
+                axios.get('api/customers')
+                .then(response => {
+                    this.clientes = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
 
         },
 
@@ -546,6 +577,7 @@
             this.getResults();
             this.getDeliverers();
             this.getProducts();
+            this.getClientsNames();
         },
     }
 </script>

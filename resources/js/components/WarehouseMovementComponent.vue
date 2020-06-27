@@ -72,7 +72,7 @@
                                                         md="6"
                                                         sm="6"
                                                         >
-                                                        <v-select
+                                                        <v-autocomplete
                                                             v-model="select_deliverer"
 
                                                             :items="nombres"
@@ -82,7 +82,7 @@
                                                             prepend-icon="local_shipping"
                                                             persistent-hint
                                                             return-object
-                                                            ></v-select>
+                                                            ></v-autocomplete>
                                                         </v-col>
 
                                                         <v-col
@@ -119,21 +119,21 @@
 
                                                         </v-col>
                                                         <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-select
-                                                        v-model="select_tipoM"
-                                                        :items="tipoMovimiento"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Seleccione el tipo de movimiento"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-select>
-                                                    </v-col>
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="6"
+                                                        >
+                                                        <v-select
+                                                            v-model="select_tipoM"
+                                                            :items="tipoMovimiento"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Seleccione el tipo de movimiento"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-select>
+                                                        </v-col>
 
                                                         <v-col
                                                         cols="12"
