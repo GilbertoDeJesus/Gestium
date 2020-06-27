@@ -42,7 +42,7 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="810px">
+                                <v-dialog v-model="dialog" scrollable max-width="810px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo Producto &nbsp;<i class="material-icons">queue</i></v-btn>
                                 </template>
@@ -326,7 +326,7 @@
                 headers: [
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Meta', value: 'meta' },
-                    { text: 'Unidad de medidad', value: 'unit_id' },
+                    { text: 'Unidad de medidad', value: 'unit.tipo' },
                     { text: 'Precio de Venta', value: 'precio_venta' },
                     { text: 'Stock', value: 'stock' },
                     { text: 'Descripción', value: 'descripcion' },

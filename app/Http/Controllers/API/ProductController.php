@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::where('status','=','1')->get();
+      return Product::where('status','=','1')->with('Unit')->get();;
     }
 
     /**
@@ -53,29 +53,27 @@ class ProductController extends Controller
     }
     public function updateS(Request $request)
     {
-         $product =$request->input();
+        $product =$request->input();
         foreach($product as $producto){
+         $id_product= product::findOrFail($producto['id']);
+         $stock=$id_product->stock;
+         $stock_minimo=$id_product->stock_minimo;
+         $operacion=$stock-$stock_minimo;
+           if ($producto['cantidad']<=$operacion ){
+             $id_product->update([
+             'stock' => $stock - $producto['cantidad'] ]);
+            }
+        }
+    }
 
-        $id_product= product::findOrFail($producto['id']);
-        $stock=$id_product->stock;
-        $stock_minimo=$id_product->stock_minimo;
-        $operacion=$stock-$stock_minimo;
-        if ($producto['cantidad']<=$operacion ){
+    public function returnProduct(Request $request) //Método para devolver los productos no vendidos al almacen.
+    {
+        $product =$request->input();
+        foreach($product as $p){
+           $id_product= product::findOrFail($p['id']);
            $id_product->update([
-           'stock' => $stock - $producto['cantidad']
-                   ]);
-           }
-
-          }
-
-        /**$product = product::findOrFail($request['id']);
-        $stock=$product->stock;
-        if($request['cantidad']<=$stock){
-           $product->update([
-           'stock' => $stock - $request['cantidad']
-        ]);
-
-           }*/
+           'stock' => $id_product->stock + $p['cantidad'] ]);
+        }
     }
 
     /**

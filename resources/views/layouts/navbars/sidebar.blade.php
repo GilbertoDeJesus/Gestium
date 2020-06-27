@@ -95,7 +95,7 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/about_compone" class="nav-link" title="Ventas">
+                <router-link to="/sales" class="nav-link" title="Ventas">
                     <i class="material-icons">shopping_cart</i>
                     <p>Ventas</p>
                 </router-link>

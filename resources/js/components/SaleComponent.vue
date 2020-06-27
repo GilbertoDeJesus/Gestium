@@ -23,7 +23,7 @@
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
-                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Salidas</v-toolbar-title>
+                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Ventas</v-toolbar-title>
                                 <v-divider
                                 class="mx-4"
                                 inset
@@ -39,27 +39,27 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" scrollable max-width="900px">
+                                <v-dialog v-model="dialog" scrollable fullscreen hide-overlay transition="dialog-bottom-transition" class="perfect-scrollbar-on">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Salida</v-btn>
+                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Venta</v-btn>
                                 </template>
-                                <v-card style="border-radius:20px;">
-                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                <v-card>
+                                    <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
                                          <v-col
                                         cols="12"
                                         md="12"
                                         sm="12">
                                             <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">assignment_turned_in</i>
+                                                <i class="material-icons" style="font-size:85px;">shopping_cart</i>
                                             </p>
                                             <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
                                         </v-col>
                                     </v-container>
 
                                 <v-card-text style="padding-bottom:0px;">
-                                    <v-container style="padding-bottom:0px;">
+                                    <v-container style="padding-bottom:0px; max-width: 100%;">
                                         <v-form v-model="valid" ref="form">
-                                            <v-container>
+                                            <v-container style="max-width: 100%;">
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
@@ -272,7 +272,7 @@
                                 color="#ff5400"
                                 dense
                                 border="left"
-                                elevation="4">No se ha realizado ninguna saida.</v-alert>
+                                elevation="4">No se ha realizado ninguna venta.</v-alert>
                             </template>
                         </v-data-table>
                     </v-col>
@@ -362,7 +362,7 @@
 
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'Nueva salida' : 'Editar registro'
+                return this.editedIndex === -1 ? 'Nueva Venta' : 'Editar registro'
             },
         },
 

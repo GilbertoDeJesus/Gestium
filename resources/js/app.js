@@ -45,7 +45,8 @@ const routes = [
     { path: '/products', component: require('./components/ProductComponent.vue').default },
     { path: '/deliverers', component: require('./components/DelivererComponent.vue').default },
     { path: '/routes', component: require('./components/RouteComponent.vue').default },
-    {path: '/warehouse_movement', component: require('./components/WarehouseMovementComponent.vue').default}
+    { path: '/warehouse_movement', component: require('./components/WarehouseMovementComponent.vue').default},
+    { path: '/sales', component: require('./components/SaleComponent.vue').default}
 //    { path: '*', component: require('./components/404.vue').default}
 ]
 

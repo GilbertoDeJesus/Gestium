@@ -32,11 +32,9 @@ Route::apiResources([
     'entries'=> 'API\EntryController',
     'providers' => 'API\ProviderController',
     'units' => 'API\UnitController'
-
-
-]);
+        ]);
 Route::put('updateS', 'API\ProductController@updateS');
-
+Route::put('returnProduct', 'API\ProductController@returnProduct');
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');
 Route::post('register', 'API\AuthController@register');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\WarehouseMovement;
 use App\Http\Controllers\Controller;
+use App\WarehouseMovementProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +17,8 @@ class WarehouseMovementController extends Controller
      */
     public function index()
     {
-        return WarehouseMovement::get();
+        return WarehouseMovement::with('Deliverer')->get();
+       // return WarehouseMovement::get();
     }
 
     /**
@@ -27,10 +29,18 @@ class WarehouseMovementController extends Controller
      */
     public function store(Request $request)
     {
-        return WarehouseMovement::create([
+        $movement= WarehouseMovement::create([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida']
         ]);
+        $movement->get();
+        $movementproduct= WarehouseMovementProduct::create([
+            'product_id'=>$request['product_id'],
+            'warehouse_movement_id'=>$movement['id'],
+            'cantidad'=>$request['cantidad'],
+            'tipoMovimiento'=>$request['tipoMovimiento']
+        ]);
+
     }
 
     /**
