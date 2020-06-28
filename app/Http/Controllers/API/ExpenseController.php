@@ -30,7 +30,8 @@ class ExpenseController extends Controller
         return Expense::create([
             'deliverer_id' => $request['deliverer_id'],
             'descripcion' => $request['descripcion'],
-            'monto' => $request['monto']
+            'monto' => $request['monto'],
+            'status' => true
         ]);
     }
 

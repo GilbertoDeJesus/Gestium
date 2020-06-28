@@ -29,9 +29,12 @@ class GoalController extends Controller
     {
         return Goal::create([
             'deliverer_id' => $request['deliverer_id'],
-            'producto_meta' => $request['producto_meta'],
-            'nombre_producto' => $request['nombre_producto'],
-            'numero_kilos' => $request['numero_kilos']
+            'numero_kilos' => $request['numero_kilos'],
+            'porcentaje' => $request['porcentaje'],
+            'numero_kilos' => $request['numero_kilos'],
+            'progreso' => $request['progreso'],
+            'bono_entregado' => $request['bono_entregado'],
+            'status' => true
         ]);
     }
 
@@ -59,9 +62,10 @@ class GoalController extends Controller
 
         $validator = Validator::make( $request->all(), [
             'deliverer_id' => 'required|Integer',
-            'producto_meta' => 'required|boolean',
-            'nombre_producto' => 'required|max:200',
             'numero_kilos' => 'required|Integer',
+            'porcentaje' => 'required|Integer',
+            'progreso' => 'required|Integer',
+            'bono_entregado' => 'required|boolean',
             ]
         );
 
@@ -71,9 +75,11 @@ class GoalController extends Controller
 
         $goal->update([
             'deliverer_id' => $request['deliverer_id'],
-            'producto_meta' => $request['producto_meta'],
+            'numero_kilos' => $request['numero_kilos'],
             'nombre_producto' => $request['nombre_producto'],
             'numero_kilos' => $request['numero_kilos'],
+            'progreso' => $request['progreso'],
+            'bono_entregado' => $request['bono_entregado'],
         ]);
 
         return$goal;

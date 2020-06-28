@@ -261,9 +261,63 @@
                                 </v-dialog>
                             </v-toolbar>
                             </template>
-                            <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                            <template v-slot:item.actions>
+                            <v-icon small class="mr-2" @click="dialogProductList=true"> visibility </v-icon>
+
+
+                             <v-dialog
+                             :retain-focus="false"
+                             v-model="dialogProductList"
+                             scrollable
+                             fullscreen
+                             hide-overlay
+                             transition="dialog-bottom-transition"
+                             class="perfect-scrollbar-on"
+                             >
+                                <v-card>
+                                    <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">shopping_cart</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                        </v-col>
+                                    </v-container>
+
+                                <v-card-text style="padding-bottom:0px;">
+
+                                     <v-data-table
+                                        :headers="hedaers_productList"
+                                        :items="productList"
+                                        sort-by="calories"
+                                        class="elevation-3"
+                                        :search="search"
+                                        :loading="loading" loading-text="Estamos cargando tu información"
+                                        :items-per-page="6"
+                                        :footer-props="{
+                                            'items-per-page-options': [7, 10, 20]
+                                        }">
+                                            <template v-slot:item.created_at="{ item }">
+                                            {{item.created_at | formatDateTime | formatUpperCase}}
+                                            </template>
+                                            <template v-slot:item.fecha_salida="{ item }">
+                                            {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
+                                            </template>
+                                     </v-data-table>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeProductList">Cerrar</v-btn>
+                                    <v-spacer></v-spacer>
+
+                                </v-card-actions>
+                                </v-card>
+                                </v-dialog>
+
+
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -289,6 +343,7 @@
             return {
                 dialog: false,
                 dialogEditProduct: false,
+                dialogProductList: false,
                 search: '',
                   date: '',
                 date1: new Date().toISOString().substr(0, 10),
@@ -317,9 +372,14 @@
                 headers: [
                     { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Producto', value: 'product_id' },
-                    { text: 'Cantidad', value: 'product.cantidad'},
+                    { text: 'Cantidad', value: 'cantidad'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                     { text: 'Acciones', value: 'actions', sortable: false },
+                ],
+                hedaers_productList: [ /*align: 'start', sortable: false,*/
+                    { text: 'Producto', value: 'product_id' },
+                    { text: 'Cantidad', value: 'cantidad'},
+                    { text: 'Fecha de salida', value: 'fecha_salida'},
                 ],
                 headers_productos: [
                     {text: 'Nombre', value: 'nombre'},
@@ -328,8 +388,9 @@
                 ],
                 salidas: [],
                 productosS:[],
-                nombres:[],
-                productos:[],
+                productList: [],
+                nombres: [],
+                productos: [],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -408,6 +469,7 @@
             editItemProduct (item) {
                 this.editedIndex = this.productosS.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
+
                 this.dialogEditProduct = true
 
 
@@ -433,25 +495,27 @@
                     this.edit_mode = false
                 }
             },
+            closeProductList(){
+                this.dialogProductList=false
+            },
             async save () {
                     const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
                         'fecha_salida': this.editedItem.fecha_salida,
                         'deliverer_id': this.select_deliverer.id,
-                        'product_id': '6',
-                        'cantidad': this.editedItem.cantidad,
-                        'tipoMovimiento': this.select_tipoM.id,
+                        'products':this.productosS,
+                        'tipoMovimiento': this.select_tipoM.id
                     }).catch(error => console.log("Error: " + error));
 
 
-                   /*if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
+                   if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
                        const response=await axios.put(`/api/updateS`,
                         this.productosS).catch(error => console.log("Error: " + error));
                         if (response) {
                         this.getResults();
-                        Toast.fire({
+                       /* Toast.fire({
                             icon: 'success',
                             title: '¡Salida registrado!'
-                        })
+                        })*/
                         console.log(response.data);
                         this.productosS=[];
 
@@ -462,15 +526,15 @@
 
                     if (response) {
                         this.getResults();
-                        Toast.fire({
+                       /* Toast.fire({
                             icon: 'success',
                             title: '¡Salida registrado!'
-                        })
+                        })*/
                         console.log(response.data);
                         this.productosS=[];
 
                      }
-                    }*/
+                    }
                     if (response) {
                         this.getResults();
                         Toast.fire({
@@ -478,7 +542,6 @@
                             title: '¡Salida registrado!'
                         })
                         console.log(response.data);
-                        this.productosS=[];
 
                      }
                 this.close();
@@ -539,6 +602,14 @@
                     this.loading = false;
                 });
             },
+            getProductsList(){
+                axios.get('api/warehouse_movements')
+                .then(response => {
+                    this.productList = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
 
         },
 
@@ -546,6 +617,7 @@
             this.getResults();
             this.getDeliverers();
             this.getProducts();
+            this.getProductsList();
         },
     }
 </script>
