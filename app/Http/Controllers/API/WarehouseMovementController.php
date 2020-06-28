@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\WarehouseMovement;
 use App\Http\Controllers\Controller;
-use App\WarehouseMovementProduct;
+use App\ProductWarehouseMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,13 +16,8 @@ class WarehouseMovementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-       return  WarehouseMovement::with('Deliverer:id,nombre')
-       ->join('product_warehouse_movement','warehouse_movements.id','=','product_warehouse_movement.warehouse_movement_id')
-       ->select('warehouse_movements.deliverer_id', 'product_warehouse_movement.cantidad', 'product_warehouse_movement.product_id')
-       ->get();
-      /*return  ProductWarehouseMovement::join('products',"product_warehouse_movement.product_id",'=','products.id')
-       ->get();*/
+    {;
+       return WarehouseMovement::with('Deliverer:id,nombre')->get();
     }
 
     /**
@@ -39,18 +34,15 @@ class WarehouseMovementController extends Controller
             'fecha_salida' => $request['fecha_salida']
 
         ]);
-        $movement->get();
-        $product_id='';
-        $cantidad='';
         foreach ( $request['products'] as $product) {
             $product_id=$product['id'];
             $cantidad=$product['cantidad'];
-        $movement_product=$movement->product()->attach( $product_id,['cantidad' =>$cantidad,
-        'tipoMovimiento' =>$request['tipoMovimiento']]);
+            $movement_product=$movement->product()->attach
+            ($product_id,['cantidad' =>$cantidad,
+            'tipoMovimiento' =>$request['tipoMovimiento']]);
 
         }
         return $movement_product;
-        return $movement;
 
 
     }
@@ -63,7 +55,24 @@ class WarehouseMovementController extends Controller
      */
     public function show($id)
     {
-        //
+        //Se devulve una consulta que tendra los campos id, nombre, cantidad y fehca_salida.
+        /*El primer join es entre las tablas producto y movimiento, en las columnas
+           product_id y id respectivamente*/
+        return ProductWarehouseMovement::join('products',
+         'product_warehouse_movement.product_id','=','products.id')
+        /*El segundo join es entre las tablas movimiento_producto y movimiento, en las columnas
+          warehouse_movement_id y id respectivamente*/
+        ->join('warehouse_movements','product_warehouse_movement.warehouse_movement_id',
+          '=','warehouse_movements.id')
+        /*En las siguientes línea se indica que solo se mostraran las columnas 'id' de la tabla
+          movimientos, el 'nombre' de la tabla productos, la 'cantidad' y 'fecha_salida' que
+          pertenecen a la tabla movimientos_producto.*/
+        ->select('warehouse_movements.id','products.nombre',
+          'product_warehouse_movement.cantidad','warehouse_movements.fecha_salida')
+         /*Se devolveran los resultados donde el campo warehouse_movement_id de la tabla
+           movimiento_producto coincida con el 'id' que recibe en un principio la función*/
+        ->where('product_warehouse_movement.warehouse_movement_id', '=',$id )
+        ->get();
     }
 
     /**
@@ -82,16 +91,13 @@ class WarehouseMovementController extends Controller
             'fecha_salida' => 'required|date',
             ]
         );
-
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
-
         $warehousemovement->update([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida'],
         ]);
-
         return$warehousemovement;
     }
 
@@ -103,9 +109,5 @@ class WarehouseMovementController extends Controller
      */
     public function destroy($id)
     {
-        $warehousemovement = WarehouseMovement::findOrFail($id);
-        $warehousemovement->update([
-            'status' => false,
-        ]);
     }
 }

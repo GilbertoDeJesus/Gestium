@@ -261,8 +261,8 @@
                                 </v-dialog>
                             </v-toolbar>
                             </template>
-                            <template v-slot:item.actions>
-                            <v-icon small class="mr-2" @click="dialogProductList=true"> visibility </v-icon>
+                            <template v-slot:item.actions="{item}">
+                            <v-icon small class="mr-2" @click=" showdetails(item)"> visibility </v-icon>
 
 
                              <v-dialog
@@ -341,6 +341,7 @@
     export default {
         data() {
             return {
+                id_movement:0,
                 dialog: false,
                 dialogEditProduct: false,
                 dialogProductList: false,
@@ -370,14 +371,13 @@
                     { nombre: 'Devolución', id: '0' },
                 ],
                 headers: [
-                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Producto', value: 'product_id' },
-                    { text: 'Cantidad', value: 'cantidad'},
+                    { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
+                    { text: 'Repartidor', value: 'deliverer.nombre' },
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 hedaers_productList: [ /*align: 'start', sortable: false,*/
-                    { text: 'Producto', value: 'product_id' },
+                    { text: 'Producto', value: 'nombre' },
                     { text: 'Cantidad', value: 'cantidad'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                 ],
@@ -435,7 +435,6 @@
 
         methods: {
             add(){
-                //var salidaProducto={id:this.select_product.id,nombre:this.select_product.nombre,cantidad:this.editedItem.cantidad}
                 this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
@@ -512,10 +511,6 @@
                         this.productosS).catch(error => console.log("Error: " + error));
                         if (response) {
                         this.getResults();
-                       /* Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })*/
                         console.log(response.data);
                         this.productosS=[];
 
@@ -526,10 +521,6 @@
 
                     if (response) {
                         this.getResults();
-                       /* Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })*/
                         console.log(response.data);
                         this.productosS=[];
 
@@ -577,6 +568,14 @@
                     }
                 });
             },
+            async showdetails(item){
+                this.editedIndex = this.salidas.indexOf(item)
+                this.editedItem = Object.assign({}, item) // Clone an object
+                this.id_movement= this.editedItem.id
+                this.dialogProductList=true
+                this.getProductsList()
+
+            },
 
             getResults() {
                 axios.get('api/warehouse_movements')
@@ -603,7 +602,7 @@
                 });
             },
             getProductsList(){
-                axios.get('api/warehouse_movements')
+                axios.get(`api/warehouse_movements/${this.id_movement}`)
                 .then(response => {
                     this.productList = response.data;
                     console.log(response.data)
