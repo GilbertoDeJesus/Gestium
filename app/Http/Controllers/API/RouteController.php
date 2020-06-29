@@ -28,10 +28,14 @@ class RouteController extends Controller
     public function store(Request $request)
     {
         return Route::create([
-            'deliverer_id' => $request['deliverer_id'],
             'municipio' => $request['municipio'],
             'status'=>true
         ]);
+    }
+    public function createdeliverer_route(Request $request)
+    {
+        return Route::findOrFail($request['id'])->deliverer()->attach
+        ($request['deliverer_id']);
     }
 
     /**
@@ -42,7 +46,6 @@ class RouteController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -57,7 +60,6 @@ class RouteController extends Controller
         $route = Route::findOrFail($id);
 
         $validator = Validator::make( $request->all(), [
-            'deliverer_id' => 'required|Integer',
             'municipio' => 'required|max:255'
             ]
         );
@@ -67,7 +69,6 @@ class RouteController extends Controller
         }
 
         $route->update([
-            'deliverer_id' => $request['deliverer_id'],
             'municipio' => $request['municipio']
              ]);
      return $route;

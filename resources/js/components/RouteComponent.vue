@@ -144,8 +144,7 @@
                     id: '',
                     nombre: '',
                 },
-                headers: [
-                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
+                headers: [ /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
@@ -213,8 +212,12 @@
             },
             async save () {
                 if (this.editedIndex > -1) {
-                    const response = await axios.put(`api/routes/${this.editedItem.id}`, this.editedItem)
-                    .catch(error => console.log(error));
+                    const response = await axios.post('/api/createdeliverer_route',{
+                        'id':this.editedItem.id,
+                        'deliverer_id': this.select.id
+                    }).catch(error => console.log("Error: " + error));
+                   /* const response = await axios.put(`api/routes/${this.editedItem.id}`, this.editedItem)
+                    .catch(error => console.log(error));*/
                     if (response.data.validation_errors) {
                         Toast.fire({
                             icon: 'error',
@@ -230,7 +233,6 @@
                     }
                 } else {
                     const response = await axios.post('/api/routes',{
-                        'deliverer_id': this.select.id,
                         'municipio': this.editedItem.municipio,
                         'status': this.editedItem.status
                     }).catch(error => console.log("Error: " + error));
@@ -294,7 +296,6 @@
                     this.loading = false;
                 });
             },
-
         },
 
         created () {

@@ -35,6 +35,7 @@ Route::apiResources([
         ]);
 Route::put('updateS', 'API\ProductController@updateS');
 Route::put('returnProduct', 'API\ProductController@returnProduct');
+Route::post('createdeliverer_route','API\RouteController@createdeliverer_route');
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');
 Route::post('register', 'API\AuthController@register');
