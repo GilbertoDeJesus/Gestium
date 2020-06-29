@@ -262,7 +262,7 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{item}">
-                            <v-icon small class="mr-2" @click=" showdetails(item)"> visibility </v-icon>
+                            <v-icon small class="mr-2" @click=" showdetails(item)" v-bind:key = " item.id "> visibility </v-icon>
 
 
                              <v-dialog
@@ -274,22 +274,23 @@
                              transition="dialog-bottom-transition"
                              class="perfect-scrollbar-on"
                              >
-                                <v-card>
+                                <v-card style="background:#f5f5f5;">
                                     <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
                                          <v-col
                                         cols="12"
                                         md="12"
                                         sm="12">
                                             <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">shopping_cart</i>
+                                                <i class="material-icons" style="font-size:85px;">assignment</i>
                                             </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Lista de productos</strong></p>
                                         </v-col>
                                     </v-container>
 
                                 <v-card-text style="padding-bottom:0px;">
 
-                                     <v-data-table
+                                    <v-container style="padding-top:2rem;">
+                                         <v-data-table
                                         :headers="hedaers_productList"
                                         :items="productList"
                                         sort-by="calories"
@@ -299,6 +300,7 @@
                                         :items-per-page="6"
                                         :footer-props="{
                                             'items-per-page-options': [7, 10, 20]
+
                                         }">
                                             <template v-slot:item.created_at="{ item }">
                                             {{item.created_at | formatDateTime | formatUpperCase}}
@@ -307,9 +309,11 @@
                                             {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
                                             </template>
                                      </v-data-table>
+                                    </v-container>
                                 </v-card-text>
 
                                 <v-card-actions>
+                                    <v-spacer></v-spacer>
                                     <v-btn class="ma-2" outlined color="#ff5300" @click="closeProductList">Cerrar</v-btn>
                                     <v-spacer></v-spacer>
 
@@ -496,6 +500,7 @@
             },
             closeProductList(){
                 this.dialogProductList=false
+                this.productList=[]
             },
             async save () {
                     const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
@@ -572,8 +577,9 @@
                 this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.id_movement= this.editedItem.id
-                this.dialogProductList=true
                 this.getProductsList()
+                this.dialogProductList=true
+
 
             },
 

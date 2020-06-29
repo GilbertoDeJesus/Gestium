@@ -40,8 +40,13 @@
                                     hide-details
                                     color="#ff5200"
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
-
+                                <v-divider
+                                class="mx-5"
+                                inset
+                                vertical
+                                ></v-divider>
+                                <v-btn color="#ff3f00" dark class="mb-2">Añadir unidad &nbsp;<i class="material-icons">queue</i></v-btn>
+                                &nbsp;&nbsp;
                                 <v-dialog v-model="dialog" scrollable max-width="810px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo Producto &nbsp;<i class="material-icons">queue</i></v-btn>
