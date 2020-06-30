@@ -92,7 +92,7 @@
                                 </v-card>
                                 </v-dialog>
 
-                                <v-dialog v-model="dialogAddDeliverer" max-width="400px">
+                                <v-dialog v-model="dialogAddDeliverer" scrollable max-width="650px">
 
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -115,34 +115,80 @@
                                                     <v-col
                                                     cols="12"
                                                     md="12"
-                                                    sm="12"
-                                                    >
-                                                    <v-text-field
-                                                    :rules="[required('nombre')]"
-                                                        v-model="editedItem.municipio"
-                                                        label="Municipio"
-                                                        type="text"
-                                                        clearable
-                                                        prepend-icon="explore"
-                                                        required
-                                                    ></v-text-field>
+                                                    sm="12">
+                                                        <v-row>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="12"
+                                                            >
+                                                            <v-text-field
+                                                            :rules="[required('nombre')]"
+                                                                v-model="editedItem.municipio"
+                                                                label="Municipio"
+                                                                type="text"
+                                                                clearable
+                                                                prepend-icon="explore"
+                                                                required
+                                                            ></v-text-field>
+                                                            </v-col>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="12"
+                                                            >
+                                                            <v-autocomplete
+                                                                v-model="select"
+
+                                                                :items="nombres"
+                                                                item-text="nombre"
+                                                                item-value="id"
+                                                                label="Selecccione al repartidor"
+                                                                prepend-icon="local_shipping"
+                                                                persistent-hint
+                                                                return-object
+                                                                ></v-autocomplete>
+                                                            </v-col>
+                                                        </v-row>
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
                                                     md="12"
-                                                    sm="12"
-                                                    >
-                                                    <v-autocomplete
-                                                        v-model="select"
+                                                    sm="12">
+                                                        <v-data-table
+                                                            :headers="headersDeliverers"
+                                                            :items="route"
+                                                            sort-by="calories"
+                                                            class="elevation-3"
+                                                            :search="search"
+                                                            :loading="loading" loading-text="Estamos cargando tu información"
+                                                            :items-per-page="6"
+                                                            :footer-props="{
+                                                                'items-per-page-options': [7, 10, 20]
+                                                            }">
 
-                                                        :items="nombres"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Selecccione al repartidor"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-autocomplete>
+                                                            <template v-slot:top>
+                                                            <v-toolbar flat color="white">
+                                                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Repartidores</v-toolbar-title>
+                                                                <v-divider
+                                                                class="mx-4"
+                                                                inset
+                                                                vertical
+                                                                ></v-divider>
+                                                                <v-text-field
+                                                                    v-model="search"
+                                                                    append-icon="search"
+                                                                    label="Buscar"
+                                                                    single-line
+                                                                    hide-details
+                                                                    color="#ff5200"
+                                                                ></v-text-field>
+                                                            </v-toolbar>
+                                                            </template>
+                                                            <template v-slot:item.created_at="{ item }">
+                                                            {{item.created_at | formatDateTime | formatUpperCase}}
+                                                            </template>
+                                                        </v-data-table>
                                                     </v-col>
                                                 </v-row>
                                             </v-container>
@@ -192,6 +238,7 @@
                 valid: false,
                 edit_mode: false,
                 id_Route: 0,
+                numRep: 0,
                 nameDeliverer: '',
                 select: {
                     id: '',
@@ -200,13 +247,19 @@
                 headers: [ /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
+                    { text: 'Num. de repartidores', value: 'numDev'},
                     { text: 'Acciones', value: 'actions', sortable: false },
+                ],
+                headersDeliverers: [
+                    { text: 'Nombre', value: 'nombre'},
+                    { text: 'Registrado', value: 'created_at'}
                 ],
                 desserts: [],
                 nombres:[],
                 route: [
                     {id: ''},
-                    {nombre: ''}
+                    {nombre: ''},
+                    {created_at: ''},
                 ],
                 editedIndex: -1,
                 editedItem: {
@@ -214,14 +267,16 @@
                     nombre: '',
                     municipio: '',
                     created_at: '',
-                    status: ''
+                    status: '',
+                    numDev: ''
                 },
                 defaultItem: {
                     id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
-                    status: ''
+                    status: '',
+                    numDev: ''
                 },
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
@@ -319,8 +374,6 @@
                         'id':this.editedItem.id,
                         'deliverer_id': this.select.id
                         }).catch(error => console.log("Error: " + error));
-                        /* const response = await axios.put(`api/routes/${this.editedItem.id}`, this.editedItem)
-                        .catch(error => console.log(error));*/
                         if (response.data.validation_errors) {
                             Toast.fire({
                                 icon: 'error',
@@ -378,7 +431,9 @@
                     this.desserts = response.data;
                     console.log(response.data)
                     this.loading = false;
+
                 });
+
             },
             getDeliverers(){
                 axios.get('api/deliverers')
@@ -394,8 +449,11 @@
                     this.route = response.data;
                     console.log(response.data)
                     this.loading = false;
+
+
                 });
             },
+
         },
 
         created () {

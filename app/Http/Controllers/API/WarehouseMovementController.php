@@ -16,8 +16,16 @@ class WarehouseMovementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {;
-       return WarehouseMovement::with('Deliverer:id,nombre')->get();
+    {
+       return WarehouseMovement::latest('warehouse_movements.created_at')
+       ->join ('deliverers','warehouse_movements.deliverer_id','=','deliverers.id')
+       ->join('product_warehouse_movement','warehouse_movements.id','=',
+        'product_warehouse_movement.warehouse_movement_id')
+       ->select('warehouse_movements.id','warehouse_movements.fecha_salida',
+         WarehouseMovement::raw('sum(cantidad) as sum'),'deliverers.nombre')
+       ->groupBy('warehouse_movements.id','warehouse_movements.fecha_salida'
+       ,'deliverers.nombre')
+       ->get();
     }
 
     /**
@@ -67,8 +75,7 @@ class WarehouseMovementController extends Controller
         /*En las siguientes línea se indica que solo se mostraran las columnas 'id' de la tabla
           movimientos, el 'nombre' de la tabla productos, la 'cantidad' y 'fecha_salida' que
           pertenecen a la tabla movimientos_producto.*/
-        ->select('warehouse_movements.id','products.nombre',
-          'product_warehouse_movement.cantidad','warehouse_movements.fecha_salida')
+        ->select('products.nombre','product_warehouse_movement.cantidad','warehouse_movements.fecha_salida')
          /*Se devolveran los resultados donde el campo warehouse_movement_id de la tabla
            movimiento_producto coincida con el 'id' que recibe en un principio la función*/
         ->where('product_warehouse_movement.warehouse_movement_id', '=',$id )

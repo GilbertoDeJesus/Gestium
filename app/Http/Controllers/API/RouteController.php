@@ -16,7 +16,7 @@ class RouteController extends Controller
      */
     public function index()
     {
-        return Route::where('status','=','1')->get() ;
+        return Route::latest()->where('status','=','1')->get() ;
     }
 
     /**

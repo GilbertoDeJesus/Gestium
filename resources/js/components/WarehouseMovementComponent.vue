@@ -74,7 +74,6 @@
                                                         >
                                                         <v-autocomplete
                                                             v-model="select_deliverer"
-
                                                             :items="nombres"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -99,6 +98,7 @@
                                                         >
                                                             <template v-slot:activator="{ on }">
                                                             <v-text-field
+                                                                :rules="[required('fecha'), minimum_length(1)]"
                                                                 v-model="editedItem.fecha_salida"
                                                                 label="Fecha de salida"
                                                                 prepend-icon="event"
@@ -142,7 +142,6 @@
                                                         >
                                                         <v-autocomplete
                                                             v-model="select_product"
-
                                                             :items="productos"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -159,7 +158,7 @@
                                                         sm="6"
                                                         >
                                                         <v-text-field
-
+                                                            :rules="[required('cantidad')]"
                                                             v-model="editedItem.cantidad"
                                                             label="Cantidad"
                                                             type="number"
@@ -169,7 +168,14 @@
                                                         ></v-text-field>
                                                         </v-col>
                                                         <v-spacer></v-spacer>
-                                                        <v-btn dark class="ma-2" color="#ff5300" style="padding-right:4rem; padding-left:4rem;"  @click="add">Agregar</v-btn>
+                                                        <v-btn
+
+                                                        :disabled="!valid"
+                                                        dark class="ma-2"
+                                                        color="#ff5300"
+                                                        style="padding-right:4rem; padding-left:4rem;"
+                                                        @click="add"
+                                                        >Agregar</v-btn>
                                                     </v-row>
                                                     </v-col>
                                                     <v-col
@@ -255,7 +261,7 @@
                                 <v-card-actions>
                                     <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="save">Guardar</v-btn>
+                                    <v-btn dark class="ma-2" color="#ff5300" @click="save">Guardar</v-btn>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
@@ -351,6 +357,7 @@
                 dialogProductList: false,
                 search: '',
                   date: '',
+                producto: '',
                 date1: new Date().toISOString().substr(0, 10),
                 menu:false,
                 loading: true,
@@ -376,7 +383,8 @@
                 ],
                 headers: [
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
-                    { text: 'Repartidor', value: 'deliverer.nombre' },
+                    { text: 'Repartidor', value: 'nombre' },
+                    { text: 'Cantidad de productos', value: 'sum'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
@@ -439,17 +447,45 @@
 
         methods: {
             add(){
-                this.salidaProducto={
+
+                for (let index = 0; index < this.productosS.length; index++) {
+
+                    if (this.productosS[index].nombre == this.select_product.nombre) {
+                        this.producto = this.productosS[index].nombre
+                        break
+                    }
+
+                }
+                if (this.select_product.nombre == this.producto) {
+
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "Este producto ya esta en la lista!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    this.producto=''
+                }else{
+                    this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
                     'cantidad':this.editedItem.cantidad
                     }
-                this.productosS.push(this.salidaProducto);
-                    //this.productosS[index]
-                console.log(this.productosS)
+
+                    this.productosS.push(this.salidaProducto);
+                    console.log(this.productosS)
+                    this.select_product=[0];
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+
+                }
                 this.select_product=[0];
-                this.select_product.id='';
-                this.editedItem.cantidad='';
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+
 
             },
             modifyQuantity(item){
@@ -466,20 +502,44 @@
             editItem (item) {
                 this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
+
                 this.dialog = true
                 this.edit_mode = true
             },
             editItemProduct (item) {
-                this.editedIndex = this.productosS.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
 
+                this.editedIndex = this.productosS.indexOf(item)
+                this.salidaProducto = Object.assign({}, item) // Clone an object
                 this.dialogEditProduct = true
+                this.getProductsList()
 
 
             },
             deleteItemProducts(item) {
                 const index = this.productosS.indexOf(item)
-                confirm('¿Estas seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
+                //confirm('¿Esta seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
+                Swal.fire({
+                    title: '¿Esta seguro de eliminar este producto de la lista?',
+                    text: "Esta acción no es reversible!",
+                    type: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminalo!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.value) {
+                        this.productosS.splice(index, 1)
+                            Swal.fire(
+                            'Eliminado!',
+                            'El producto ha sido eliminado de la lista.',
+                            'success'
+                            )
+                            console.log(this.productosS)
+                    } else {
+                        this.productosS = Object.assign({}, this.defaultItem)
+                    }
+                });
             },
             cancelarEditar(){
                 this.editedItem.cantidad='';
