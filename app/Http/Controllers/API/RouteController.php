@@ -27,10 +27,17 @@ class RouteController extends Controller
      */
     public function store(Request $request)
     {
-        return Route::create([
+        $route=Route::create([
             'municipio' => $request['municipio'],
             'status'=>true
         ]);
+        foreach ( $request['deliverers'] as $deliverer) {
+            $deliverer_id=$deliverer['id'];
+            $deliverer_route=$route->deliverer()->attach
+            ($deliverer_id);
+        }
+        return $deliverer_route;
+
     }
     public function createdeliverer_route(Request $request)
     {
