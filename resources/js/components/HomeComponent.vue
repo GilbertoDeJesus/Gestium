@@ -32,17 +32,25 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
+                                   prepend-inner-icon="search"
                                     label="Buscar"
-                                    single-line
                                     hide-details
-                                    color="#ff5300"
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
+                                    color="#ff5200"
+                                    clearable
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
+                                <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                                ></v-divider>
 
                                 <v-dialog v-model="dialog" max-width="420px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo usuario &nbsp;<i class="material-icons">person_add</i></v-btn>
+                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo usuario &nbsp;<v-icon>person_add</v-icon></v-btn>
                                 </template>
                                     <v-card style="border-radius:20px;">
 

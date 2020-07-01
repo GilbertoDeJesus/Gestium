@@ -31,17 +31,24 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
+                                    prepend-inner-icon="search"
                                     label="Buscar"
-                                    single-line
                                     hide-details
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
-
+                                <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                                ></v-divider>
                                 <v-dialog v-model="dialog" scrollable max-width="900px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Salida</v-btn>
+                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on"> Nueva Salida &nbsp;<v-icon>playlist_add</v-icon></v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -268,7 +275,8 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{item}">
-                            <v-icon small class="mr-2" @click=" showdetails(item)" v-bind:key = " item.id "> visibility </v-icon>
+
+                            <v-icon color="#ff5300" @click=" showdetails(item)" v-bind:key = " item.id "> unarchive </v-icon>
 
 
                              <v-dialog
@@ -276,7 +284,6 @@
                              v-model="dialogProductList"
                              scrollable
                              fullscreen
-                             hide-overlay
                              transition="dialog-bottom-transition"
                              class="perfect-scrollbar-on"
                              >
@@ -289,19 +296,37 @@
                                             <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
                                                 <i class="material-icons" style="font-size:85px;">assignment</i>
                                             </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Lista de productos</strong></p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Lista de productos de {{formNombre}} </strong></p>
                                         </v-col>
                                     </v-container>
 
                                 <v-card-text style="padding-bottom:0px;">
+                                    <v-container style="margin-top:1.5rem; max-width: 600px;" >
 
-                                    <v-container style="padding-top:2rem;">
+                                        <v-spacer></v-spacer>
+                                        <v-spacer></v-spacer>
+                                            <v-text-field
+                                                v-model="searchP"
+                                                prepend-inner-icon="search"
+                                                label="Buscar productos"
+                                                hide-details
+                                                filled
+                                                rounded
+                                                single-line
+                                                dense
+                                                color="#ff5200"
+                                                clearable
+                                            ></v-text-field>
+                                        <v-spacer></v-spacer>
+                                        <v-spacer></v-spacer>
+                                    </v-container>
+                                    <v-container style="margin-top:1.5rem;">
                                          <v-data-table
                                         :headers="hedaers_productList"
                                         :items="productList"
                                         sort-by="calories"
                                         class="elevation-3"
-                                        :search="search"
+                                        :search="searchP"
                                         :loading="loading" loading-text="Estamos cargando tu información"
                                         :items-per-page="6"
                                         :footer-props="{
@@ -314,6 +339,7 @@
                                             <template v-slot:item.fecha_salida="{ item }">
                                             {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
                                             </template>
+
                                      </v-data-table>
                                     </v-container>
                                 </v-card-text>
@@ -356,8 +382,10 @@
                 dialogEditProduct: false,
                 dialogProductList: false,
                 search: '',
+                searchP: '',
                   date: '',
                 producto: '',
+                nDeliverer: '',
                 date1: new Date().toISOString().substr(0, 10),
                 menu:false,
                 loading: true,
@@ -384,9 +412,9 @@
                 headers: [
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
                     { text: 'Repartidor', value: 'nombre' },
-                    { text: 'Cantidad de productos', value: 'sum'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
-                    { text: 'Acciones', value: 'actions', sortable: false },
+                    { text: 'Cantidad de productos', value: 'sum'},
+                    { text: 'Lista de productos', value: 'actions', sortable: false },
                 ],
                 hedaers_productList: [ /*align: 'start', sortable: false,*/
                     { text: 'Producto', value: 'nombre' },
@@ -436,6 +464,9 @@
         computed: {
             formTitle () {
                 return this.editedIndex === -1 ? 'Nueva salida' : 'Editar registro'
+            },
+            formNombre (){
+                return this.nDeliverer
             },
         },
 
@@ -637,6 +668,7 @@
                 this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.id_movement= this.editedItem.id
+                this.nDeliverer = this.editedItem.nombre
                 this.getProductsList()
                 this.dialogProductList=true
 
