@@ -53,6 +53,11 @@ class RouteController extends Controller
      */
     public function show($id)
     {
+        //ruta:  axios.get(`api/routes/${this.id_Deliverer}`)
+        return Route::leftjoin('deliverer_route',
+        'deliverer_route.route_id','=','routes.id')
+        ->where('deliverer_route.deliverer_id', '=',$id)
+        ->get();
     }
 
     /**
