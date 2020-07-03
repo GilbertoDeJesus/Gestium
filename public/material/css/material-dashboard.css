@@ -1002,13 +1002,13 @@ pre code {
 
 @media (min-width: 768px) {
   .container {
-    max-width: 720px;
+    max-width: 100%;
   }
 }
 
 @media (min-width: 992px) {
   .container {
-    max-width: 960px;
+    max-width: 100%;
   }
 }
 
@@ -1016,6 +1016,12 @@ pre code {
   .container {
     max-width: 1140px;
   }
+}
+
+@media (min-width: 1264px){
+    .container {
+        max-width: 100%;
+    }
 }
 
 .container-fluid {

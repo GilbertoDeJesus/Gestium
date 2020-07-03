@@ -39,7 +39,7 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="400px">
+                                <v-dialog v-model="dialog" max-width="450px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Ruta</v-btn>
                                 </template>
@@ -50,9 +50,9 @@
                                         md="12"
                                         sm="12">
                                             <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">directions</i>
+                                                <i class="material-icons" style="font-size:65px;">directions</i>
                                             </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                            <p style="text-align: center; color:#ffffff; font-size:18px; margin-bottom: -10px;"><strong>Agregar Ruta</strong></p>
                                         </v-col>
                                     </v-container>
 
@@ -61,28 +61,11 @@
                                         <v-form v-model="valid" ref="form">
                                             <v-container>
                                                 <v-row>
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-select
-                                                        v-model="select"
-
-                                                        :items="nombres"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Selecccione al repartidor"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-select>
-                                                    </v-col>
 
                                                     <v-col
                                                     cols="12"
                                                     md="12"
-                                                    sm="6"
+                                                    sm="12"
                                                     >
                                                     <v-text-field
                                                     :rules="[required('nombre')]"
@@ -92,6 +75,7 @@
                                                         clearable
                                                         prepend-icon="explore"
                                                         required
+                                                        style="padding-top:2.5rem;"
                                                     ></v-text-field>
                                                     </v-col>
                                                 </v-row>
@@ -107,11 +91,123 @@
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
+
+                                <v-dialog v-model="dialogAddDeliverer" scrollable max-width="650px">
+
+                                <v-card style="border-radius:20px;">
+                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">person_add</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Asignar Repartidores</strong></p>
+                                        </v-col>
+                                    </v-container>
+
+                                <v-card-text style="padding-bottom:0px;">
+                                    <v-container style="padding-bottom:0px;">
+                                        <v-form v-model="valid" ref="form">
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="12">
+                                                        <v-row>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="12"
+                                                            >
+                                                            <v-text-field
+                                                            :rules="[required('nombre')]"
+                                                                v-model="editedItem.municipio"
+                                                                label="Municipio"
+                                                                type="text"
+                                                                clearable
+                                                                prepend-icon="explore"
+                                                                required
+                                                            ></v-text-field>
+                                                            </v-col>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="12"
+                                                            >
+                                                            <v-autocomplete
+                                                                v-model="select"
+
+                                                                :items="nombres"
+                                                                item-text="nombre"
+                                                                item-value="id"
+                                                                label="Selecccione al repartidor"
+                                                                prepend-icon="local_shipping"
+                                                                persistent-hint
+                                                                return-object
+                                                                ></v-autocomplete>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="12">
+                                                        <v-data-table
+                                                            :headers="headersDeliverers"
+                                                            :items="route"
+                                                            sort-by="calories"
+                                                            class="elevation-3"
+                                                            :search="search"
+                                                            :loading="loading" loading-text="Estamos cargando tu información"
+                                                            :items-per-page="6"
+                                                            :footer-props="{
+                                                                'items-per-page-options': [7, 10, 20]
+                                                            }">
+
+                                                            <template v-slot:top>
+                                                            <v-toolbar flat color="white">
+                                                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Repartidores</v-toolbar-title>
+                                                                <v-divider
+                                                                class="mx-4"
+                                                                inset
+                                                                vertical
+                                                                ></v-divider>
+                                                                <v-text-field
+                                                                    v-model="search"
+                                                                    append-icon="search"
+                                                                    label="Buscar"
+                                                                    single-line
+                                                                    hide-details
+                                                                    color="#ff5200"
+                                                                ></v-text-field>
+                                                            </v-toolbar>
+                                                            </template>
+                                                            <template v-slot:item.created_at="{ item }">
+                                                            {{item.created_at | formatDateTime | formatUpperCase}}
+                                                            </template>
+                                                        </v-data-table>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-container>
+                                        </v-form>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeDeliverer">Cancelar</v-btn>
+                                    <v-spacer></v-spacer>
+                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="saveDeliverer">Guardar</v-btn>
+                                </v-card-actions>
+                                </v-card>
+                                </v-dialog>
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                            <v-icon medium class="mr-2" @click="addDeliverers(item)"> person_add </v-icon>
+                            <v-icon medium color="red" @click="deleteItem(item)"> mdi-cancel </v-icon>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -136,36 +232,51 @@
         data() {
             return {
                 dialog: false,
+                dialogAddDeliverer: false,
                 search: '',
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                id_Route: 0,
+                numRep: 0,
+                nameDeliverer: '',
                 select: {
                     id: '',
                     nombre: '',
                 },
-                headers: [
-                    { text: 'Repartidor', value: 'nombre' }, /*align: 'start', sortable: false,*/
+                headers: [ /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
+                    { text: 'Num. de repartidores', value: 'numDev'},
                     { text: 'Acciones', value: 'actions', sortable: false },
+                ],
+                headersDeliverers: [
+                    { text: 'Nombre', value: 'nombre'},
+                    { text: 'Registrado', value: 'created_at'}
                 ],
                 desserts: [],
                 nombres:[],
+                route: [
+                    {id: ''},
+                    {nombre: ''},
+                    {created_at: ''},
+                ],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
-                    status: ''
+                    status: '',
+                    numDev: ''
                 },
                 defaultItem: {
                     id: '',
                     nombre: '',
                     municipio: '',
                     created_at: '',
-                    status: ''
+                    status: '',
+                    numDev: ''
                 },
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
@@ -200,6 +311,13 @@
                 this.dialog = true
                 this.edit_mode = true
             },
+            addDeliverers (item){
+                this.editedIndex = this.desserts.indexOf(item)
+                this.editedItem = Object.assign({}, item) // Clone an object
+                this.id_Route=this.editedItem.id
+                this.getDelivererRoute()
+                this.dialogAddDeliverer = true
+            },
             close () {
                 this.$refs.form.reset()
                 this.dialog = false
@@ -211,26 +329,11 @@
                     this.edit_mode = false
                 }
             },
+            closeDeliverer () {
+                this.dialogAddDeliverer=false
+            },
             async save () {
-                if (this.editedIndex > -1) {
-                    const response = await axios.put(`api/routes/${this.editedItem.id}`, this.editedItem)
-                    .catch(error => console.log(error));
-                    if (response.data.validation_errors) {
-                        Toast.fire({
-                            icon: 'error',
-                            title: '¡Ocurrió un error, vuelve a intentarlo!'
-                        });
-                        console.log(response.data);
-                    } else {
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Datos del proveedor actualizados!'
-                        })
-                    }
-                } else {
                     const response = await axios.post('/api/routes',{
-                        'deliverer_id': this.select.id,
                         'municipio': this.editedItem.municipio,
                         'status': this.editedItem.status
                     }).catch(error => console.log("Error: " + error));
@@ -239,24 +342,68 @@
                         this.getResults();
                         Toast.fire({
                             icon: 'success',
-                            title: '¡Proveedor registrado!'
+                            title: '¡Ruta registrada!'
                         })
                         console.log(response.data);
                     }
-                }
+
 
                 this.close();
+            },
+            async saveDeliverer () {
+                for (let index = 0; index < this.route.length; index++) {
+                    if (this.route[index].nombre == this.select.nombre) {
+                        this.nameDeliverer = this.route[index].nombre
+                        break
+                    }
+
+                }
+                if (this.select.nombre == this.nameDeliverer) {
+                        //confirm('Este repartidor ya esta registrado')
+                        Swal.fire({
+                        title: 'Alerta',
+                        text: "Este repartidor ya esta registrado!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                        this.nameDeliverer=''
+                    }
+                    else{
+                        const response = await axios.post('/api/createdeliverer_route',{
+                        'id':this.editedItem.id,
+                        'deliverer_id': this.select.id
+                        }).catch(error => console.log("Error: " + error));
+                        if (response.data.validation_errors) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error, vuelve a intentarlo!'
+                            });
+                            console.log(response.data);
+                        } else {
+                            this.getResults();
+                            Toast.fire({
+                                icon: 'success',
+                                title: '¡Repartidores agregados!'
+                            })
+                        }
+                        this.dialogAddDeliverer=false
+                        this.nameDeliverer=''
+                    }
+                    this.nameDeliverer=''
+
+
             },
             async deleteItem (item) {
                 this.editedIndex = this.desserts.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
-                    title: '¿Estás seguro de desactivar este proveedor?',
-                    text: "Se cambiara el status de activo!",
+                    title: '¿Está seguro de desactivar esta ruta?',
+                    text: "Esta acción no es reversible!",
                     type: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#ff5300',
-                    cancelButtonColor: '#C1BCBB',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
                     confirmButtonText: 'Si, desactivalo!',
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
@@ -264,8 +411,8 @@
                         axios.delete(`api/routes/${this.editedItem.id}`).then(() => {
                             this.getResults();
                             Swal.fire(
-                            'Desactivado!',
-                            'El proveedor ha sido desactivado.',
+                            'Desactivada!',
+                            'La ruta ha sido desactivada.',
                             'success'
                             )
 
@@ -284,7 +431,11 @@
                     this.desserts = response.data;
                     console.log(response.data)
                     this.loading = false;
+
                 });
+
+            },
+            getDeliverers(){
                 axios.get('api/deliverers')
                 .then(response => {
                     this.nombres = response.data;
@@ -292,11 +443,23 @@
                     this.loading = false;
                 });
             },
+            getDelivererRoute(){
+                axios.get(`api/deliverers/${this.id_Route}`)
+                .then(response => {
+                    this.route = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+
+
+                });
+            },
 
         },
 
         created () {
             this.getResults();
+            this.getDeliverers();
+            this.getDelivererRoute();
         },
     }
 </script>

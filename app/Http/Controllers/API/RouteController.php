@@ -16,7 +16,7 @@ class RouteController extends Controller
      */
     public function index()
     {
-        return Route::where('status','=','1')->get() ;
+        return Route::latest()->where('status','=','1')->get() ;
     }
 
     /**
@@ -27,11 +27,22 @@ class RouteController extends Controller
      */
     public function store(Request $request)
     {
-        return Route::create([
-            'deliverer_id' => $request['deliverer_id'],
+        $route=Route::create([
             'municipio' => $request['municipio'],
             'status'=>true
         ]);
+        foreach ( $request['deliverers'] as $deliverer) {
+            $deliverer_id=$deliverer['id'];
+            $deliverer_route=$route->deliverer()->attach
+            ($deliverer_id);
+        }
+        return $deliverer_route;
+
+    }
+    public function createdeliverer_route(Request $request)
+    {
+        return Route::findOrFail($request['id'])->deliverer()->attach
+        ($request['deliverer_id']);
     }
 
     /**
@@ -42,7 +53,11 @@ class RouteController extends Controller
      */
     public function show($id)
     {
-        //
+        //ruta:  axios.get(`api/routes/${this.id_Deliverer}`)
+        return Route::leftjoin('deliverer_route',
+        'deliverer_route.route_id','=','routes.id')
+        ->where('deliverer_route.deliverer_id', '=',$id)
+        ->get();
     }
 
     /**
@@ -57,7 +72,6 @@ class RouteController extends Controller
         $route = Route::findOrFail($id);
 
         $validator = Validator::make( $request->all(), [
-            'deliverer_id' => 'required|Integer',
             'municipio' => 'required|max:255'
             ]
         );
@@ -67,7 +81,6 @@ class RouteController extends Controller
         }
 
         $route->update([
-            'deliverer_id' => $request['deliverer_id'],
             'municipio' => $request['municipio']
              ]);
      return $route;

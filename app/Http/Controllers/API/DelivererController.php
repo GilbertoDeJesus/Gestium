@@ -47,7 +47,11 @@ class DelivererController extends Controller
      */
     public function show($id)
     {
-        //
+        return Deliverer::join('deliverer_route',
+        'deliverer_route.deliverer_id','=','deliverers.id')
+        ->select('deliverer_route.route_id','deliverers.nombre','deliverer_route.created_at')
+        ->where('deliverer_route.route_id', '=',$id)
+        ->get();
     }
 
     /**

@@ -39,7 +39,7 @@
                                 ></v-text-field>
                                 <v-spacer></v-spacer>
 
-                                <v-dialog v-model="dialog" max-width="900px">
+                                <v-dialog v-model="dialog" scrollable max-width="900px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Salida</v-btn>
                                 </template>
@@ -72,9 +72,8 @@
                                                         md="6"
                                                         sm="6"
                                                         >
-                                                        <v-select
-                                                            v-model="select_provider"
-
+                                                        <v-autocomplete
+                                                            v-model="select_deliverer"
                                                             :items="nombres"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -82,7 +81,7 @@
                                                             prepend-icon="local_shipping"
                                                             persistent-hint
                                                             return-object
-                                                            ></v-select>
+                                                            ></v-autocomplete>
                                                         </v-col>
 
                                                         <v-col
@@ -99,6 +98,7 @@
                                                         >
                                                             <template v-slot:activator="{ on }">
                                                             <v-text-field
+                                                                :rules="[required('fecha'), minimum_length(1)]"
                                                                 v-model="editedItem.fecha_salida"
                                                                 label="Fecha de salida"
                                                                 prepend-icon="event"
@@ -119,21 +119,21 @@
 
                                                         </v-col>
                                                         <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-select
-                                                        v-model="select_tipoM"
-                                                        :items="tipoMovimiento"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        label="Seleccione el tipo de movimiento"
-                                                        prepend-icon="local_shipping"
-                                                        persistent-hint
-                                                        return-object
-                                                        ></v-select>
-                                                    </v-col>
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="6"
+                                                        >
+                                                        <v-select
+                                                            v-model="select_tipoM"
+                                                            :items="tipoMovimiento"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Seleccione el tipo de movimiento"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-select>
+                                                        </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -142,7 +142,6 @@
                                                         >
                                                         <v-autocomplete
                                                             v-model="select_product"
-
                                                             :items="productos"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -159,6 +158,7 @@
                                                         sm="6"
                                                         >
                                                         <v-text-field
+                                                            :rules="[required('cantidad')]"
                                                             v-model="editedItem.cantidad"
                                                             label="Cantidad"
                                                             type="number"
@@ -168,7 +168,14 @@
                                                         ></v-text-field>
                                                         </v-col>
                                                         <v-spacer></v-spacer>
-                                                        <v-btn dark class="ma-2" color="#ff5300" style="padding-right:4rem; padding-left:4rem;"  @click="add">Agregar</v-btn>
+                                                        <v-btn
+
+                                                        :disabled="!valid"
+                                                        dark class="ma-2"
+                                                        color="#ff5300"
+                                                        style="padding-right:4rem; padding-left:4rem;"
+                                                        @click="add"
+                                                        >Agregar</v-btn>
                                                     </v-row>
                                                     </v-col>
                                                     <v-col
@@ -194,6 +201,7 @@
                                                                 <v-dialog
                                                                     v-model="dialogEditProduct"
                                                                     max-width="400px"
+                                                                    :retain-focus="false"
                                                                 >
                                                                     <v-card>
                                                                     <v-card-title>
@@ -201,6 +209,7 @@
                                                                     </v-card-title>
                                                                     <v-card-text>
                                                                         <v-text-field
+                                                                            :retain-focus="false"
                                                                             v-model="editedItem.cantidad"
                                                                             label="Ingrese la nueva Cantidad"
                                                                             type="number"
@@ -252,15 +261,73 @@
                                 <v-card-actions>
                                     <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="save">Guardar</v-btn>
+                                    <v-btn dark class="ma-2" color="#ff5300" @click="save">Guardar</v-btn>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
                             </v-toolbar>
                             </template>
-                            <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                            <template v-slot:item.actions="{item}">
+                            <v-icon small class="mr-2" @click=" showdetails(item)" v-bind:key = " item.id "> visibility </v-icon>
+
+
+                             <v-dialog
+                             :retain-focus="false"
+                             v-model="dialogProductList"
+                             scrollable
+                             fullscreen
+                             hide-overlay
+                             transition="dialog-bottom-transition"
+                             class="perfect-scrollbar-on"
+                             >
+                                <v-card style="background:#f5f5f5;">
+                                    <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">assignment</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Lista de productos</strong></p>
+                                        </v-col>
+                                    </v-container>
+
+                                <v-card-text style="padding-bottom:0px;">
+
+                                    <v-container style="padding-top:2rem;">
+                                         <v-data-table
+                                        :headers="hedaers_productList"
+                                        :items="productList"
+                                        sort-by="calories"
+                                        class="elevation-3"
+                                        :search="search"
+                                        :loading="loading" loading-text="Estamos cargando tu información"
+                                        :items-per-page="6"
+                                        :footer-props="{
+                                            'items-per-page-options': [7, 10, 20]
+
+                                        }">
+                                            <template v-slot:item.created_at="{ item }">
+                                            {{item.created_at | formatDateTime | formatUpperCase}}
+                                            </template>
+                                            <template v-slot:item.fecha_salida="{ item }">
+                                            {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
+                                            </template>
+                                     </v-data-table>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeProductList">Cerrar</v-btn>
+                                    <v-spacer></v-spacer>
+
+                                </v-card-actions>
+                                </v-card>
+                                </v-dialog>
+
+
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -284,16 +351,19 @@
     export default {
         data() {
             return {
+                id_movement:0,
                 dialog: false,
                 dialogEditProduct: false,
+                dialogProductList: false,
                 search: '',
                   date: '',
+                producto: '',
                 date1: new Date().toISOString().substr(0, 10),
                 menu:false,
                 loading: true,
                 valid: false,
                 edit_mode: false,
-                select_provider: {
+                select_deliverer: {
                     id: '',
                     nombre: '',
                 },
@@ -312,11 +382,16 @@
                     { nombre: 'Devolución', id: '0' },
                 ],
                 headers: [
-                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Producto', value: 'product_id' },
-                    { text: 'Cantidad', value: 'cantidad'},
+                    { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
+                    { text: 'Repartidor', value: 'nombre' },
+                    { text: 'Cantidad de productos', value: 'sum'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                     { text: 'Acciones', value: 'actions', sortable: false },
+                ],
+                hedaers_productList: [ /*align: 'start', sortable: false,*/
+                    { text: 'Producto', value: 'nombre' },
+                    { text: 'Cantidad', value: 'cantidad'},
+                    { text: 'Fecha de salida', value: 'fecha_salida'},
                 ],
                 headers_productos: [
                     {text: 'Nombre', value: 'nombre'},
@@ -325,8 +400,9 @@
                 ],
                 salidas: [],
                 productosS:[],
-                nombres:[],
-                productos:[],
+                productList: [],
+                nombres: [],
+                productos: [],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -371,18 +447,45 @@
 
         methods: {
             add(){
-                //var salidaProducto={id:this.select_product.id,nombre:this.select_product.nombre,cantidad:this.editedItem.cantidad}
-                this.salidaProducto={
+
+                for (let index = 0; index < this.productosS.length; index++) {
+
+                    if (this.productosS[index].nombre == this.select_product.nombre) {
+                        this.producto = this.productosS[index].nombre
+                        break
+                    }
+
+                }
+                if (this.select_product.nombre == this.producto) {
+
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "Este producto ya esta en la lista!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    this.producto=''
+                }else{
+                    this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
                     'cantidad':this.editedItem.cantidad
                     }
-                this.productosS.push(this.salidaProducto);
-                    //this.productosS[index]
-                console.log(this.productosS)
+
+                    this.productosS.push(this.salidaProducto);
+                    console.log(this.productosS)
+                    this.select_product=[0];
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+
+                }
                 this.select_product=[0];
-                this.select_product.id='';
-                this.editedItem.cantidad='';
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+
 
             },
             modifyQuantity(item){
@@ -399,18 +502,44 @@
             editItem (item) {
                 this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
+
                 this.dialog = true
                 this.edit_mode = true
             },
             editItemProduct (item) {
+
                 this.editedIndex = this.productosS.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
+                this.salidaProducto = Object.assign({}, item) // Clone an object
                 this.dialogEditProduct = true
+                this.getProductsList()
+
 
             },
             deleteItemProducts(item) {
                 const index = this.productosS.indexOf(item)
-                confirm('¿Estas seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
+                //confirm('¿Esta seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
+                Swal.fire({
+                    title: '¿Esta seguro de eliminar este producto de la lista?',
+                    text: "Esta acción no es reversible!",
+                    type: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminalo!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.value) {
+                        this.productosS.splice(index, 1)
+                            Swal.fire(
+                            'Eliminado!',
+                            'El producto ha sido eliminado de la lista.',
+                            'success'
+                            )
+                            console.log(this.productosS)
+                    } else {
+                        this.productosS = Object.assign({}, this.defaultItem)
+                    }
+                });
             },
             cancelarEditar(){
                 this.editedItem.cantidad='';
@@ -429,25 +558,24 @@
                     this.edit_mode = false
                 }
             },
+            closeProductList(){
+                this.dialogProductList=false
+                this.productList=[]
+            },
             async save () {
                     const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
                         'fecha_salida': this.editedItem.fecha_salida,
                         'deliverer_id': this.select_deliverer.id,
-                        'product_id': '1',
-                        'cantidad': this.editedItem.cantidad,
-                        'tipoMovimiento': this.select_tipoM.id,
+                        'products':this.productosS,
+                        'tipoMovimiento': this.select_tipoM.id
                     }).catch(error => console.log("Error: " + error));
 
 
-                   /*if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
+                   if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
                        const response=await axios.put(`/api/updateS`,
                         this.productosS).catch(error => console.log("Error: " + error));
                         if (response) {
                         this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })
                         console.log(response.data);
                         this.productosS=[];
 
@@ -458,15 +586,11 @@
 
                     if (response) {
                         this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })
                         console.log(response.data);
                         this.productosS=[];
 
                      }
-                    }*/
+                    }
                     if (response) {
                         this.getResults();
                         Toast.fire({
@@ -474,7 +598,6 @@
                             title: '¡Salida registrado!'
                         })
                         console.log(response.data);
-                        this.productosS=[];
 
                      }
                 this.close();
@@ -510,6 +633,15 @@
                     }
                 });
             },
+            async showdetails(item){
+                this.editedIndex = this.salidas.indexOf(item)
+                this.editedItem = Object.assign({}, item) // Clone an object
+                this.id_movement= this.editedItem.id
+                this.getProductsList()
+                this.dialogProductList=true
+
+
+            },
 
             getResults() {
                 axios.get('api/warehouse_movements')
@@ -535,6 +667,14 @@
                     this.loading = false;
                 });
             },
+            getProductsList(){
+                axios.get(`api/warehouse_movements/${this.id_movement}`)
+                .then(response => {
+                    this.productList = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
 
         },
 
@@ -542,6 +682,7 @@
             this.getResults();
             this.getDeliverers();
             this.getProducts();
+            this.getProductsList();
         },
     }
 </script>
