@@ -21,7 +21,7 @@ class Product extends Model
         ->withTimestamps();
     }
     public function sale(){
-        return $this->belongsToMany(Sale::class)->using(ProductWarehouseMovement::class)->using(ProductSale::class);
+        return $this->belongsToMany(Sale::class)->using(ProductWarehouseMovement::class)->using(ProductWarehouseMovementSale::class);
     }
 
 

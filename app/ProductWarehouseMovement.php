@@ -11,7 +11,7 @@ class ProductWarehouseMovement extends Pivot
 {
   public function sale()
   {
-    return $this->belongsToMany(Sale::class)->using(ProductSale::class);
+    return $this->belongsToMany(Sale::class)->using(ProductWarehouseMovementSale::class);
   }
   
 
