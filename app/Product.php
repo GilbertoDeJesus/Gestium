@@ -19,6 +19,9 @@ class Product extends Model
         ->withPivot('cantidad', 'tipo_movimiento')
         ->withTimestamps();
     }
+    public function sale(){
+        return $this->belongsToMany(Sale::class)->using(ProductWarehouseMovement::class)->using(ProductSale::class);
+    }
 
 
     protected $guarded = [];

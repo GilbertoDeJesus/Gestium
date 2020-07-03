@@ -2,14 +2,15 @@
 
 namespace App;
 
+use CreateProductWarehouseMovementTable;
 use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    public function product(){
-        return $this->belongsToMany(ProductWarehouseMovement::class)->using(ProductSale::class);
+    
+    public function productwarehousemovement(){
+        return $this->belongsToMany(ProductWarehouseMovement::class)->using(ProductWarehouseMovementSale::class);
     }
-
     public function customer(){
         return $this->belongsTo(Customer::class);
     }
