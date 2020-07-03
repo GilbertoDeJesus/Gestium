@@ -9,7 +9,7 @@ class Sale extends Model
 {
     
     public function productwarehousemovement(){
-        return $this->belongsToMany(ProductWarehouseMovement::class)->using(ProductWarehouseMovementSale::class);
+        return $this->belongsToMany(ProductWarehouseMovement::class)->using(ProductSale::class);
     }
     public function customer(){
         return $this->belongsTo(Customer::class);

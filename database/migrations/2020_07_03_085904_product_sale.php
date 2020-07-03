@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductWarehouseMovementSaleTable extends Migration
+class ProductSale extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProductWarehouseMovementSaleTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_warehouse_movement_sale', function (Blueprint $table) {
+        Schema::create('product_sale', function (Blueprint $table) {
             $table->id();
             $table->integer('cantidad');
             $table->decimal('monto',6,2);
@@ -21,7 +21,7 @@ class CreateProductWarehouseMovementSaleTable extends Migration
             $table->unsignedBigInteger('product_warehouse_movement_id');
             $table->timestamps();
             $table->foreign('sale_id')->references('id')->on('sales');
-            $table->foreign('product_warehouse_movement_id')->references('id')->on('product_warehouse_movements');
+            $table->foreign('product_warehouse_movement_id')->references('warehouse_movement_id')->on('product_warehouse_movement');
 
         });
     }
@@ -33,6 +33,6 @@ class CreateProductWarehouseMovementSaleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_warehouse_movement_sale');
+        Schema::dropIfExists('product_sale');
     }
 }
