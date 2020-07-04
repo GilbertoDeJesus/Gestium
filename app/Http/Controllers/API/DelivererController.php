@@ -53,6 +53,13 @@ class DelivererController extends Controller
         ->where('deliverer_route.route_id', '=',$id)
         ->get();
     }
+   /* public function getlistdeliverer($id_route){
+        return Deliverer::join('deliverer_route',
+        'deliverer_route.deliverer_id','=','deliverers.id')
+        ->select('deliverer_route.route_id','deliverers.nombre','deliverer_route.created_at')
+        ->where('deliverer_route.route_id', '=',$id_route)
+        ->get();
+    }*/
 
     /**
      * Update the specified resource in storage.

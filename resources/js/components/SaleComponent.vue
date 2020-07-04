@@ -346,6 +346,7 @@
                 select_product: {
                     id: '',
                     nombre: '',
+                    precio_venta:'',
                 },
                 select_customer:{
                     id: '',
@@ -355,6 +356,7 @@
                     id:'',
                     nombre:'',
                     cantidad:'',
+                    precio_venta:'',
                 },
                 select_tipoM: { text: 'Salida', id: '1' },
                 tipoMovimiento: [
@@ -423,11 +425,11 @@
 
         methods: {
             add(){
-                //var salidaProducto={id:this.select_product.id,nombre:this.select_product.nombre,cantidad:this.editedItem.cantidad}
                 this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
-                    'cantidad':this.editedItem.cantidad
+                    'cantidad':this.editedItem.cantidad,
+                    'precio_venta':this.select_product.precio_venta
                     }
                 this.productosS.push(this.salidaProducto);
                     //this.productosS[index]
@@ -483,12 +485,12 @@
                 }
             },
             async save () {
-                    const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
+                    const response = await axios.post('/api/sales',{ //llena tabla movimientos
                         'fecha_salida': this.editedItem.fecha_salida,
-                        'deliverer_id': this.select_deliverer.id,
-                        'product_id': '6',
-                        'cantidad': this.editedItem.cantidad,
-                        'tipoMovimiento': this.select_tipoM.id,
+                        'observacion': "Hola",
+                        'products':this.productosS,
+                        'deliverer_id':this.select_deliverer.id,
+                        'customer_id':this.select_customer.id
                     }).catch(error => console.log("Error: " + error));
 
 
@@ -590,7 +592,7 @@
                 });
             },
             getProducts(){
-                axios.get('api/products')
+                axios.get(`api/warehouse_movements/1`)
                 .then(response => {
                     this.productos = response.data;
                     console.log(response.data)
