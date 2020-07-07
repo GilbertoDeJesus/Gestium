@@ -2,14 +2,18 @@
 
 namespace App;
 
+use CreateProductWarehouseMovementSaleTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+
 class ProductWarehouseMovement extends Pivot
 {
-    public function sale(){
-        return $this->belongsToMany(Sale::class)->using(ProductSale::class);
-          }
+  public function sale()
+  {
+    return $this->belongsToMany(Sale::class)->using(ProductWarehouseMovementSale::class);
+  }
+  
 
-        public $incrementing=true;
+  public $incrementing = true;
 }
