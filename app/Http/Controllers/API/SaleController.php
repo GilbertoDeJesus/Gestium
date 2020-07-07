@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 use App\Sale;
+use App\ProductWarehouseMovement;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -16,7 +17,9 @@ class SaleController extends Controller
      */
     public function index()
     {
-        return Sale::get();
+        return Sale::latest()
+        ->with('customer:id,nombre')
+        ->get();
     }
 
     /**
@@ -27,13 +30,37 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        return Sale::create([
-            'deliverer_id' => $request['deliverer_id'],
-            'customer_id' => $request['customer_id'],
-            'fecha' => $request['fecha'],
-            'monto' => $request['monto'],
-            'observacion' => $request['observacion']
+        $total=0;
+       // $sale=Sale::find(4);
+        $sale= Sale::create([
+            'fecha'=>$request['fecha_salida'],
+            'monto'=>'0',
+            'observacion'=>$request['observacion'],
+            'deliverer_id'=>$request['deliverer_id'],
+            'customer_id'=>$request['customer_id']
         ]);
+
+        foreach ( $request['products'] as $product) {
+            $movement_product_id=$product['pw_id'];
+            $cantidad=$product['cantidad'];
+            $precio_producto=$product['precio_venta'];
+            $subtotal=($cantidad*$precio_producto);
+            $product_sale=$sale->productwarehousemovement()->attach
+            ($movement_product_id,['cantidad' =>$cantidad,
+            'monto' =>$subtotal]);
+            $total=$total+$subtotal;
+
+           $pwm= Productwarehousemovement::findOrFail($movement_product_id);
+                 $stock=$pwm->cantidad;
+                  if ($product['cantidad']<=$stock ){
+                    $pwm->update([
+                    'cantidad' => $stock - $cantidad]);
+                   }
+        }
+        $sale->update([
+            'monto' => $total]);
+
+        return $product_sale;
     }
 
     /**

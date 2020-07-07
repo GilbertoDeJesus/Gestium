@@ -6,7 +6,7 @@
                     <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
-                            :items="salidas"
+                            :items="sales"
                             sort-by="calories"
                             class="elevation-3"
                             :search="search"
@@ -346,7 +346,9 @@
                 select_product: {
                     id: '',
                     nombre: '',
+                    cantidad:'',
                     precio_venta:'',
+                    pw_id:'',
                 },
                 select_customer:{
                     id: '',
@@ -357,6 +359,7 @@
                     nombre:'',
                     cantidad:'',
                     precio_venta:'',
+                    pw_id:'',
                 },
                 select_tipoM: { text: 'Salida', id: '1' },
                 tipoMovimiento: [
@@ -364,10 +367,10 @@
                     { nombre: 'Devolución', id: '0' },
                 ],
                 headers: [
-                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Producto', value: 'product_id' },
-                    { text: 'Cantidad', value: 'product.cantidad'},
-                    { text: 'Fecha de salida', value: 'fecha_salida'},
+                    { text: 'Cliente', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Monto', value: 'monto' },
+                    { text: 'Observación', value: 'observacion'},
+                    { text: 'Fecha de venta', value: 'fecha'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 headers_productos: [
@@ -375,7 +378,7 @@
                     {text: 'Cantidad', value: 'cantidad'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                salidas: [],
+                sales: [],
                 productosS:[],
                 nombres:[],
                 routes:[],
@@ -425,18 +428,63 @@
 
         methods: {
             add(){
-                this.salidaProducto={
+                 if(this.editedItem.cantidad>this.select_product.cantidad){
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "No hay suficiente cantidad de producto",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    this.producto=''
+                    }
+                    else{
+
+
+                for (let index = 0; index < this.productosS.length; index++) {
+
+                    if (this.productosS[index].nombre == this.select_product.nombre) {
+                        this.producto = this.productosS[index].nombre
+                        break
+                    }
+
+                }
+                if (this.select_product.nombre == this.producto) {
+
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "Este producto ya esta en la lista!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    this.producto=''
+                }
+
+                else{
+
+
+                    this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
                     'cantidad':this.editedItem.cantidad,
-                    'precio_venta':this.select_product.precio_venta
+                    'precio_venta':this.select_product.precio_venta,
+                    'pw_id':this.select_product.pw_id
                     }
-                this.productosS.push(this.salidaProducto);
-                    //this.productosS[index]
-                console.log(this.productosS)
+
+                    this.productosS.push(this.salidaProducto);
+                    console.log(this.productosS)
+                    this.select_product=[0];
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+
+                }
                 this.select_product=[0];
-                this.select_product.id='';
-                this.editedItem.cantidad='';
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+                    }
 
             },
             modifyQuantity(item){
@@ -451,7 +499,7 @@
             },
 
             editItem (item) {
-                this.editedIndex = this.salidas.indexOf(item)
+                this.editedIndex = this.sales.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.dialog = true
                 this.edit_mode = true
@@ -485,7 +533,7 @@
                 }
             },
             async save () {
-                    const response = await axios.post('/api/sales',{ //llena tabla movimientos
+                    const response = await axios.post('/api/sales',{ //llena tabla ventas
                         'fecha_salida': this.editedItem.fecha_salida,
                         'observacion': "Hola",
                         'products':this.productosS,
@@ -536,7 +584,7 @@
 
             },
             async deleteItem (item) {
-                this.editedIndex = this.salidas.indexOf(item)
+                this.editedIndex = this.sales.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
                     title: '¿Estás seguro de desactivar esta salida?',
@@ -567,9 +615,9 @@
             },
 
             getResults() {
-                axios.get('api/warehouse_movements')
+                axios.get('api/sales')
                 .then(response => {
-                    this.salidas = response.data;
+                    this.sales = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });

@@ -21,7 +21,7 @@ class ProductWarehouseMovementSale extends Migration
             $table->unsignedBigInteger('product_sale_id');
             $table->timestamps();
             $table->foreign('sale_id')->references('id')->on('sales');
-            $table->foreign('product_sale_id')->references('warehouse_movement_id')->on('product_warehouse_movement');
+            $table->foreign('product_sale_id')->references('id')->on('product_warehouse_movement');
 
         });
     }
