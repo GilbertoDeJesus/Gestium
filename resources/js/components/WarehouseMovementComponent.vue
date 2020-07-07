@@ -274,6 +274,7 @@
                                 </v-dialog>
                             </v-toolbar>
                             </template>
+
                             <template v-slot:item.actions="{item}">
 
                             <v-icon color="#ff5300" @click=" showdetails(item)" v-bind:key = " item.id "> unarchive </v-icon>
@@ -284,7 +285,7 @@
                              v-model="dialogProductList"
                              scrollable
                              fullscreen
-                             transition="dialog-bottom-transition"
+                             persistent
                              class="perfect-scrollbar-on"
                              >
                                 <v-card style="background:#f5f5f5;">

@@ -74,7 +74,7 @@
                                                         >
                                                         <v-autocomplete
                                                             v-model="select_deliverer"
-
+                                                            v-on:change="getRoutesList"
                                                             :items="nombres"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -84,6 +84,26 @@
                                                             return-object
                                                             ></v-autocomplete>
                                                         </v-col>
+
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-autocomplete
+
+                                                            v-model="select_route"
+                                                            :disabled="dis"
+                                                            :items="routes"
+                                                            item-text="municipio"
+                                                            item-value="id"
+                                                            label="Rutas"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
+                                                        </v-col>
+
 
                                                         <v-col
                                                         cols="12"
@@ -307,6 +327,7 @@
             return {
                 dialog: false,
                 dialogEditProduct: false,
+                dis:true,
                 search: '',
                   date: '',
                 date1: new Date().toISOString().substr(0, 10),
@@ -317,6 +338,10 @@
                 select_deliverer: {
                     id: '',
                     nombre: '',
+                },
+                select_route:{
+                    id: '',
+                    municipio: '',
                 },
                 select_product: {
                     id: '',
@@ -351,6 +376,7 @@
                 salidas: [],
                 productosS:[],
                 nombres:[],
+                routes:[],
                 productos:[],
                 clientes:[],
                 acum:1,
@@ -550,6 +576,15 @@
                 axios.get('api/deliverers')
                 .then(response => {
                     this.nombres = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
+            getRoutesList(){
+                this.dis=false
+                axios.get(`api/routes/${this.select_deliverer.id}`)
+                .then(response => {
+                    this.routes = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });

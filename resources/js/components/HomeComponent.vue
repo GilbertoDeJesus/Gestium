@@ -3,8 +3,15 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de Usuarios registrados</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="10" sm="12" md="10">
-
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -16,11 +23,16 @@
                             :footer-props="{
                                 'items-per-page-options': [7, 10, 20]
                             }">
-                            <template v-slot:item.created_at="{ item }">
-                               {{item.created_at | formatDateTime | formatUpperCase}}
-                            </template>
+
                             <template v-slot:item.name="{ item }">
-                                {{item.name | formatUpperCase}}
+                               <v-chip class="ma-2">
+                                    <v-avatar left >
+                                        <v-icon color="teal">mdi-account-circle</v-icon>
+                                    </v-avatar>{{item.name | formatUpperCase}}
+                                </v-chip>
+                            </template>
+                            <template v-slot:item.created_at="{ item }">
+                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
@@ -32,9 +44,10 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                   prepend-inner-icon="search"
+                                    prepend-inner-icon="search"
                                     label="Buscar"
                                     hide-details
+                                    style="background-color: #FFFFFE;"
                                     filled
                                     rounded
                                     single-line
@@ -50,7 +63,7 @@
 
                                 <v-dialog v-model="dialog" max-width="420px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo usuario &nbsp;<v-icon>person_add</v-icon></v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>group_add</v-icon>Agregar</v-btn>
                                 </template>
                                     <v-card style="border-radius:20px;">
 
@@ -154,8 +167,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert

@@ -3,6 +3,14 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de creditos aprobados</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
@@ -18,6 +26,13 @@
                             <template v-slot:item.fecha="{ item }">
                                 {{item.fecha |  formatDateTimeShort | formatUpperCase}}
                             </template>
+                            <template v-slot:headers.customer{nombre}="{item}">
+                                <v-chip>
+                                    <v-avatar left >
+                                        <v-icon color="teal">mdi-account-circle</v-icon>
+                                    </v-avatar>{{item.customer.nombre | formatUpperCase}}
+                                </v-chip>
+                            </template>
                             <template v-slot:item.descripcion="{ item }">
                                 {{item.descripcion | formatUpperCase}}
                             </template>
@@ -31,13 +46,22 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
+                                    prepend-inner-icon="search"
                                     label="Buscar"
-                                    single-line
                                     hide-details
+                                    style="background-color: #FFFFFE;"
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
+                                <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                                ></v-divider>
 
                                 <v-dialog v-model="dialog" max-width="500px">
                                 <template v-slot:activator="{ on }">

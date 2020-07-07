@@ -24,6 +24,18 @@
                             <template v-slot:item.descripcion="{ item }">
                                 {{item.descripcion | formatUpperCase}}
                             </template>
+                            <template v-slot:item.precio_venta="{ item }">
+                               <v-chip class="ma-2">
+                                    <v-avatar left >
+                                        <v-icon color="green">monetization_on</v-icon>
+                                    </v-avatar>{{item.precio_venta}}
+                                </v-chip>
+                            </template>
+                            <template v-slot:item.stock="{ item }">
+                               <v-chip color="orange" text-color="white">
+                                    {{item.stock}}
+                                </v-chip>
+                            </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Productos</v-toolbar-title>
@@ -34,22 +46,31 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
-                                    label="Buscar"
-                                    single-line
+                                    prepend-inner-icon="search"
+                                    label="Buscar productos"
                                     hide-details
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
                                 <v-divider
                                 class="mx-5"
                                 inset
                                 vertical
                                 ></v-divider>
-                                <v-btn color="#ff3f00" dark class="mb-2">Añadir unidad &nbsp;<i class="material-icons">queue</i></v-btn>
-                                &nbsp;&nbsp;
+                                <v-btn color="#ff3f00" outlined dark><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
+                                <v-divider
+                                class="mx-2"
+                                style="color:#fff;"
+                                inset
+                                vertical
+                                ></v-divider>
                                 <v-dialog v-model="dialog" scrollable max-width="810px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo Producto &nbsp;<i class="material-icons">queue</i></v-btn>
+                                    <v-btn color="#ff3f00" dark v-on="on" ><v-icon left>queue</v-icon>Nuevo Producto</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -330,11 +351,11 @@
                 },
                 headers: [
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Meta', value: 'meta' },
+                    //{ text: 'Meta', value: 'meta' },
                     { text: 'Unidad de medidad', value: 'unit.tipo' },
                     { text: 'Precio de Venta', value: 'precio_venta' },
                     { text: 'Stock', value: 'stock' },
-                    { text: 'Descripción', value: 'descripcion' },
+                    //{ text: 'Descripción', value: 'descripcion' },
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
