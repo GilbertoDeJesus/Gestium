@@ -3,12 +3,20 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de clientes registrados</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="11" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
                             sort-by="calories"
-                            class="elevation-3"
+                            class="elevation-4"
                             :search="search"
                             :loading="loading" loading-text="Estamos cargando tu información"
                             :items-per-page="6"
@@ -19,14 +27,23 @@
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
                             <template v-slot:item.nombre="{ item }">
-                                {{item.nombre | formatUpperCase}}
+                               <v-chip>
+                                    <v-avatar left >
+                                        <v-icon color="teal">mdi-account-circle</v-icon>
+                                    </v-avatar>{{item.nombre | formatUpperCase}}
+                                </v-chip>
                             </template>
                             <template v-slot:item.direccion="{ item }">
                                 {{item.direccion | formatUpperCase}}
                             </template>
                             <template v-slot:item.establecimiento="{ item }">
-                                {{item.establecimiento | formatUpperCase}}
+                               <v-chip color="orange" dark>
+                                    <v-avatar left >
+                                        <v-icon>store</v-icon>
+                                    </v-avatar>{{item.establecimiento | formatUpperCase}}
+                                </v-chip>
                             </template>
+
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Clientes</v-toolbar-title>
@@ -37,17 +54,26 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
+                                    prepend-inner-icon="search"
                                     label="Buscar"
-                                    single-line
                                     hide-details
+                                    style="background-color: #FFFFFE;"
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
+                                <v-divider
+                                class="mx-5"
+                                inset
+                                vertical
+                                ></v-divider>
 
                                 <v-dialog v-model="dialog" max-width="550px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-4" v-on="on" >Nuevo Cliente</v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>person_add</v-icon>Agregar</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -164,21 +190,24 @@
                                                         required
                                                     ></v-text-field>
                                                     </v-col>
+
                                                     <v-col
-                                                    cols="12"
-                                                    md="6"
-                                                    sm="6"
-                                                    >
-                                                    <v-text-field
-                                                        v-model="editedItem.route_id"
-                                                        :counter="20"
-                                                        label="Ruta"
-                                                        type="text"
-                                                        prepend-icon="explore"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-autocomplete
+
+                                                            v-model="select_route"
+                                                            :items="routes"
+                                                            item-text="municipio"
+                                                            item-value="id"
+                                                            label="Rutas"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
+                                                        </v-col>
 
                                                 </v-row>
                                             </v-container>
@@ -198,8 +227,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -227,17 +260,22 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                select_route:{
+                    id: '',
+                    municipio: '',
+                },
                 headers: [
-                    { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Telefono', value: 'telefono' },
-                    { text: 'Email', value: 'email' },
+                    { text: 'Nombre', value: 'nombre'},
+                    //{ text: 'Telefono', value: 'telefono' },
+                    //{ text: 'Email', value: 'email' },
                     { text: 'Dirección', value: 'direccion' },
                     { text: 'Establecimiento', value: 'establecimiento' },
-                    { text: 'Ruta', value: 'route_id' },
+                    //{ text: 'Ruta', value: 'route_id' },
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 desserts: [],
+                routes:[],
                 editedIndex: -1,
                 editedItem: {
                     id: '',
@@ -327,7 +365,7 @@
                         'establecimiento': this.editedItem.establecimiento,
                         'email' : this.editedItem.email,
                         'status': this.editedItem.status,
-                        'route_id': this.editedItem.route_id
+                        'route_id': this.select_route.id,
                     }).catch(error => console.log("Error: " + error));
 
                     if (response) {
@@ -381,10 +419,20 @@
                     this.loading = false;
                 });
             },
+            getRoutesList(){
+                this.dis=false
+                axios.get('api/routes')
+                .then(response => {
+                    this.routes = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                });
+            },
         },
 
         created () {
             this.getResults();
+            this.getRoutesList();
         },
     }
 </script>
