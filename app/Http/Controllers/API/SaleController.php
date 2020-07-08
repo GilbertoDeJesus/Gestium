@@ -46,7 +46,7 @@ class SaleController extends Controller
             $precio_producto=$product['precio_venta'];
             $subtotal=($cantidad*$precio_producto);
             $product_sale=$sale->productwarehousemovement()->attach
-            ($movement_product_id,['cantidad' =>$cantidad,
+            ($movement_product_id,['cantidadVenta' =>$cantidad,
             'monto' =>$subtotal]);
             $total=$total+$subtotal;
 
@@ -71,7 +71,30 @@ class SaleController extends Controller
      */
     public function show($id)
     {
-        //
+    }
+    //La función obtine los datos de una venta, sus productos, la cantidad de cada uno
+    //y el total a pagar por producto.
+    public function getSaleDetail($id){
+      return ProductWarehouseMovement::
+        join('product_warehouse_movement_sale',
+        'product_warehouse_movement.id', '=' ,
+        'product_warehouse_movement_sale.product_sale_id')
+
+      ->join('products',
+        'product_warehouse_movement.product_id', '=',
+        'products.id')
+
+      ->select('products.id as product_id','products.nombre',
+        'product_warehouse_movement_sale.cantidad as cantidadVenta',
+        'product_warehouse_movement_sale.monto')
+
+      ->where('product_warehouse_movement_sale.sale_id','=', $id)
+      ->get();
+
+      /*  return Sale::with("productwarehousemovement")
+        ->where('id', '=',3)
+        ->select('id','monto')
+        ->get();*/
     }
 
     /**

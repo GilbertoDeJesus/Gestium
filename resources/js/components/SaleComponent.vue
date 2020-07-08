@@ -93,6 +93,7 @@
                                                         <v-autocomplete
 
                                                             v-model="select_route"
+                                                            v-on:change="getClientsNames"
                                                             :disabled="dis"
                                                             :items="routes"
                                                             item-text="municipio"
@@ -114,6 +115,7 @@
                                                             v-model="select_customer"
 
                                                             :items="clientes"
+                                                            :disabled="dis"
                                                             item-text="nombre"
                                                             item-value="id"
                                                             label="Cliente"
@@ -180,7 +182,7 @@
                                                         >
                                                         <v-autocomplete
                                                             v-model="select_product"
-
+                                                            v-on:change="getStock"
                                                             :items="productos"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -190,6 +192,18 @@
                                                             return-object
                                                             ></v-autocomplete>
                                                         </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                              md="6"
+                                                               sm="6"
+                                                        >
+                                                        <v-text-field
+                                                            v-text="stock"
+                                                            clearable
+                                                            :disabled= true
+                                                        ></v-text-field>
+
+                                                         </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -328,6 +342,7 @@
                 dialog: false,
                 dialogEditProduct: false,
                 dis:true,
+                stock: 'Stock disponible: ',
                 search: '',
                   date: '',
                 date1: new Date().toISOString().substr(0, 10),
@@ -384,6 +399,7 @@
                 routes:[],
                 productos:[],
                 clientes:[],
+                saleDetails:[],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -541,35 +557,6 @@
                         'customer_id':this.select_customer.id
                     }).catch(error => console.log("Error: " + error));
 
-
-                   /*if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
-                       const response=await axios.put(`/api/updateS`,
-                        this.productosS).catch(error => console.log("Error: " + error));
-                        if (response) {
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })
-                        console.log(response.data);
-                        this.productosS=[];
-
-                    }
-                    }else{
-                       const response=await axios.put(`/api/returnProduct`,
-                        this.productosS).catch(error => console.log("Error: " + error));
-
-                    if (response) {
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })
-                        console.log(response.data);
-                        this.productosS=[];
-
-                     }
-                    }*/
                     if (response) {
                         this.getResults();
                         Toast.fire({
@@ -614,6 +601,10 @@
                 });
             },
 
+            getStock(){
+                this.stock="Stock disponible: " + this.select_product.cantidad;
+            },
+
             getResults() {
                 axios.get('api/sales')
                 .then(response => {
@@ -648,12 +639,21 @@
                 });
             },
             getClientsNames(){
-                axios.get('api/customers')
+                this.dis=false
+                axios.get(`api/getCustomer/${this.select_route.id}`)
                 .then(response => {
                     this.clientes = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
+            },
+            getSaleDetail(){
+                axios.get(`api/getSaleDetail/3`)
+                .then(response => {
+                    this.saleDetails = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                      });
             },
 
         },
@@ -662,7 +662,7 @@
             this.getResults();
             this.getDeliverers();
             this.getProducts();
-            this.getClientsNames();
+            this.getSaleDetail();
         },
     }
 </script>

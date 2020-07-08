@@ -16,11 +16,16 @@ class RouteController extends Controller
      */
     public function index()
     {
-        //return Route::latest()->where('status','=','1')->get() ;
         return Route::latest()->where('status','=','1')
         ->with('deliverer')
         ->get();
 
+    }
+    //Obtine los clientes que pertenecen al id de la ruta que se recibe
+    public function getCustomer($id_route){
+      return Route::findOrFail($id_route) ->customer()
+      ->where('customers.status', "=", 1)
+      ->get();
     }
 
     /**
