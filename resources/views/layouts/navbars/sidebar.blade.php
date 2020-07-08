@@ -1,10 +1,11 @@
-<div class="sidebar" data-color="white" data-background-color="danger" data-image="{{ asset('material') }}/img/sidebar-3.jpg">
+<div class="sidebar" data-color="purple" data-background-color="black" data-image="{{ asset('material') }}/img/sidebar-4.jpg">
   <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
       Tip 2: you can also add an image using data-image tag
   -->
   <div class="logo">
-    <a href="{{ route('home') }}" class="simple-text logo-normal">
+    <a href="{{ route('home') }}" class="simple-text logo-normal" style="padding: 3px 0px;">
+        <i><img style="width: 80px; display: block; margin-left: auto; margin-right: auto; padding-bottom: 5px;" src="{{ asset('material') }}/img/iconoGestium.ico"></i>
       {{ __('Gestium') }}
     </a>
   </div>
@@ -43,7 +44,6 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="true">
-          {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
           <i class="material-icons">local_mall</i>
           <p>{{ __('Productos') }}
             <b class="caret"></b>

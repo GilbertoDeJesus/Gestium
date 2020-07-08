@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    
+
     public function productwarehousemovement(){
-        return $this->belongsToMany(ProductWarehouseMovement::class)->using(ProductWarehouseMovementSale::class);
+        return $this->belongsToMany(ProductWarehouseMovement::class,'product_warehouse_movement_sale',
+        'sale_id','product_sale_id')
+        ->withPivot('cantidad', 'monto')
+        ->withTimestamps();
     }
     public function customer(){
         return $this->belongsTo(Customer::class);

@@ -6,7 +6,7 @@
                     <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
-                            :items="salidas"
+                            :items="sales"
                             sort-by="calories"
                             class="elevation-3"
                             :search="search"
@@ -93,6 +93,7 @@
                                                         <v-autocomplete
 
                                                             v-model="select_route"
+                                                            v-on:change="getClientsNames"
                                                             :disabled="dis"
                                                             :items="routes"
                                                             item-text="municipio"
@@ -114,6 +115,7 @@
                                                             v-model="select_customer"
 
                                                             :items="clientes"
+                                                            :disabled="dis"
                                                             item-text="nombre"
                                                             item-value="id"
                                                             label="Cliente"
@@ -180,7 +182,7 @@
                                                         >
                                                         <v-autocomplete
                                                             v-model="select_product"
-
+                                                            v-on:change="getStock"
                                                             :items="productos"
                                                             item-text="nombre"
                                                             item-value="id"
@@ -190,6 +192,18 @@
                                                             return-object
                                                             ></v-autocomplete>
                                                         </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                              md="6"
+                                                               sm="6"
+                                                        >
+                                                        <v-text-field
+                                                            v-text="stock"
+                                                            clearable
+                                                            :disabled= true
+                                                        ></v-text-field>
+
+                                                         </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -328,6 +342,7 @@
                 dialog: false,
                 dialogEditProduct: false,
                 dis:true,
+                stock: 'Stock disponible: ',
                 search: '',
                   date: '',
                 date1: new Date().toISOString().substr(0, 10),
@@ -346,6 +361,9 @@
                 select_product: {
                     id: '',
                     nombre: '',
+                    cantidad:'',
+                    precio_venta:'',
+                    pw_id:'',
                 },
                 select_customer:{
                     id: '',
@@ -355,6 +373,8 @@
                     id:'',
                     nombre:'',
                     cantidad:'',
+                    precio_venta:'',
+                    pw_id:'',
                 },
                 select_tipoM: { text: 'Salida', id: '1' },
                 tipoMovimiento: [
@@ -362,10 +382,10 @@
                     { nombre: 'Devolución', id: '0' },
                 ],
                 headers: [
-                    { text: 'Repartidor', value: 'deliverer.nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Producto', value: 'product_id' },
-                    { text: 'Cantidad', value: 'product.cantidad'},
-                    { text: 'Fecha de salida', value: 'fecha_salida'},
+                    { text: 'Cliente', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
+                    { text: 'Monto', value: 'monto' },
+                    { text: 'Observación', value: 'observacion'},
+                    { text: 'Fecha de venta', value: 'fecha'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 headers_productos: [
@@ -373,12 +393,13 @@
                     {text: 'Cantidad', value: 'cantidad'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                salidas: [],
+                sales: [],
                 productosS:[],
                 nombres:[],
                 routes:[],
                 productos:[],
                 clientes:[],
+                saleDetails:[],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -423,18 +444,63 @@
 
         methods: {
             add(){
-                //var salidaProducto={id:this.select_product.id,nombre:this.select_product.nombre,cantidad:this.editedItem.cantidad}
-                this.salidaProducto={
+                 if(this.editedItem.cantidad>this.select_product.cantidad){
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "No hay suficiente cantidad de producto",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    this.producto=''
+                    }
+                    else{
+
+
+                for (let index = 0; index < this.productosS.length; index++) {
+
+                    if (this.productosS[index].nombre == this.select_product.nombre) {
+                        this.producto = this.productosS[index].nombre
+                        break
+                    }
+
+                }
+                if (this.select_product.nombre == this.producto) {
+
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "Este producto ya esta en la lista!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    this.producto=''
+                }
+
+                else{
+
+
+                    this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
-                    'cantidad':this.editedItem.cantidad
+                    'cantidad':this.editedItem.cantidad,
+                    'precio_venta':this.select_product.precio_venta,
+                    'pw_id':this.select_product.pw_id
                     }
-                this.productosS.push(this.salidaProducto);
-                    //this.productosS[index]
-                console.log(this.productosS)
+
+                    this.productosS.push(this.salidaProducto);
+                    console.log(this.productosS)
+                    this.select_product=[0];
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+
+                }
                 this.select_product=[0];
-                this.select_product.id='';
-                this.editedItem.cantidad='';
+                    this.select_product.id='';
+                    this.editedItem.cantidad='';
+                    this.producto=''
+                    }
 
             },
             modifyQuantity(item){
@@ -449,7 +515,7 @@
             },
 
             editItem (item) {
-                this.editedIndex = this.salidas.indexOf(item)
+                this.editedIndex = this.sales.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.dialog = true
                 this.edit_mode = true
@@ -483,43 +549,14 @@
                 }
             },
             async save () {
-                    const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
+                    const response = await axios.post('/api/sales',{ //llena tabla ventas
                         'fecha_salida': this.editedItem.fecha_salida,
-                        'deliverer_id': this.select_deliverer.id,
-                        'product_id': '6',
-                        'cantidad': this.editedItem.cantidad,
-                        'tipoMovimiento': this.select_tipoM.id,
+                        'observacion': "Hola",
+                        'products':this.productosS,
+                        'deliverer_id':this.select_deliverer.id,
+                        'customer_id':this.select_customer.id
                     }).catch(error => console.log("Error: " + error));
 
-
-                   /*if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
-                       const response=await axios.put(`/api/updateS`,
-                        this.productosS).catch(error => console.log("Error: " + error));
-                        if (response) {
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })
-                        console.log(response.data);
-                        this.productosS=[];
-
-                    }
-                    }else{
-                       const response=await axios.put(`/api/returnProduct`,
-                        this.productosS).catch(error => console.log("Error: " + error));
-
-                    if (response) {
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Salida registrado!'
-                        })
-                        console.log(response.data);
-                        this.productosS=[];
-
-                     }
-                    }*/
                     if (response) {
                         this.getResults();
                         Toast.fire({
@@ -534,7 +571,7 @@
 
             },
             async deleteItem (item) {
-                this.editedIndex = this.salidas.indexOf(item)
+                this.editedIndex = this.sales.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
                     title: '¿Estás seguro de desactivar esta salida?',
@@ -564,10 +601,14 @@
                 });
             },
 
+            getStock(){
+                this.stock="Stock disponible: " + this.select_product.cantidad;
+            },
+
             getResults() {
-                axios.get('api/warehouse_movements')
+                axios.get('api/sales')
                 .then(response => {
-                    this.salidas = response.data;
+                    this.sales = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
@@ -590,7 +631,7 @@
                 });
             },
             getProducts(){
-                axios.get('api/products')
+                axios.get(`api/warehouse_movements/1`)
                 .then(response => {
                     this.productos = response.data;
                     console.log(response.data)
@@ -598,12 +639,21 @@
                 });
             },
             getClientsNames(){
-                axios.get('api/customers')
+                this.dis=false
+                axios.get(`api/getCustomer/${this.select_route.id}`)
                 .then(response => {
                     this.clientes = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
+            },
+            getSaleDetail(){
+                axios.get(`api/getSaleDetail/3`)
+                .then(response => {
+                    this.saleDetails = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                      });
             },
 
         },
@@ -612,7 +662,7 @@
             this.getResults();
             this.getDeliverers();
             this.getProducts();
-            this.getClientsNames();
+            this.getSaleDetail();
         },
     }
 </script>

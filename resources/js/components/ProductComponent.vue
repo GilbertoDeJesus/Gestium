@@ -3,6 +3,14 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de productos disponibles</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="12" sm="12" md="12">
                         <v-data-table
                             :headers="headers"
@@ -18,11 +26,129 @@
                             <template v-slot:item.created_at="{ item }">
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
+                        <!--    <template v-slot:item.nombre="{ item }">
+                                <v-chip class="ma-2">
+                                    <v-avatar left>
+                                        <v-icon color="teal">mdi-archive</v-icon>
+                                    </v-avatar>{{item.nombre | formatUpperCase}}
+                                </v-chip>
+                            </template> -->
                             <template v-slot:item.nombre="{ item }">
-                                {{item.nombre | formatUpperCase}}
+                                <v-row
+                                    class="px-6 py-3"
+                                    align="center"
+                                    >
+                                    <v-menu
+                                        dense
+                                        bottom
+                                        right
+                                        transition="slide-y-transition"
+                                        origin="top left"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                        <v-chip
+                                            pill
+                                            v-on="on"
+                                        >
+                                            <v-avatar left>
+                                            <v-icon color="teal">mdi-archive</v-icon>
+                                            </v-avatar>
+                                            {{item.nombre | formatUpperCase}}
+                                        </v-chip>
+                                        </template>
+                                        <v-card width="350">
+                                        <v-list dark>
+                                            <v-list-item>
+                                            <v-list-item-avatar>
+                                                <v-icon large color="indigo">mdi-package-variant</v-icon>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.nombre | formatUpperCase}}</v-list-item-title>
+                                            </v-list-item-content>
+                                            <v-list-item-action>
+                                                <v-btn
+                                                icon
+                                                @click="menu = false"
+                                                >
+                                                <v-icon>mdi-close-circle</v-icon>
+                                                </v-btn>
+                                            </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-list two-line dense>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal" >mdi-weight-kilogram</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.unit.tipo}}</v-list-item-title>
+                                                <v-list-item-subtitle>Unidad de medida</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal" >monetization_on</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.precio_compra}}</v-list-item-title>
+                                                <v-list-item-subtitle>Precio de compra</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal" >monetization_on</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.precio_venta}}</v-list-item-title>
+                                                <v-list-item-subtitle>Precio de venta</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal" >mdi-table-large</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.stock}}</v-list-item-title>
+                                                <v-list-item-subtitle>Stock disponible</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal" >mdi-comment-text</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.descripcion}}</v-list-item-title>
+                                                <v-list-item-subtitle>Descripción</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal" >mdi-calendar</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.created_at | formatDateTime | formatUpperCase}}</v-list-item-title>
+                                                <v-list-item-subtitle>Fecha de registro</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        </v-card>
+                                    </v-menu>
+                                </v-row>
                             </template>
                             <template v-slot:item.descripcion="{ item }">
                                 {{item.descripcion | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.precio_venta="{ item }">
+                               <v-chip class="ma-2">
+                                    <v-avatar left >
+                                        <v-icon color="green">monetization_on</v-icon>
+                                    </v-avatar>{{item.precio_venta}}
+                                </v-chip>
+                            </template>
+                            <template v-slot:item.stock="{ item }">
+                               <v-chip color="orange" text-color="white">
+                                    {{item.stock}}
+                                </v-chip>
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
@@ -34,22 +160,31 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
-                                    label="Buscar"
-                                    single-line
+                                    prepend-inner-icon="search"
+                                    label="Buscar productos"
                                     hide-details
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
                                 <v-divider
                                 class="mx-5"
                                 inset
                                 vertical
                                 ></v-divider>
-                                <v-btn color="#ff3f00" dark class="mb-2">Añadir unidad &nbsp;<i class="material-icons">queue</i></v-btn>
-                                &nbsp;&nbsp;
+                                <v-btn color="#ff3f00" outlined dark><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
+                                <v-divider
+                                class="mx-2"
+                                style="color:#fff;"
+                                inset
+                                vertical
+                                ></v-divider>
                                 <v-dialog v-model="dialog" scrollable max-width="810px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff3f00" dark class="mb-2" v-on="on" >Nuevo Producto &nbsp;<i class="material-icons">queue</i></v-btn>
+                                    <v-btn color="#ff3f00" dark v-on="on" ><v-icon left>queue</v-icon>Nuevo Producto</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -291,8 +426,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -330,11 +469,11 @@
                 },
                 headers: [
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Meta', value: 'meta' },
+                    //{ text: 'Meta', value: 'meta' },
                     { text: 'Unidad de medidad', value: 'unit.tipo' },
                     { text: 'Precio de Venta', value: 'precio_venta' },
                     { text: 'Stock', value: 'stock' },
-                    { text: 'Descripción', value: 'descripcion' },
+                    //{ text: 'Descripción', value: 'descripcion' },
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],

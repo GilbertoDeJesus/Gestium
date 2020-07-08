@@ -18,7 +18,7 @@
 .router-link-exact-active {
     background: linear-gradient(60deg, #fc3e0d, #ea6b19) !important;
     color: white !important;
-    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4) !important;
+    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 0, 0, 0.4) !important;
 }
 
 .router-link-exact-active i {
@@ -14519,7 +14519,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 
 .sidebar .sidebar-wrapper {
   position: relative;
-  height: calc(100vh - 75px);
+  height: calc(100vh - 120px);
   overflow: auto;
   width: 260px;
   z-index: 4;
@@ -18876,4 +18876,5 @@ Copyright (c) 2015 Daniel Eden
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+}
 }

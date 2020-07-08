@@ -75,7 +75,9 @@ class WarehouseMovementController extends Controller
         /*En las siguientes línea se indica que solo se mostraran las columnas 'id' de la tabla
           movimientos, el 'nombre' de la tabla productos, la 'cantidad' y 'fecha_salida' que
           pertenecen a la tabla movimientos_producto.*/
-        ->select('products.nombre','product_warehouse_movement.cantidad','warehouse_movements.fecha_salida')
+        ->select('products.id','products.nombre', 'products.precio_venta',
+        'product_warehouse_movement.cantidad','product_warehouse_movement.id as pw_id',
+        'warehouse_movements.fecha_salida')
          /*Se devolveran los resultados donde el campo warehouse_movement_id de la tabla
            movimiento_producto coincida con el 'id' que recibe en un principio la función*/
         ->where('product_warehouse_movement.warehouse_movement_id', '=',$id )
