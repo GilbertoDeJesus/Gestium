@@ -26,7 +26,7 @@
                             <template v-slot:item.fecha="{ item }">
                                 {{item.fecha |  formatDateTimeShort | formatUpperCase}}
                             </template>
-                            <template v-slot:headers.customer{nombre}="{item}">
+                            <template v-slot:item.nombre="{item}">
                                 <v-chip>
                                     <v-avatar left >
                                         <v-icon color="teal">mdi-account-circle</v-icon>
@@ -271,6 +271,7 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                nombre:'',
                 select: {
                     id: '',
                     nombre: '',

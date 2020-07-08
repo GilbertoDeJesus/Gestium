@@ -26,12 +26,91 @@
                             <template v-slot:item.created_at="{ item }">
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
+
                             <template v-slot:item.nombre="{ item }">
-                               <v-chip>
-                                    <v-avatar left >
-                                        <v-icon color="teal">mdi-account-circle</v-icon>
-                                    </v-avatar>{{item.nombre | formatUpperCase}}
-                                </v-chip>
+                                <v-row
+                                    class="px-6 py-3"
+                                    align="center"
+                                    >
+                                    <v-menu
+
+                                        bottom
+                                        right
+                                        transition="slide-y-transition"
+                                        origin="top left"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                        <v-chip
+                                            pill
+                                            v-on="on"
+                                        >
+                                            <v-avatar left>
+                                            <v-icon color="teal">mdi-account-circle</v-icon>
+                                            </v-avatar>
+                                            {{item.nombre | formatUpperCase}}
+                                        </v-chip>
+                                        </template>
+                                        <v-card width="380">
+                                        <v-list dark>
+                                            <v-list-item>
+                                            <v-list-item-avatar>
+                                                <v-icon color="teal" large>mdi-account-circle</v-icon>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.nombre | formatUpperCase}}</v-list-item-title>
+                                                <v-list-item-subtitle>{{item.email}}</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            <v-list-item-action>
+                                                <v-btn
+                                                icon
+                                                @click="menu = false"
+                                                >
+                                                <v-icon>mdi-close-circle</v-icon>
+                                                </v-btn>
+                                            </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-list two-line>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="indigo">mdi-phone</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.telefono}}</v-list-item-title>
+                                                <v-list-item-subtitle>Telefono</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="indigo">mdi-directions</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.direccion}}</v-list-item-title>
+                                                <v-list-item-subtitle>Direccion</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="indigo">mdi-store</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.establecimiento}}</v-list-item-title>
+                                                <v-list-item-subtitle>Establecimiento</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="indigo">mdi-calendar</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.created_at | formatDateTime | formatUpperCase}}</v-list-item-title>
+                                                <v-list-item-subtitle>Fecha de registro</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        </v-card>
+                                    </v-menu>
+                                </v-row>
                             </template>
                             <template v-slot:item.direccion="{ item }">
                                 {{item.direccion | formatUpperCase}}
