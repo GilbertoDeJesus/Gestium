@@ -6,7 +6,7 @@ use App\Entry;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use PDF;
 class EntryController extends Controller
 {
     /**
@@ -33,6 +33,12 @@ class EntryController extends Controller
             'fecha_entrada' => $request['fecha_entrada']
         ]);
     }
+    public function PDFEntries(){
+        $entries = Entry::all();
+        $pdf = PDF::loadView('entries', compact('entries'));
+        return $pdf->setPaper('a4', 'landscape')->stream('entries.pdf');
+    }
+
 
     /**
      * Display the specified resource.

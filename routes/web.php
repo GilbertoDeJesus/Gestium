@@ -18,8 +18,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('/pdfrepartidores', 'API\DelivererController@PDFDeliverers')->name('descargarPDFDeliverers');
+Route::get('/pdfproductos', 'API\ProductController@PDFProducts')->name('descargarPDFProducts');
+Route::get('/pdfentradas', 'API\EntryController@PDFEntries')->name('descargarPDFEntries');
 Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('{path}','HomeController@index')->where( 'path', '([A-z\/_.\d-]+)?' );
 
