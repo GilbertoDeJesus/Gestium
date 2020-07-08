@@ -17,7 +17,6 @@ class DelivererController extends Controller
     public function index()
     {
         return Deliverer::where('status','=','1')->get();
-
     }
 
     /**
@@ -51,11 +50,12 @@ class DelivererController extends Controller
 
 
     }
-    public function getlistdeliverer($id_route){
+    public function getdelivererlist($id_route){
         return Deliverer::join('deliverer_route',
         'deliverer_route.deliverer_id','=','deliverers.id')
         ->select('deliverer_route.route_id','deliverers.nombre','deliverer_route.created_at')
         ->where('deliverer_route.route_id', '=',$id_route)
+        ->where('deliverers.status',"=",1)
         ->get();
     }
 

@@ -452,7 +452,7 @@
                 });
             },
             getDelivererRoute(){
-                axios.get(`api/deliverers/${this.id_Route}`)
+                axios.get(`api/getDelivererList/${this.id_Route}`)
                 .then(response => {
                     this.route = response.data;
                     console.log(response.data)

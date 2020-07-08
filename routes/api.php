@@ -36,7 +36,9 @@ Route::apiResources([
 Route::put('updateS', 'API\ProductController@updateS');
 Route::put('returnProduct', 'API\ProductController@returnProduct');
 Route::post('createdeliverer_route','API\RouteController@createdeliverer_route');
-Route::get('getlistdeliverer/{id_route}','API\DelivererController@getlistdeliverer');
+Route::get('getDelivererList/{id_route}','API\DelivererController@getdelivererlist');
+Route::get('getSaleDetail/{id_sale}','API\SaleController@getSaleDetail');
+Route::get('getCustomer/{id_route}','API\RouteController@getCustomer');
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');
 Route::post('register', 'API\AuthController@register');
