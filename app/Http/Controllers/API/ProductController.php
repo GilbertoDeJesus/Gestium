@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Product;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
@@ -128,5 +129,10 @@ class ProductController extends Controller
         $product->update([
             'status' => false,
         ]);
+    }
+    public function PDFProducts(){
+        $products = Product::all();
+        $pdf = PDF::loadView('products', compact('products'));
+        return $pdf->setPaper('a4', 'landscape')->stream('products.pdf');
     }
 }
