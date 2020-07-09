@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Deliverer;
 use App\Http\Controllers\Controller;
+use App\WarehouseMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,9 +48,16 @@ class DelivererController extends Controller
      */
     public function show($id)
     {
-
-
     }
+    public function getmovementList($id)
+    {
+        return Deliverer::findOrFail($id)
+        ->warehousemovement()
+        ->latest('created_at')
+        ->take(3)
+        ->get();
+    }
+
     public function getdelivererlist($id_route){
         return Deliverer::join('deliverer_route',
         'deliverer_route.deliverer_id','=','deliverers.id')

@@ -400,6 +400,7 @@
                 productos:[],
                 clientes:[],
                 saleDetails:[],
+                movementlist:[],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -655,6 +656,14 @@
                     this.loading = false;
                       });
             },
+            getmovement(){
+                axios.get(`api/getmovementList/1`)
+                .then(response => {
+                    this.movementlist = response.data;
+                    console.log(response.data)
+                    this.loading = false;
+                      });
+            },
 
         },
 
@@ -663,6 +672,7 @@
             this.getDeliverers();
             this.getProducts();
             this.getSaleDetail();
+            this.getmovement();
         },
     }
 </script>
