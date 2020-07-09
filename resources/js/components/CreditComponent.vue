@@ -33,6 +33,14 @@
                                     </v-avatar>{{item.customer.nombre | formatUpperCase}}
                                 </v-chip>
                             </template>
+                            <template v-slot:item.monto="{item}">
+                                <v-chip color="orange" dark>
+                                    <v-avatar left color="green">
+                                        <v-icon color="white">monetization_on</v-icon>
+                                    </v-avatar>{{item.monto}}
+                                </v-chip>
+
+                            </template>
                             <template v-slot:item.descripcion="{ item }">
                                 {{item.descripcion | formatUpperCase}}
                             </template>
@@ -65,7 +73,7 @@
 
                                 <v-dialog v-model="dialog" max-width="500px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo Credito</v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>mdi-credit-card-multiple</v-icon>Nuevo Credito</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
 
@@ -242,8 +250,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -283,7 +295,7 @@
                     { text: 'Monto', value: 'monto' },
                     { text: 'Descripcion', value: 'descripcion' },
                     { text: 'Fecha de aprobación', value: 'fecha'},
-                    { text: 'Tipo de movimiento', value: 'tipoMovimiento'},
+                    //{ text: 'Tipo de movimiento', value: 'tipoMovimiento'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 desserts: [],
