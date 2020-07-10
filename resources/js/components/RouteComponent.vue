@@ -67,7 +67,7 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialog" max-width="450px">
+                                <v-dialog v-model="dialog" max-width="400px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>mdi-plus-network</v-icon>Nueva Ruta</v-btn>
                                 </template>
@@ -106,6 +106,23 @@
                                                         style="padding-top:2.5rem;"
                                                     ></v-text-field>
                                                     </v-col>
+                                                    <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                        <v-autocomplete
+                                                            v-model="select"
+
+                                                            :items="nombres"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Selecccione al repartidor"
+                                                            prepend-icon="local_shipping"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
+                                                        </v-col>
                                                 </v-row>
                                             </v-container>
                                         </v-form>
@@ -120,39 +137,43 @@
                                 </v-card>
                                 </v-dialog>
 
-                                <v-dialog v-model="dialogAddDeliverer" scrollable max-width="650px">
+                                <v-dialog v-model="dialogAddDeliverer" scrollable max-width="900px">
 
-                                <v-card style="border-radius:20px;">
-                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
-                                         <v-col
-                                        cols="12"
-                                        md="12"
-                                        sm="12">
-                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">person_add</i>
-                                            </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Asignar Repartidores</strong></p>
-                                        </v-col>
-                                    </v-container>
+                                <v-card style="border-radius:10px; height:100%; margin: 0; display: flex; flex-direction: column;">
 
-                                <v-card-text style="padding-bottom:0px;">
-                                    <v-container style="padding-bottom:0px;">
-                                        <v-form v-model="valid" ref="form">
-                                            <v-container>
+
+                                <v-card-text style="padding-bottom:0px; height:100%; padding-left:12px;" >
+
+                                        <v-form v-model="valid" ref="form" style="height:100%; margin-bottom: 0px;">
+
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
-                                                    sm="12">
+                                                    md="5"
+                                                    sm="12"
+                                                    style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                                    <v-container class="align-items-center">
+                                                     <v-container class="align-items-center">
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12">
+                                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                                <i class="material-icons" style="font-size:65px;">person_add</i>
+                                                            </p>
+                                                            <p style="text-align: center; color:#ffffff; font-size:18px; margin-bottom: -10px;">Asignar Repartidores</p>
+                                                        </v-col>
+                                                    </v-container>
                                                         <v-row>
                                                             <v-col
                                                             cols="12"
-                                                            md="6"
+                                                            md="12"
                                                             sm="12"
                                                             >
                                                             <v-text-field
                                                             :rules="[required('nombre')]"
                                                                 v-model="editedItem.municipio"
+                                                                dark
                                                                 label="Municipio"
                                                                 type="text"
                                                                 clearable
@@ -162,12 +183,12 @@
                                                             </v-col>
                                                             <v-col
                                                             cols="12"
-                                                            md="6"
+                                                            md="12"
                                                             sm="12"
                                                             >
                                                             <v-autocomplete
                                                                 v-model="select"
-
+                                                                dark
                                                                 :items="nombres"
                                                                 item-text="nombre"
                                                                 item-value="id"
@@ -177,58 +198,78 @@
                                                                 return-object
                                                                 ></v-autocomplete>
                                                             </v-col>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="6">
+                                                                <v-btn outlined color="#fff" @click="closeDeliverer">Cancelar</v-btn>
+                                                            </v-col>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="6">
+                                                                <v-btn color="#fff" style="float: right; color: #ff5200;" :disabled="!valid"  @click="saveDeliverer">Guardar</v-btn>
+                                                            </v-col>
                                                         </v-row>
+                                                    </v-container>
                                                     </v-col>
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
+                                                    md="7"
                                                     sm="12">
+                                                    <v-container class="align-items-center">
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        style="padding-bottom: 0px;">
+                                                            <p style="text-align: center; font-size:28px; margin-bottom: -10px;"><strong>Listado de repartidores</strong></p>
+                                                            <v-container style="margin-top:1.5rem;" >
+
+                                                                <v-spacer></v-spacer>
+                                                                    <v-text-field
+                                                                        v-model="searchD"
+                                                                        prepend-inner-icon="search"
+                                                                        label="Buscar productos"
+                                                                        hide-details
+                                                                        filled
+                                                                        rounded
+                                                                        single-line
+                                                                        dense
+                                                                        color="#ff5200"
+                                                                        clearable
+                                                                    ></v-text-field>
+                                                                <v-spacer></v-spacer>
+
+                                                            </v-container>
+                                                        </v-col>
+
+                                                    </v-container>
+                                                    <v-container class="align-items-center">
+
                                                         <v-data-table
                                                             :headers="headersDeliverers"
                                                             :items="route"
                                                             sort-by="calories"
+                                                            fixed-header
                                                             class="elevation-3"
-                                                            :search="search"
+                                                            :search="searchD"
                                                             :loading="loading" loading-text="Estamos cargando tu información"
-                                                            :items-per-page="6"
+                                                            :items-per-page="5"
                                                             :footer-props="{
-                                                                'items-per-page-options': [7, 10, 20]
+                                                                'items-per-page-options': [5, 10, 20]
                                                             }">
-
-                                                            <template v-slot:top>
-                                                            <v-toolbar flat color="white">
-                                                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Repartidores</v-toolbar-title>
-                                                                <v-divider
-                                                                class="mx-4"
-                                                                inset
-                                                                vertical
-                                                                ></v-divider>
-                                                                <v-text-field
-                                                                    v-model="search"
-                                                                    append-icon="search"
-                                                                    label="Buscar"
-                                                                    single-line
-                                                                    hide-details
-                                                                    color="#ff5200"
-                                                                ></v-text-field>
-                                                            </v-toolbar>
-                                                            </template>
                                                             <template v-slot:item.created_at="{ item }">
                                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                                             </template>
                                                         </v-data-table>
+                                                    </v-container>
                                                     </v-col>
                                                 </v-row>
-                                            </v-container>
-                                        </v-form>
-                                    </v-container>
-                                </v-card-text>
 
-                                <v-card-actions>
-                                    <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1" @click="closeDeliverer">Cancelar</v-btn>
-                                    <v-spacer></v-spacer>
-                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="saveDeliverer">Guardar</v-btn>
-                                </v-card-actions>
+                                        </v-form>
+
+                                </v-card-text>
                                 </v-card>
                                 </v-dialog>
                             </v-toolbar>
@@ -266,6 +307,7 @@
                 dialog: false,
                 dialogAddDeliverer: false,
                 search: '',
+                searchD: '',
                 loading: true,
                 valid: false,
                 edit_mode: false,

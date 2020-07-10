@@ -46,7 +46,7 @@ class SaleController extends Controller
             $precio_producto=$product['precio_venta'];
             $subtotal=($cantidad*$precio_producto);
             $product_sale=$sale->productwarehousemovement()->attach
-            ($movement_product_id,['cantidadVenta' =>$cantidad,
+            ($movement_product_id,['cantidad' =>$cantidad,
             'monto' =>$subtotal]);
             $total=$total+$subtotal;
 

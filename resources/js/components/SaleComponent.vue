@@ -3,6 +3,14 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:30px; margin-bottom: -5px;"><strong>Ventas</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
@@ -31,17 +39,25 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
+                                    prepend-inner-icon="search"
                                     label="Buscar"
-                                    single-line
                                     hide-details
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
+                                <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                                ></v-divider>
 
                                 <v-dialog v-model="dialog" scrollable fullscreen hide-overlay transition="dialog-bottom-transition" class="perfect-scrollbar-on">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nueva Venta</v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>person_add</v-icon>Nueva Venta</v-btn>
                                 </template>
                                 <v-card>
                                     <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
@@ -97,7 +113,7 @@
                                                             :disabled="dis"
                                                             :items="routes"
                                                             item-text="municipio"
-                                                            item-value="id"
+                                                            item-value="route_id"
                                                             label="Rutas"
                                                             prepend-icon="local_shipping"
                                                             persistent-hint
@@ -355,7 +371,7 @@
                     nombre: '',
                 },
                 select_route:{
-                    id: '',
+                    route_id: '',
                     municipio: '',
                 },
                 select_product: {
@@ -641,7 +657,7 @@
             },
             getClientsNames(){
                 this.dis=false
-                axios.get(`api/getCustomer/${this.select_route.id}`)
+                axios.get(`api/getCustomer/${this.select_route.route_id}`)
                 .then(response => {
                     this.clientes = response.data;
                     console.log(response.data)

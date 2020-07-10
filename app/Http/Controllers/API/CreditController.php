@@ -17,7 +17,11 @@ class CreditController extends Controller
      */
     public function index()
     {
-        return Credit::with('Customer')->get();
+        return Credit::with('Customer')
+        ->latest('credits.created_at')
+        ->where('tipoMovimiento',"=" ,1)
+        ->where('status',"=" ,1)
+        ->get();
     }
 
     /**
@@ -34,8 +38,10 @@ class CreditController extends Controller
             'monto' => $request['monto'],
             'descripcion' => $request['descripcion'],
             'fecha'=> $request['fecha'],
-            'tipoMovimiento'=> $request['tipoMovimiento'],
+            'tipoMovimiento'=> 1,
+            'aPagar'=>$request['monto'],
             'status'=> true
+
         ]);
     }
 
@@ -60,6 +66,7 @@ class CreditController extends Controller
     public function update(Request $request, $id)
     {
         $credit = credit::findOrFail($id);
+        $montoOld=$credit->aPagar;
         $validator = Validator ::make( $request->all(),[
             'customer_id'=> 'required|Integer',
             'monto' =>'required|Integer',
@@ -69,13 +76,24 @@ class CreditController extends Controller
         if($validator->fails()){
             return response()->json(['validation_errors' => $validator->errors()]);
         }
-        $credit->update([
-            'customer_id' => $request['customer_id'],
+        $creditAbono=$montoOld-$request['monto'];
+        if($request['monto']<=$montoOld){
+            $credit->update([
+                'customer_id' => $request['customer_id'],
+                    'aPagar' =>$creditAbono
+            ]);
+            Credit::create([
+                'customer_id' => $request['customer_id'],
                 'monto' => $request['monto'],
                 'descripcion' => $request['descripcion'],
                 'fecha'=> $request['fecha'],
-                'tipoMovimiento'=> $request['tipoMovimiento'],
-        ]);
+                'tipoMovimiento'=> 0,
+                'aPagar'=>$creditAbono,
+                'status'=> true
+
+            ]);
+        }
+
         return $credit;
     }
 
