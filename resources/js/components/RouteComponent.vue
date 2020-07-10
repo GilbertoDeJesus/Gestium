@@ -410,7 +410,8 @@
             async save () {
                     const response = await axios.post('/api/routes',{
                         'municipio': this.editedItem.municipio,
-                        'status': this.editedItem.status
+                        'status': this.editedItem.status,
+                        'deliverer_id': this.select.id
                     }).catch(error => console.log("Error: " + error));
 
                     if (response) {
