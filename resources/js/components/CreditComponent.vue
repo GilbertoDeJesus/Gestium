@@ -26,7 +26,7 @@
                             <template v-slot:item.fecha="{ item }">
                                 {{item.fecha |  formatDateTimeShort | formatUpperCase}}
                             </template>
-                            <template v-slot:item.nombre="{item}">
+                            <template v-slot:item.customer.nombre="{item}">
                                 <v-chip>
                                     <v-avatar left >
                                         <v-icon color="teal">mdi-account-circle</v-icon>

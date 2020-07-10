@@ -3,6 +3,14 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                     <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:28px; margin-bottom: -10px;"><strong>Listado de rutas activas</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
@@ -19,8 +27,20 @@
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
                             <template v-slot:item.municipio="{ item }">
-                                {{item.municipio | formatUpperCase}}
+                                <v-chip>
+                                    <v-avatar left color="primary">
+                                        <v-icon color="light-green accent-4">mdi-earth</v-icon>
+                                    </v-avatar>{{item.municipio | formatUpperCase}}
+                                </v-chip>
                             </template>
+                            <template v-slot:item.deliverer.length="{ item }">
+                                <v-chip color="orange" dark>
+                                    <v-avatar left>
+                                        <v-icon>mdi-account-multiple</v-icon>
+                                    </v-avatar>{{item.deliverer.length}}
+                                </v-chip>
+                            </template>
+
                             <template v-slot:top>
                             <v-toolbar flat color="white">
                                 <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Rutas</v-toolbar-title>
@@ -49,7 +69,7 @@
 
                                 <v-dialog v-model="dialog" max-width="450px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark v-on="on"><v-icon left>add_circle_outline</v-icon> Nueva Ruta</v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>mdi-plus-network</v-icon>Nueva Ruta</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -205,7 +225,7 @@
                                 </v-card-text>
 
                                 <v-card-actions>
-                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeDeliverer">Cancelar</v-btn>
+                                    <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1" @click="closeDeliverer">Cancelar</v-btn>
                                     <v-spacer></v-spacer>
                                     <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="saveDeliverer">Guardar</v-btn>
                                 </v-card-actions>
@@ -214,8 +234,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon medium class="mr-2" @click="addDeliverers(item)"> person_add </v-icon>
-                            <v-icon medium color="red" @click="deleteItem(item)"> mdi-cancel </v-icon>
+                                <v-btn color="secondary" style="min-width: 30px; min-height: 30px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon  @click="addDeliverers(item)"> person_add </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 30px; min-height: 30px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon  @click="deleteItem(item)"> mdi-cancel </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -255,7 +279,7 @@
                 headers: [ /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
-                    { text: 'Num. de repartidores', value: 'numDev'},
+                    { text: 'Num. de repartidores', value: 'deliverer.length'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 headersDeliverers: [
@@ -304,6 +328,7 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'Nueva Ruta' : 'Editar registro'
             },
+
         },
 
         watch: {
@@ -440,6 +465,7 @@
                     console.log(response.data)
                     this.loading = false;
 
+
                 });
 
             },
@@ -457,8 +483,6 @@
                     this.route = response.data;
                     console.log(response.data)
                     this.loading = false;
-
-
                 });
             },
 
