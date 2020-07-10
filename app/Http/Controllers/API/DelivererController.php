@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\WarehouseMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class DelivererController extends Controller
 {
@@ -103,6 +104,11 @@ class DelivererController extends Controller
         ]);
 
         return$deliverer;
+    }
+    public function PDFDeliverers(){
+        $deliverers = Deliverer::all();
+        $pdf = PDF::loadView('deliverers', compact('deliverers'));
+        return $pdf->setPaper('a4', 'landscape')->stream('deliverers.pdf');
     }
 
     /**
