@@ -407,6 +407,20 @@
                                             <template v-slot:item.created_at="{ item }">
                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                             </template>
+                                            <template v-slot:item.nombre="{ item }">
+                                                <v-chip>
+                                                    <v-avatar left>
+                                                        <v-icon color="teal">mdi-archive</v-icon>
+                                                        </v-avatar>{{item.nombre | formatUpperCase}}
+                                                </v-chip>
+                                            </template>
+                                            <template v-slot:item.cantidad="{ item }">
+                                                <v-chip color="orange" dark>
+                                                    <v-avatar left>
+                                                        <v-icon>mdi-package-variant</v-icon>
+                                                        </v-avatar>{{item.cantidad}}
+                                                </v-chip>
+                                            </template>
                                             <template v-slot:item.fecha_salida="{ item }">
                                             {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
                                             </template>
