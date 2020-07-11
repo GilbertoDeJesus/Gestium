@@ -59,92 +59,38 @@
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>person_add</v-icon>Nueva Venta</v-btn>
                                 </template>
-                                <v-card>
-                                    <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
-                                         <v-col
-                                        cols="12"
-                                        md="12"
-                                        sm="12">
-                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">shopping_cart</i>
-                                            </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
-                                        </v-col>
-                                    </v-container>
+                                <v-card style="height:100%; margin: 0; display: flex; flex-direction: column; background: #f7f9fa;">
 
-                                <v-card-text style="padding-bottom:0px;">
-                                    <v-container style="padding-bottom:0px; max-width: 100%;">
-                                        <v-form v-model="valid" ref="form">
-                                            <v-container style="max-width: 100%;">
-                                                <v-row>
+
+                                <v-card-text style="padding-bottom:0px; height:100%; padding-left:0px; padding-right: 0px">
+                                    <v-container style="padding:0px; max-width: 100%; height:100%;">
+                                        <v-form v-model="valid" ref="form" style="height:100%; margin-bottom: 0px">
+                                            <v-container style="max-width: 100%; height: 100%; padding-bottom: 0px; padding-top: 0px;">
+                                                <v-row style="height:100%;">
                                                     <v-col
                                                     cols="12"
-                                                    md="5"
+                                                    md="3"
                                                     sm="12"
+                                                    class="elevation-9"
+                                                    style="height:100%; padding: 0px;background: #fff;"
                                                     >
+                                                    <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12">
+                                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                                <i class="material-icons" style="font-size:85px;">shopping_cart</i>
+                                                            </p>
+                                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                                        </v-col>
+                                                    </v-container>
+                                                    <v-container style="padding:1.5rem;">
                                                     <v-row justify="center">
                                                         <v-col
                                                         cols="12"
-                                                        md="6"
-                                                        sm="6"
-                                                        >
-                                                        <v-autocomplete
-                                                            v-model="select_deliverer"
-                                                            v-on:change="getRoutesList"
-                                                            :items="nombres"
-                                                            item-text="nombre"
-                                                            item-value="id"
-                                                            label="Repartidor"
-                                                            prepend-icon="local_shipping"
-                                                            persistent-hint
-                                                            return-object
-                                                            ></v-autocomplete>
-                                                        </v-col>
-
-                                                        <v-col
-                                                        cols="12"
-                                                        md="6"
-                                                        sm="6"
-                                                        >
-                                                        <v-autocomplete
-
-                                                            v-model="select_route"
-                                                            v-on:change="getClientsNames"
-                                                            :disabled="dis"
-                                                            :items="routes"
-                                                            item-text="municipio"
-                                                            item-value="route_id"
-                                                            label="Rutas"
-                                                            prepend-icon="local_shipping"
-                                                            persistent-hint
-                                                            return-object
-                                                            ></v-autocomplete>
-                                                        </v-col>
-
-
-                                                        <v-col
-                                                        cols="12"
-                                                        md="6"
-                                                        sm="6"
-                                                        >
-                                                        <v-autocomplete
-                                                            v-model="select_customer"
-
-                                                            :items="clientes"
-                                                            :disabled="dis"
-                                                            item-text="nombre"
-                                                            item-value="id"
-                                                            label="Cliente"
-                                                            prepend-icon="assignment_ind"
-                                                            persistent-hint
-                                                            return-object
-                                                            ></v-autocomplete>
-                                                        </v-col>
-
-                                                        <v-col
-                                                        cols="12"
-                                                        md="6"
-                                                        sm="6"
+                                                        md="12"
+                                                        sm="12"
                                                         >
                                                         <v-dialog
                                                             ref="dialog"
@@ -156,7 +102,12 @@
                                                             <template v-slot:activator="{ on }">
                                                             <v-text-field
                                                                 v-model="editedItem.fecha_salida"
-                                                                label="Fecha de salida"
+                                                                hide-details
+                                                                rounded
+                                                                filled
+                                                                dense
+                                                                clearable
+                                                                label="Fecha"
                                                                 prepend-icon="event"
                                                                 readonly
                                                                 v-on="on"
@@ -172,24 +123,108 @@
                                                             @input="menu = false"
                                                             ></v-date-picker>
                                                         </v-dialog>
-
                                                         </v-col>
                                                         <v-col
                                                         cols="12"
                                                         md="12"
                                                         sm="6"
                                                         >
-                                                        <v-select
-                                                            v-model="select_tipoM"
-                                                            :items="tipoMovimiento"
+                                                        <v-textarea
+
+                                                            hide-details
+                                                            clearable
+                                                            rounded
+                                                            filled
+                                                            dense
+                                                            label="Descripcion"
+                                                            type="text"
+                                                            rows="1"
+                                                            prepend-icon="mdi-comment-text"
+                                                            persistent-hint
+                                                        ></v-textarea>
+                                                        </v-col>
+
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                        <v-autocomplete
+                                                            v-model="select_deliverer"
+                                                            v-on:change="getRoutesList"
+                                                            :items="nombres"
+                                                            hide-details
+                                                            clearable
+                                                            rounded
+                                                            filled
+                                                            dense
                                                             item-text="nombre"
                                                             item-value="id"
-                                                            label="Seleccione el tipo de movimiento"
+                                                            label="Repartidor"
                                                             prepend-icon="local_shipping"
                                                             persistent-hint
                                                             return-object
-                                                        ></v-select>
+                                                            ></v-autocomplete>
                                                         </v-col>
+
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                        <v-autocomplete
+
+                                                            v-model="select_route"
+                                                            v-on:change="getClientsNames"
+                                                            :disabled="dis"
+                                                            :items="routes"
+                                                            hide-details
+                                                            clearable
+                                                            rounded
+                                                            filled
+                                                            dense
+                                                            item-text="municipio"
+                                                            item-value="route_id"
+                                                            label="Rutas"
+                                                            prepend-icon="mdi-map"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
+                                                        </v-col>
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                        <v-autocomplete
+                                                            v-model="select_customer"
+
+                                                            :items="clientes"
+                                                            :disabled="dis"
+                                                            hide-details
+                                                            clearable
+                                                            rounded
+                                                            filled
+                                                            dense
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Cliente"
+                                                            prepend-icon="assignment_ind"
+                                                            persistent-hint
+                                                            return-object
+                                                            ></v-autocomplete>
+                                                        </v-col>
+                                                        </v-row>
+                                                    </v-container>
+                                                    </v-col>
+
+                                                    <v-col
+                                                    cols="12"
+                                                    md="6"
+                                                    sm="12"
+                                                    >
+                                                    <v-container style="margin: 1px solid #c3c3c3; border-radius: 10px;">
+                                                    <v-row style="padding: 1rem; border-radius: 1rem; background: #fff;" class="elevation-2">
 
                                                         <v-col
                                                         cols="12"
@@ -200,6 +235,10 @@
                                                             v-model="select_product"
                                                             v-on:change="getStock"
                                                             :items="productos"
+                                                            hide-details
+                                                            rounded
+                                                            filled
+                                                            dense
                                                             item-text="nombre"
                                                             item-value="id"
                                                             label="Producto"
@@ -213,10 +252,22 @@
                                                               md="6"
                                                                sm="6"
                                                         >
+                                                        <strong>Stock disponible:</strong>
+
                                                         <v-text-field
                                                             v-text="stock"
                                                             clearable
                                                             :disabled= true
+                                                            style="display: inline-block;"
+                                                        ></v-text-field>
+
+                                                        <br><strong>Precio unitario:</strong>
+
+                                                        <v-text-field
+                                                            v-text="precio"
+                                                            clearable
+                                                            :disabled= true
+                                                            style="display: inline-block;"
                                                         ></v-text-field>
 
                                                          </v-col>
@@ -230,21 +281,28 @@
 
                                                             v-model="editedItem.cantidad"
                                                             label="Cantidad"
+                                                            hide-details
+                                                            rounded
+                                                            filled
+                                                            dense
                                                             type="number"
                                                             clearable
                                                             prepend-icon="local_mall"
                                                             required
                                                         ></v-text-field>
                                                         </v-col>
-                                                        <v-spacer></v-spacer>
-                                                        <v-btn dark class="ma-2" color="#ff5300" style="padding-right:4rem; padding-left:4rem;"  @click="add">Agregar</v-btn>
+                                                        <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        sm="6"
+                                                        >
+                                                        <v-btn dark class="ma-2" outlined color="#ff5300"   @click="add">Agregar</v-btn>
+                                                        </v-col>
                                                     </v-row>
-                                                    </v-col>
-                                                    <v-col
-                                                    cols="12"
-                                                    md="7"
-                                                    sm="12"
-                                                    >
+                                                    <v-divider
+                                                        class="mx-5"
+                                                        ></v-divider>
+                                                    <v-row style="padding: 1rem; border-radius: 1rem; background: #fff;" class="elevation-2">
                                                         <v-col
                                                         cols="12"
                                                         md="12"
@@ -312,8 +370,34 @@
                                                             </template>
                                                             </v-data-table>
                                                         </v-col>
+                                                        </v-row>
+                                                        </v-container>
                                                     </v-col>
-
+                                                    <v-col
+                                                    cols="12"
+                                                    md="3"
+                                                    sm="12"
+                                                    style="height:100%;"
+                                                    >
+                                                    <v-row style="padding: 2.5rem; border-radius: 1rem; background: #fff;" class="elevation-2">
+                                                        <h2>Total a pagar:</h2>
+                                                        <h3><v-icon color="green" style="font-size: xx-large;">monetization_on</v-icon> {{totalPrecio}}</h3>
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                            <v-btn class="ma-2" x-large block outlined color="#ff5300" @click="close">Cancelar</v-btn>
+                                                        </v-col>
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        >
+                                                            <v-btn dark class="ma-2" x-large block color="#ff5300" :disabled="!valid"  @click="save">Guardar</v-btn>
+                                                        </v-col>
+                                                    </v-row>
+                                                    </v-col>
                                                 </v-row>
                                             </v-container>
                                         </v-form>
@@ -321,9 +405,9 @@
                                 </v-card-text>
 
                                 <v-card-actions>
-                                    <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cancelar</v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="save">Guardar</v-btn>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="close">Cerrar</v-btn>
+                                    <v-spacer></v-spacer>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
@@ -358,7 +442,10 @@
                 dialog: false,
                 dialogEditProduct: false,
                 dis:true,
-                stock: 'Stock disponible: ',
+                stock: '',
+                precio:'',
+                totalPrecio: 0,
+                pre: 0,
                 search: '',
                   date: '',
                 date1: new Date().toISOString().substr(0, 10),
@@ -470,6 +557,8 @@
                         confirmButtonText: 'Entendido'
                         });
                     this.producto=''
+                    this.stock=''
+                    this.precio=''
                     }
                     else{
 
@@ -492,6 +581,8 @@
                         confirmButtonText: 'Entendido'
                         });
                     this.producto=''
+                    this.stock=''
+                    this.precio=''
                 }
 
                 else{
@@ -504,6 +595,7 @@
                     'precio_venta':this.select_product.precio_venta,
                     'pw_id':this.select_product.pw_id
                     }
+                    this.totalPrecio=this.totalPrecio+(this.select_product.precio_venta * this.editedItem.cantidad )
 
                     this.productosS.push(this.salidaProducto);
                     console.log(this.productosS)
@@ -511,17 +603,24 @@
                     this.select_product.id='';
                     this.editedItem.cantidad='';
                     this.producto=''
+                    this.stock=''
+                    this.precio=''
 
                 }
                 this.select_product=[0];
                     this.select_product.id='';
                     this.editedItem.cantidad='';
                     this.producto=''
+                    this.stock=''
+                    this.precio=''
                     }
 
             },
             modifyQuantity(item){
-                //this.editedIndex = this.productosS.indexOf(item)
+                this.pre= this.editedItem.cantidad - this.productosS[this.editedIndex].cantidad;
+                    console.log(this.pre)
+                    this.totalPrecio=(this.totalPrecio)+(this.productosS[this.editedIndex].precio_venta *  this.pre );
+
                 this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
                 this.editedIndex = -1
                 this.editedItem.cantidad='';
@@ -559,6 +658,7 @@
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
+                this.totalPrecio= 0
                 this.productosS=[]
                 })
                 if (this.edit_mode == true) {
@@ -578,10 +678,11 @@
                         this.getResults();
                         Toast.fire({
                             icon: 'success',
-                            title: '¡Salida registrado!'
+                            title: '¡Venta registrada!'
                         })
                         console.log(response.data);
                         this.productosS=[];
+                        this.totalPrecio= 0
 
                      }
                 this.close();
@@ -619,7 +720,8 @@
             },
 
             getStock(){
-                this.stock="Stock disponible: " + this.select_product.cantidad;
+                this.stock= this.select_product.cantidad;
+                this.precio=this.select_product.precio_venta;
             },
 
             getResults() {
