@@ -40,12 +40,15 @@ class RouteController extends Controller
             'municipio' => $request['municipio'],
             'status'=>true
         ]);
-        foreach ( $request['deliverers'] as $deliverer) {
+        $deliverer_route=$route->deliverer()->attach
+        ($request['deliverer_id']);
+        return $deliverer_route;
+        /*foreach ( $request['deliverers'] as $deliverer) {
             $deliverer_id=$deliverer['id'];
             $deliverer_route=$route->deliverer()->attach
             ($deliverer_id);
-        }
-        return $deliverer_route;
+        }*/
+
 
     }
     public function createdeliverer_route(Request $request)

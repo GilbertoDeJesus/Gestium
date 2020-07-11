@@ -130,7 +130,7 @@
                                                         sm="6"
                                                         >
                                                         <v-textarea
-
+                                                        v-model="editedItem.observacion"
                                                             hide-details
                                                             clearable
                                                             rounded
@@ -508,16 +508,20 @@
                 editedIndex: -1,
                 editedItem: {
                     id: '',
-                    cantidad: '',
-                    fecha_salida:'',
+                    //cantidad: '',
+                    fecha:'',
+                    monto: '',
+                    observacion: '',
                     created_at: '',
                     status: ''
                 },
                 defaultItem: {
                     id: '',
-                    cantidad: '',
+                    //cantidad: '',
+                    fecha: '',
+                    monto: '',
+                    observacion: '',
                     created_at: '',
-                    fecha_salida:'',
                     status: ''
                 },
                 required( propertyName ) {
@@ -668,7 +672,8 @@
             async save () {
                     const response = await axios.post('/api/sales',{ //llena tabla ventas
                         'fecha_salida': this.editedItem.fecha_salida,
-                        'observacion': "Hola",
+                        'monto': this.totalPrecio,
+                        'observacion': this.editedItem.observacion,
                         'products':this.productosS,
                         'deliverer_id':this.select_deliverer.id,
                         'customer_id':this.select_customer.id
