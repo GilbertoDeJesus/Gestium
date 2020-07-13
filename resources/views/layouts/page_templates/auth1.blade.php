@@ -1,3 +1,4 @@
+<!-- Junta el sidebar con el navar-->
 <div class="wrapper">
   @include('layouts.navbars.sidebar1')
   <div class="main-panel">

@@ -120,6 +120,7 @@ class DelivererController extends Controller
         //Devolvemos el repartidor con sus datos actualizados
         return$deliverer;
     }
+    //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     public function PDFDeliverers(){
         $deliverers = Deliverer::all();
         $pdf = PDF::loadView('deliverers', compact('deliverers'));

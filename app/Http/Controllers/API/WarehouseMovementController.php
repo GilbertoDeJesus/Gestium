@@ -143,6 +143,7 @@ class WarehouseMovementController extends Controller
      */
     public function destroy($id)
     {
+      //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     }
     public function PDFWarehouseMovements(){
       $warehousemovements = WarehouseMovement::all();

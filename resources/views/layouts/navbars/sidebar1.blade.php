@@ -2,6 +2,7 @@
   <!--
       Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
       Tip 2: you can also add an image using data-image tag
+      Este es el sidebar que se genera el vista de reportes para simular la vista de vuetify
   -->
   <div class="logo">
     <a href="{{ route('home') }}" class="simple-text logo-normal" style="padding: 3px 0px;">

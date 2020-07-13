@@ -164,6 +164,7 @@ class ProductController extends Controller
             'status' => false,
         ]);
     }
+    //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     public function PDFProducts(){
         $products = Product::all();
         $pdf = PDF::loadView('products', compact('products'));

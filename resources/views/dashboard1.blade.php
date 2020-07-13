@@ -1,5 +1,5 @@
 @extends('layouts.app1', ['activePage' => 'dashboard'])
-
+<!-- Aqui se une el navar y sidebar y deja que modifiquemos la parte en blanco-->
 @section('content')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -9,6 +9,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-4">
+          <!-- Agregamos un grupo de botones para elegir el tipo de formato-->
           <div class="list-group" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action-primary active" id="list-repartidores-list" data-toggle="list" href="#list-repartidores" role="tab" aria-controls="repartidores">Reporte de Repartidores</a>
             <a class="list-group-item list-group-item-action-primary" id="list-proveedores-list" data-toggle="list" href="#list-proveedores" role="tab" aria-controls="proveedores">Reporte de Proveedores</a>
@@ -21,6 +22,7 @@
             <a class="list-group-item list-group-item-action-primary" id="list-rutas-list" data-toggle="list" href="#list-rutas" role="tab" aria-controls="rutas">Reporte de Rutas</a>
           </div>
         </div>
+        <!-- Muestra la opcion de reporte que se escoja y muestra las opciones de porte-->
         <div class="col-8">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade" id="list-repartidores" role="tabpanel" aria-labelledby="list-repartidores-list">

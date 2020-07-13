@@ -1,4 +1,4 @@
-<!-- Navbar -->
+<!-- Navbar de la pagina reportes-->
 <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-dark">
   <div class="container-fluid">
     <div class="navbar-wrapper">
