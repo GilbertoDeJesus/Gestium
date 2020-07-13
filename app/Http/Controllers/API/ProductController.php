@@ -17,6 +17,8 @@ class ProductController extends Controller
      */
     public function index()
     {
+       //Obtenemos y devolvemos todos los productos que tengan un "status" igual a 1
+       //y también su relación con la tabla "units"
       return Product::where('status','=','1')->with('Unit')->get();;
     }
 
@@ -28,6 +30,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        //Creamos y devolvemos un nuevo producto con los datos obtenidos del $request.
         return Product::create([
             'provider_id' => $request['provider_id'],
             'unit_id' => $request['unit_id'],
@@ -54,26 +57,48 @@ class ProductController extends Controller
     }
     public function updateS(Request $request)
     {
-        $product =$request->input();
+        //Recuperamos todos los datos de la entrada
+        $product = $request->input();
+
+        //Recorremos todos los productos obtenidos
         foreach($product as $producto){
-         $id_product= product::findOrFail($producto['id']);
-         $stock=$id_product->stock;
-         $stock_minimo=$id_product->stock_minimo;
-         $operacion=$stock-$stock_minimo;
-           if ($producto['cantidad']<=$operacion ){
+
+         //Buscamos un producto que en su id coincida con el 'id' recibido
+         $id_product = product::findOrFail($producto['id']);
+
+         //A la variable stock le asignamos el valor del campo "stock" del objeto "id_product"
+         $stock = $id_product->stock;
+         //A la variable stock le asignamos el valor del campo "stock_minimo" del objeto "id_product"
+         $stock_minimo = $id_product->stock_minimo;
+         //Operación la igualamos a la diferencia de las variables "stock" y "stock_minimo"
+         $operacion = $stock - $stock_minimo;
+
+         //Si "$producto" en su elemento "cantidad" es menor o igual a "$operacion" se actualiza el
+         // stock del producto encontrado en un principio con la diferencia de su columna "stock" menos
+         //el valor de "$producto" en su elemento "cantidad"
+           if ($producto['cantidad'] <= $operacion ){
              $id_product->update([
              'stock' => $stock - $producto['cantidad'] ]);
             }
         }
     }
 
-    public function returnProduct(Request $request) //Método para devolver los productos no vendidos al almacen.
+    //Método para devolver los productos no vendidos al almacen.
+    public function returnProduct(Request $request)
     {
-        $product =$request->input();
+        //Recuperamos todos los datos de la entrada
+        $product = $request->input();
+
+        //Recorremos la entrada
         foreach($product as $p){
-           $id_product= product::findOrFail($p['id']);
+            // Buscamos el producto con el id del objeto recorrido
+           $id_product = product::findOrFail($p['id']);
+
+           //Actualizamos en el campo "stock" del producto enocntrado con la suma de lo ya almacenado
+           //con la "cantidad" nueva.
            $id_product->update([
            'stock' => $id_product->stock + $p['cantidad'] ]);
+
         }
     }
 
@@ -86,7 +111,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Buscamos el producto que en su campo "id" coincida con el "id" recibido
         $product = product::findOrFail($id);
+
+        //Validamos los datos recibidos
         $validator = Validator ::make( $request->all(),[
             'provider_id'=> 'required|Integer',
             'unit_id' => 'required |Integer',
@@ -99,21 +127,26 @@ class ProductController extends Controller
             'stock_minimo' =>'required|Integer',
         ]
         );
+
+        //Si hay un error enviamos un mensaje con el error
        if($validator->fails()){
            return response()->json(['validation_errors' => $validator->errors()]);
        }
-       $product->update([
-        'provider_id' => $request['provider_id'],
-        'unit_id' => $request['unit_id'],
-        'nombre' => $request['nombre'],
-        'meta' => $request['meta'],
-        'descripcion' => $request['descripcion'],
-        'precio_compra' => $request['precio_compra'],
-        'precio_venta' => $request['precio_venta'],
-        'stock' => $request['stock'],
-        'stock_minimo' => $request['stock_minimo'],
+
+       //Actualizamos los datos del producto encontrado
+        $product->update([
+            'provider_id' => $request['provider_id'],
+            'unit_id' => $request['unit_id'],
+            'nombre' => $request['nombre'],
+            'meta' => $request['meta'],
+            'descripcion' => $request['descripcion'],
+            'precio_compra' => $request['precio_compra'],
+            'precio_venta' => $request['precio_venta'],
+            'stock' => $request['stock'],
+            'stock_minimo' => $request['stock_minimo'],
 
         ]);
+        //Devolvemos el producto con la información actualizada
        return $product;
     }
 
@@ -125,6 +158,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
+        //En el producto que coincida con el id recibido se actualiza el campo "status" a 0
         $product = product::findOrFail($id);
         $product->update([
             'status' => false,

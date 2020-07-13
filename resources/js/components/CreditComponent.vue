@@ -14,7 +14,7 @@
                     <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
-                            :items="desserts"
+                            :items="credits"
                             sort-by="calories"
                             class="elevation-3"
                             :search="search"
@@ -26,15 +26,89 @@
                             <template v-slot:item.fecha="{ item }">
                                 {{item.fecha |  formatDateTimeShort | formatUpperCase}}
                             </template>
-                            <template v-slot:item.nombre="{item}">
-                                <v-chip>
-                                    <v-avatar left >
-                                        <v-icon color="teal">mdi-account-circle</v-icon>
-                                    </v-avatar>{{item.customer.nombre | formatUpperCase}}
+
+                            <template v-slot:item.monto="{item}">
+                                <v-chip color="orange" dark>
+                                    <v-avatar left color="green">
+                                        <v-icon color="white">monetization_on</v-icon>
+                                    </v-avatar>{{item.monto}}
                                 </v-chip>
+
                             </template>
-                            <template v-slot:item.descripcion="{ item }">
-                                {{item.descripcion | formatUpperCase}}
+                            <template v-slot:item.aPagar="{item}">
+                                <v-chip color="orange" dark>
+                                    <v-avatar left color="green">
+                                        <v-icon color="white">monetization_on</v-icon>
+                                    </v-avatar>{{item.aPagar}}
+                                </v-chip>
+
+                            </template>
+
+                            <template v-slot:item.customer.nombre="{ item }" style="left: 350px;">
+                                <v-row
+
+                                    align="center"
+                                    style="left: 350px;"
+                                    >
+                                    <v-menu
+                                        bottom
+                                        right
+                                        transition="scale-transition"
+                                        origin="top left"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                        <v-chip
+                                            pill
+                                            v-on="on"
+                                        >
+                                            <v-avatar left >
+                                                <v-icon color="teal">mdi-account-circle</v-icon>
+                                            </v-avatar>{{item.customer.nombre | formatUpperCase}}
+                                        </v-chip>
+                                        </template>
+                                        <v-card width="400">
+                                        <v-list dark>
+                                            <v-list-item>
+                                            <v-list-item-avatar>
+                                                <v-icon color="teal" large>mdi-account-circle</v-icon>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.customer.nombre | formatUpperCase}}</v-list-item-title>
+                                                <v-list-item-subtitle>Monto aprobado: ${{item.monto}}</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            <v-list-item-action>
+                                                <v-btn
+                                                icon
+                                                @click="menu = false"
+                                                >
+                                                <v-icon>mdi-close-circle</v-icon>
+                                                </v-btn>
+                                            </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-list three-line>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="indigo">mdi-comment-text</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>Descripción</v-list-item-title>
+                                                <v-list-item-subtitle>{{item.descripcion | formatUpperCase}}</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="indigo">mdi-calendar</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.fecha}}</v-list-item-title>
+                                                <v-list-item-subtitle>Fecha de aprobación</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        </v-card>
+                                    </v-menu>
+                                </v-row>
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
@@ -65,7 +139,7 @@
 
                                 <v-dialog v-model="dialog" max-width="500px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo Credito</v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>mdi-credit-card-multiple</v-icon>Nuevo Credito</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
 
@@ -88,8 +162,9 @@
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="6"
+                                                    md="12"
                                                     sm="6"
+                                                    v-if="!edit_mode"
                                                     >
                                                     <v-select
                                                         v-model="select"
@@ -102,6 +177,38 @@
                                                         return-object
                                                         ></v-select>
                                                     </v-col>
+                                                     <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="6"
+                                                    v-if="edit_mode"
+                                                    >
+                                                    <v-text-field
+                                                       :rules="[required('descripcion'), minimum_length(8)]"
+                                                        v-model="editedItem.descripcion"
+                                                        label="Descripción del abono"
+                                                        type="text"
+                                                        prepend-icon="post_add"
+                                                        clearable
+                                                        required
+                                                    ></v-text-field>
+                                                    </v-col>
+                                                     <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="6"
+                                                    v-if="!edit_mode"
+                                                    >
+                                                    <v-text-field
+                                                    :rules="[required('descripcion'), minimum_length(8)]"
+                                                        v-model="editedItem.descripcion"
+                                                        label="Descripción"
+                                                        type="text"
+                                                        prepend-icon="post_add"
+                                                        clearable
+                                                        required
+                                                    ></v-text-field>
+                                                    </v-col>
 
                                                     <v-col
                                                     cols="12"
@@ -110,6 +217,7 @@
                                                     v-if="edit_mode"
                                                     >
                                                     <v-text-field
+                                                        :rules="[required('monto'), minimum_length(1)]"
                                                         v-model="editedItem.monto"
                                                         :counter=true
                                                         type="number"
@@ -139,56 +247,7 @@
                                                     ></v-text-field>
                                                     </v-col>
 
-                                                    <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    >
-                                                    <v-text-field
-                                                    :rules="[required('descripcion'), minimum_length(8)]"
-                                                        v-model="editedItem.descripcion"
-                                                        label="Descripción"
-                                                        type="text"
-                                                        prepend-icon="post_add"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
 
-                                                    <v-col
-                                                    cols="12"
-                                                    md="6"
-                                                    sm="6"
-                                                        v-if="!edit_mode"
-                                                    >
-                                                    <v-text-field
-                                                        :rules="[minimum_length(1)]"
-                                                        v-model="editedItem.tipoMovimiento"
-                                                        :counter="15"
-                                                        label="Tipo de Movimiento"
-                                                        type="text"
-                                                        prepend-icon="account_balance"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
-
-                                                    <v-col
-                                                    cols="12"
-                                                    md="6"
-                                                    sm="6"
-                                                        v-if="edit_mode"
-                                                    >
-                                                    <v-text-field
-                                                        v-model="editedItem.tipoMovimiento"
-                                                        :counter="15"
-                                                        label="Tipo de Movimiento"
-                                                        type="text"
-                                                        prepend-icon="account_balance"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
-                                                    </v-col>
 
                                                     <v-col
                                                     cols="12"
@@ -242,8 +301,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon small @click="editItem(item)">mdi-credit-card-multiple </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -281,12 +344,12 @@
                 headers: [
                     { text: 'Nombre', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Monto', value: 'monto' },
-                    { text: 'Descripcion', value: 'descripcion' },
+                    { text: 'Por pagar', value: 'aPagar'},
+                    //{ text: 'Detalles', value: 'descripcion' },
                     { text: 'Fecha de aprobación', value: 'fecha'},
-                    { text: 'Tipo de movimiento', value: 'tipoMovimiento'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                desserts: [],
+                credits: [],
                 nombres: [],
                 editedIndex: -1,
                 editedItem: {
@@ -294,7 +357,6 @@
                     monto: '',
                     descripcion: '',
                     fecha: '',
-                    tipoMovimiento: '',
                     created_at: ''
                 },
                 defaultItem: {
@@ -302,7 +364,6 @@
                     monto: '',
                     descripcion: '',
                     fecha: '',
-                    tipoMovimiento: '',
                     created_at: ''
                 },
                 required( propertyName ) {
@@ -320,7 +381,7 @@
 
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
+                return this.editedIndex === -1 ? 'Nuevo registro' : 'Registrar abono'
             },
         },
 
@@ -332,10 +393,20 @@
 
         methods: {
             editItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+                this.editedIndex = this.credits.indexOf(item)
+                if(item.aPagar>0){
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.dialog = true
                 this.edit_mode = true
+                this.editedItem.monto = ''
+                this.editedItem.descripcion = ''
+                }else{
+                    Swal.fire({
+                        title:'Este crédito ya ha sido saldado',
+                        type:'success',
+                        confirmButtonColor: '#ff5300'
+                    })
+                }
             },
             close () {
                 this.$refs.form.reset()
@@ -370,7 +441,6 @@
                         'monto': this.editedItem.monto,
                         'descripcion' : this.editedItem.descripcion,
                         'fecha': this.editedItem.fecha,
-                        'tipoMovimiento': this.editedItem.tipoMovimiento,
                         'customer_id': this.select.id,
                     }).catch(error => console.log("Error: " + error));
 
@@ -387,7 +457,7 @@
                 this.close();
             },
             async deleteItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+                this.editedIndex = this.credits.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
                     title: '¿Estás seguro de cancelar este credito?',
@@ -420,7 +490,7 @@
             getResults() {
                 axios.get('api/credits')
                 .then(response => {
-                    this.desserts = response.data;
+                    this.credits = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });

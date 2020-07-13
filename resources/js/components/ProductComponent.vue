@@ -170,18 +170,118 @@
                                     color="#ff5200"
                                     clearable
                                 ></v-text-field>
+
                                 <v-divider
                                 class="mx-5"
                                 inset
                                 vertical
                                 ></v-divider>
-                                <v-btn color="#ff3f00" outlined dark><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
-                                <v-divider
+
+                                <v-dialog v-model="dialogUnits" scrollable max-width="650px">
+                                    <template v-slot:activator="{ on }">
+                                    <v-btn color="#ff5300" outlined dark v-on="on"><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
+                                </template>
+
+                                <v-card style="border-radius:20px;">
+                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                         <v-col
+                                        cols="12"
+                                        md="12"
+                                        sm="12">
+                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                <i class="material-icons" style="font-size:85px;">straighten</i>
+                                            </p>
+                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Agregar unidades de medida</strong></p>
+                                        </v-col>
+                                    </v-container>
+
+                                <v-card-text style="padding-bottom:0px;">
+                                    <v-container style="padding-bottom:0px;">
+                                        <v-form v-model="valid" ref="form">
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="12">
+                                                        <v-row>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="12"
+                                                            sm="12"
+                                                            >
+                                                            <v-text-field
+                                                            :rules="[required('tipo')]"
+                                                                v-model="editUnit.tipo"
+                                                                label="Nueva unidad de medida"
+                                                                type="text"
+                                                                clearable
+                                                                prepend-icon="straighten"
+                                                                required
+                                                            ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="12">
+                                                        <v-data-table
+                                                            :headers="headersUnits"
+                                                            :items="units"
+                                                            sort-by="calories"
+                                                            class="elevation-3"
+                                                            :search="search"
+                                                            :loading="loading" loading-text="Estamos cargando tu información"
+                                                            :items-per-page="6"
+                                                            :footer-props="{
+                                                                'items-per-page-options': [7, 10, 20]
+                                                            }">
+
+                                                            <template v-slot:top>
+                                                            <v-toolbar flat color="white">
+                                                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Unidades de medida</v-toolbar-title>
+                                                                <v-divider
+                                                                class="mx-4"
+                                                                inset
+                                                                vertical
+                                                                ></v-divider>
+                                                                <v-text-field
+                                                                    v-model="search"
+                                                                    append-icon="search"
+                                                                    label="Buscar"
+                                                                    single-line
+                                                                    hide-details
+                                                                    color="#ff5200"
+                                                                ></v-text-field>
+                                                            </v-toolbar>
+                                                            </template>
+                                                            <template v-slot:item.created_at="{ item }">
+                                                            {{item.created_at | formatDateTime | formatUpperCase}}
+                                                            </template>
+                                                        </v-data-table>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-container>
+                                        </v-form>
+                                    </v-container>
+                                </v-card-text>
+
+                                <v-card-actions>
+                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeUnits">Cancelar</v-btn>
+                                    <v-spacer></v-spacer>
+                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="saveUnits">Guardar</v-btn>
+                                </v-card-actions>
+                                </v-card>
+                                </v-dialog>
+
+                                 <v-divider
                                 class="mx-2"
                                 style="color:#fff;"
                                 inset
                                 vertical
                                 ></v-divider>
+
                                 <v-dialog v-model="dialog" scrollable max-width="810px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" dark v-on="on" ><v-icon left>queue</v-icon>Nuevo Producto</v-btn>
@@ -423,6 +523,8 @@
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>
+
+
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
@@ -455,6 +557,7 @@
         data() {
             return {
                 dialog: false,
+                dialogUnits: false,
                 search: '',
                 loading: true,
                 valid: false,
@@ -467,6 +570,11 @@
                     id: '',
                     tipo: '',
                 },
+                units: [
+                    {id: ''},
+                    {tipo: ''},
+                    {created_at: ''},
+                ],
                 headers: [
                     { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
                     //{ text: 'Meta', value: 'meta' },
@@ -477,10 +585,19 @@
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
+                headersUnits: [
+                    { text: 'Clave', value: 'id'},
+                    { text: 'Unidad', value: 'tipo'}
+                ],
                 desserts: [],
                 providers:[],
-                units:[],
+                unitslist:[],
+                nameUnit: '',
                 editedIndex: -1,
+                editUnit:{
+                    id:'',
+                    tipo:''
+                },
                 editedItem: {
                     id: '',
                     nombre: '',
@@ -550,6 +667,9 @@
                     this.edit_mode = false
                 }
             },
+             closeUnits () {
+                this.dialogUnits=false
+            },
             async save () {
                 if (this.editedIndex > -1) {
                     const response = await axios.put(`api/products/${this.editedItem.id}`, this.editedItem)
@@ -592,6 +712,46 @@
                 }
 
                 this.close();
+            },
+            async saveUnits () {
+                for (let index = 0; index < this.units.length; index++) {
+                    if (this.units[index].tipo == this.editUnit.tipo) {
+                        this.nameUnit = this.units[index].tipo
+                        break
+                    }
+
+                }
+                if (this.editUnit.tipo== this.nameUnit) {
+                        Swal.fire({
+                        title: 'Alerta',
+                        text: "Esta unidad ya está registrada!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                        this.nameUnit=''
+                    }
+                    else{
+                        const response = await axios.post('/api/units',{
+                        'tipo':this.editUnit.tipo
+                        }).catch(error => console.log("Error: " + error));
+                        if (response.data.validation_errors) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: '¡Ocurrió un error, vuelve a intentarlo!'
+                            });
+                            console.log(response.data);
+                        } else {
+                            this.getTypeUnit();
+                            Toast.fire({
+                                icon: 'success',
+                                title: '¡Unidades agregadas!'
+                            })
+                        }
+                        this.dialogUnits=false
+                    }
+
+
             },
             async deleteItem (item) {
                 this.editedIndex = this.desserts.indexOf(item)

@@ -39,6 +39,7 @@ Route::post('createdeliverer_route','API\RouteController@createdeliverer_route')
 Route::get('getDelivererList/{id_route}','API\DelivererController@getdelivererlist');
 Route::get('getSaleDetail/{id_sale}','API\SaleController@getSaleDetail');
 Route::get('getCustomer/{id_route}','API\RouteController@getCustomer');
+Route::get('getmovementList/{id}','API\DelivererController@getmovementList');
 
 /* oute::post('login', 'API\AuthController@login')->name('get-token');
 Route::post('register', 'API\AuthController@register');

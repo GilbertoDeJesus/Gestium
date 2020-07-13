@@ -18,6 +18,7 @@ class CustomerController extends Controller
 
     public function index()
     {
+        //Obtenemos los clientes que tengan un status igual a 0
         return Customer::where('status','=','1')->get();
     }
 
@@ -29,6 +30,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        //Damos de alta a un nuevo cliente con los elementos de nuestro "$request".
         return Customer::create([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
@@ -60,8 +62,10 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Actualizamos los campos del cliente que en su id coincida con el id recibido
         $customer = Customer::findOrFail($id);
 
+        //Validamos los elementos de nuestro "$request".
         $validator = Validator::make( $request->all(), [
             'nombre' => 'required|min:5',
             'telefono' => 'nullable',
@@ -72,10 +76,12 @@ class CustomerController extends Controller
             ]
         );
 
+        //Si existe algún error se envía un mensaje con él.
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
 
+        //Si todo es correcto actualizamos los campos del cliente que se encontró con el id.
         $customer->update([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
@@ -83,8 +89,11 @@ class CustomerController extends Controller
             'establecimiento' => $request['establecimiento'],
             'email' => $request['email'],
             'route_id' => $request['route_id'],
-                   ]);
-     return $customer;
+         ]);
+
+
+         //Se devuelve el cliente con los datos actualizados
+         return $customer;
     }
 
 
@@ -96,6 +105,7 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
+        //En el cliente que coincida con el id recibido se actualiza el campo "status" a 0
         $customer = Customer::findOrFail($id);
         $customer->update([
             'status' => false

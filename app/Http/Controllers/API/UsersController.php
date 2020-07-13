@@ -17,6 +17,7 @@ class UsersController extends Controller
      */
     public function index()
     {
+        //Obtenemos y devolvemos todos los usuarios registrados y se ordenan de acuerdo al más reciente.
         return User::latest()->get();
     }
 
@@ -28,6 +29,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        //Creamos un nuevo usuario
         return User::create([
             'name' => $request['name'],
             'email' => $request['email'],
@@ -55,6 +57,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Actualizamos al usuario que en su campo "id" coincida con el "id" de la entrada
         $user = User::findOrFail($id);
 
         $validator = Validator::make( $request->all(), [
@@ -90,6 +93,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
+        //Eliminamos usuario que en su campo "id" coincida con el "id" recibido
         $user = User::findOrFail($id);
         $user->delete();
     }

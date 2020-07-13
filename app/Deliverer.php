@@ -12,8 +12,8 @@ class Deliverer extends Model
     public function expense(){
         return $this->hasMany(Expense::class);
     }
-    public function depurate(){
-        return $this->hasMany(Depurate::class);
+    public function warehousemovement(){
+        return $this->hasMany(WarehouseMovement::class);
     }
     public function sale(){
         return $this->hasMany(Sale::class);

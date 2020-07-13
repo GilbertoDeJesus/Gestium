@@ -16,6 +16,7 @@ class EntryController extends Controller
      */
     public function index()
     {
+        //Obtenemos todas las entradas registradas.
         return Entry::get();
     }
 
@@ -27,6 +28,7 @@ class EntryController extends Controller
      */
     public function store(Request $request)
     {
+        //Registramos una nueva entrada con los datos obtenidos del $request.
         return Entry::create([
             'provider_id' => $request['provider_id'],
             'observacion' => $request['observacion'],
@@ -60,8 +62,10 @@ class EntryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Buscamos una entrada donde su campo "id" coincida con el "$id" recibido
         $entry = entry::findOrFail($id);
 
+        //Validamos la información obtenida.
         $validator = Validator::make( $request->all(), [
             'provider_id' => 'required|Integer',
             'observacion' => 'required|max:200',
@@ -69,16 +73,19 @@ class EntryController extends Controller
             ]
         );
 
+         //Si hay un error envíamos un mensaje con el error
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
 
+        //Actualizamos los datos de la entrada encontrada.
         $entry->update([
             'provider_id' => $request['provider_id'],
             'observacion' => $request['observacion'],
             'fecha_entrada' => $request['fecha_entrada'],
         ]);
 
+        //Devolvemos la entrada con los datos actualizados.
         return$entry;
     }
 
@@ -90,6 +97,7 @@ class EntryController extends Controller
      */
     public function destroy($id)
     {
+        //En la entrada que coincida con el id recibido se actualiza el campo "status" a 0
         $entry = entry::findOrFail($id);
         $entry->update([
             'status' => false,

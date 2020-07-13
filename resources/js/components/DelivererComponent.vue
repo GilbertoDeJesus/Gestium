@@ -3,7 +3,15 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
-                    <v-col cols="12" sm="12" md="12">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de repartidores activos</strong></p>
+                         </v-col>
+                    </v-container>
+                    <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -18,8 +26,99 @@
                             <template v-slot:item.created_at="{ item }">
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
-                            <template v-slot:item.nombre="{ item }">
+                            <template v-slot:item.telefono="{ item }">
+                               <v-chip>
+                                    <v-avatar left >
+                                        <v-icon color="green">mdi-phone</v-icon>
+                                    </v-avatar>{{item.telefono | formatUpperCase}}
+                                </v-chip>
+                            </template>
+                        <!--    <template v-slot:item.nombre="{ item }">
                                 {{item.nombre | formatUpperCase}}
+                            </template> -->
+                            <template v-slot:item.nombre="{ item }">
+                                <v-row
+                                    class="px-6 py-3"
+                                    align="center"
+                                    >
+                                    <v-menu
+                                        bottom
+                                        right
+                                        transition="slide-y-transition"
+                                        origin="top left"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                        <v-chip
+                                            pill
+                                            v-on="on"
+                                        >
+                                            <v-avatar left>
+                                            <v-icon color="teal">mdi-account-circle</v-icon>
+                                            </v-avatar>
+                                            {{item.nombre | formatUpperCase}}
+                                        </v-chip>
+                                        </template>
+                                        <v-card width="380">
+                                        <v-list color="indigo" dark>
+                                            <v-list-item>
+                                            <v-list-item-avatar color="teal">
+                                                <v-icon color="white" large>mdi-account-circle</v-icon>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.nombre | formatUpperCase}}</v-list-item-title>
+                                                <v-list-item-subtitle>{{item.email}}</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            <v-list-item-action>
+                                                <v-btn
+                                                icon
+                                                @click="menu = false"
+                                                >
+                                                <v-icon>mdi-close-circle</v-icon>
+                                                </v-btn>
+                                            </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-list two-line>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal">mdi-phone</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.telefono}}</v-list-item-title>
+                                                <v-list-item-subtitle>Telefono</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal">mdi-calendar-text</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.fecha_nacimiento}}</v-list-item-title>
+                                                <v-list-item-subtitle>Fecha de nacimiento</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal">mdi-calendar-blank</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.fecha_contratacion}}</v-list-item-title>
+                                                <v-list-item-subtitle>Fecha de contratacion</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item>
+                                            <v-list-item-icon>
+                                                <v-icon color="teal">mdi-calendar</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{item.created_at | formatDateTime | formatUpperCase}}</v-list-item-title>
+                                                <v-list-item-subtitle>Fecha de registro</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        </v-card>
+                                    </v-menu>
+                                </v-row>
                             </template>
                             <template v-slot:item.fecha_nacimiento="{ item }">
                                 {{item.fecha_nacimiento |  formatDateTimeShort | formatUpperCase}}
@@ -37,17 +136,24 @@
                                 ></v-divider>
                                 <v-text-field
                                     v-model="search"
-                                    append-icon="search"
+                                    prepend-inner-icon="search"
                                     label="Buscar"
-                                    single-line
                                     hide-details
+                                    filled
+                                    rounded
+                                    single-line
+                                    dense
                                     color="#ff5200"
+                                    clearable
                                 ></v-text-field>
-                                <v-spacer></v-spacer>
-
+                                <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                                ></v-divider>
                                 <v-dialog v-model="dialog" max-width="650px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on">Nuevo Repartidor</v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>person_add</v-icon>Nuevo Repartidor</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -249,8 +355,12 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                            <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-                            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                    <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
+                                </v-btn>
+                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                    <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                                </v-btn>
                             </template>
                             <template v-slot:no-data>
                             <v-alert
@@ -285,9 +395,9 @@
                 headers: [
                     { text: 'Nombre', value: 'nombre'} , /*align: 'start', sortable: false,*/
                     { text: 'Telefono', value: 'telefono' },
-                    { text: 'Email', value: 'email' },
-                    { text: "Fecha de nacimiento", value: "fecha_nacimiento"},
-                    { text: "Fecha de contratación", value: "fecha_contratacion"},
+                    //{ text: 'Email', value: 'email' },
+                    //{ text: "Fecha de nacimiento", value: "fecha_nacimiento"},
+                    //{ text: "Fecha de contratación", value: "fecha_contratacion"},
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],

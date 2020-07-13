@@ -18,14 +18,17 @@ class WarehouseMovementController extends Controller
      */
     public function index()
     {
+        //Obtenemos y devolvemos todos los movimientos realizados junto con sus relaciones con otras tablas
        return WarehouseMovement::latest('warehouse_movements.created_at')
-       ->join ('deliverers','warehouse_movements.deliverer_id','=','deliverers.id')
-       ->join('product_warehouse_movement','warehouse_movements.id','=',
+       ->join ('deliverers', 'warehouse_movements.deliverer_id', '=', 'deliverers.id')
+
+       ->join('product_warehouse_movement', 'warehouse_movements.id', '=',
         'product_warehouse_movement.warehouse_movement_id')
-       ->select('warehouse_movements.id','warehouse_movements.fecha_salida',
-         WarehouseMovement::raw('sum(cantidad) as sum'),'deliverers.nombre')
-       ->groupBy('warehouse_movements.id','warehouse_movements.fecha_salida'
-       ,'deliverers.nombre')
+        //Enviamos la suma de todos los productos solicitados en el movimiento
+       ->select('warehouse_movements.id', 'warehouse_movements.fecha_salida',
+         WarehouseMovement::raw('sum(cantidad) as sum'), 'deliverers.nombre')
+       ->groupBy('warehouse_movements.id', 'warehouse_movements.fecha_salida',
+        'deliverers.nombre')
        ->get();
     }
 
@@ -37,22 +40,35 @@ class WarehouseMovementController extends Controller
      */
     public function store(Request $request)
     {
+        //creamos un registro en la tabla "warehouse:movement"
 
         $movement= WarehouseMovement::create([
+
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida']
 
         ]);
+
+        //Recorremos todos los productos recibidos en la entrada
         foreach ( $request['products'] as $product) {
-            $product_id=$product['id'];
-            $cantidad=$product['cantidad'];
-            $movement_product=$movement->product()->attach
-            ($product_id,['cantidad' =>$cantidad,
-            'tipoMovimiento' =>$request['tipoMovimiento']]);
+
+            //Por cada uno obtenemos su "id" y "cantidad"
+            $product_id = $product['id'];
+            $cantidad = $product['cantidad'];
+
+            //Con estos datos llenamos la tabla intermedia entre las tablas “warehouse_movement”
+            //Y “products”
+
+            $movement_product = $movement->product()->attach
+            ($product_id, ['cantidad' =>$cantidad,
+            'tipoMovimiento' => $request['tipoMovimiento']
+
+            ]);
 
         }
-        return $movement_product;
 
+        //Devolvemos el nuevo registro de la tabla "warehouse_movement_product"
+        return $movement_product;
 
     }
 
@@ -68,20 +84,20 @@ class WarehouseMovementController extends Controller
         /*El primer join es entre las tablas producto y movimiento, en las columnas
            product_id y id respectivamente*/
         return ProductWarehouseMovement::join('products',
-         'product_warehouse_movement.product_id','=','products.id')
+         'product_warehouse_movement.product_id', '=', 'products.id')
         /*El segundo join es entre las tablas movimiento_producto y movimiento, en las columnas
           warehouse_movement_id y id respectivamente*/
-        ->join('warehouse_movements','product_warehouse_movement.warehouse_movement_id',
+        ->join('warehouse_movements', 'product_warehouse_movement.warehouse_movement_id',
           '=','warehouse_movements.id')
         /*En las siguientes línea se indica que solo se mostraran las columnas 'id' de la tabla
           movimientos, el 'nombre' de la tabla productos, la 'cantidad' y 'fecha_salida' que
           pertenecen a la tabla movimientos_producto.*/
-        ->select('products.id','products.nombre', 'products.precio_venta',
-        'product_warehouse_movement.cantidad','product_warehouse_movement.id as pw_id',
+        ->select('products.id', 'products.nombre',  'products.precio_venta',
+        'product_warehouse_movement.cantidad', 'product_warehouse_movement.id as pw_id',
         'warehouse_movements.fecha_salida')
          /*Se devolveran los resultados donde el campo warehouse_movement_id de la tabla
            movimiento_producto coincida con el 'id' que recibe en un principio la función*/
-        ->where('product_warehouse_movement.warehouse_movement_id', '=',$id )
+        ->where('product_warehouse_movement.warehouse_movement_id', '=', $id )
         ->get();
     }
 
@@ -94,20 +110,28 @@ class WarehouseMovementController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Buscamos y obtenemos el movimiento que conincida con el id recibido
         $warehousemovement = WarehouseMovement::findOrFail($id);
 
+        //Validamos los datos de la entrada
         $validator = Validator::make( $request->all(), [
             'deliverer_id' => 'required|Integer',
             'fecha_salida' => 'required|date',
             ]
         );
+
+         //Si hay un error enviamos un mensaje con el error
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
+
+        //Actualizamos los datos de los campos “deliverer id” y “fecha salida”
+        //con lo recibido en el "$request"
         $warehousemovement->update([
             'deliverer_id' => $request['deliverer_id'],
             'fecha_salida' => $request['fecha_salida'],
         ]);
+        //Devolvemos el registro de movimiento actualizado
         return$warehousemovement;
     }
 

@@ -15,6 +15,7 @@ class UnitController extends Controller
      */
     public function index()
     {
+        //Obtenemos y devolvemos las unidades de medida registradas
         return Unit::get();
     }
 
@@ -26,8 +27,9 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
+        //Creamos y devolvemos una nueva unidad de medida con los datos obtenidos en el "$request"
         return Unit::create([
-            'tipo' => $request['tipo'],     
+            'tipo' => $request['tipo'],
         ]);
     }
 
@@ -51,25 +53,29 @@ class UnitController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Buscamos una unidad de medida que en su campo "id" coincida con el "id" obtenido
         $unit = Unit::findOrFail($id);
 
+        //Validamos la información de la entrada
         $validator = Validator::make( $request->all(), [
             'tipo' => 'required|max:40',
             ]
         );
 
+        //Si hay un error enviamos un mensaje con el error
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
 
+        //Actualizamos la unidad encontrada
         $unit->update([
-            'deliverer_id' => $request['deliverer_id'],
-            'customer_id' => $request['customer_id'],
-            'fecha' => $request['fecha'],
-            'monto' => $request['monto'],
-            'observacion' => $request['observacion']
-                              ]);
-     return $unit;
+
+            'tipo' => $request['tipo']
+
+        ]);
+
+        //Devolvemos la unidad de medida actualizada
+        return $unit;
     }
 
     /**
@@ -80,6 +86,7 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
+        //Eliminamos la unidad de medida que en su campo "id" coincida con el "id" obtenido.
         $unit = Unit::findOrFail($id);
         $unit->delete();
     }

@@ -3,6 +3,14 @@
         <v-content>
             <v-container>
                 <v-row justify="center">
+                    <v-container class="align-items-center">
+                        <v-col
+                        cols="12"
+                        md="12"
+                        sm="12">
+                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de salidas de productos registradas</strong></p>
+                         </v-col>
+                    </v-container>
                     <v-col cols="10" sm="12" md="10">
                         <v-data-table
                             :headers="headers"
@@ -15,11 +23,23 @@
                             :footer-props="{
                                 'items-per-page-options': [7, 10, 20]
                             }">
+                            <template v-slot:item.nombre="{ item }">
+                               <v-chip class="ma-2">
+                                    <v-avatar left >
+                                        <v-icon color="green">mdi-account-circle</v-icon>
+                                    </v-avatar>{{item.nombre | formatUpperCase}}
+                                </v-chip>
+                            </template>
                             <template v-slot:item.created_at="{ item }">
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
                             <template v-slot:item.fecha_salida="{ item }">
                                {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.sum="{ item }">
+                                <v-chip class="ma-1" color="orange" dark>
+                                    {{item.sum}}
+                                </v-chip>
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
@@ -48,7 +68,7 @@
                                 ></v-divider>
                                 <v-dialog v-model="dialog" scrollable max-width="900px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" dark class="mb-2" v-on="on"> Nueva Salida &nbsp;<v-icon>playlist_add</v-icon></v-btn>
+                                    <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>playlist_add</v-icon>Nueva Salida</v-btn>
                                 </template>
                                 <v-card style="border-radius:20px;">
                                     <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
@@ -276,8 +296,12 @@
                             </template>
 
                             <template v-slot:item.actions="{item}">
+                                <v-chip class="ma-1" color="primary" dark @click=" showdetails(item)" v-bind:key = " item.id ">
+                                    <v-avatar left>
+                                        <v-icon small>local_shipping</v-icon>
+                                    </v-avatar>Ver
+                                </v-chip>
 
-                            <v-icon color="#ff5300" @click=" showdetails(item)" v-bind:key = " item.id "> unarchive </v-icon>
 
 
                              <v-dialog
@@ -288,20 +312,66 @@
                              persistent
                              class="perfect-scrollbar-on"
                              >
-                                <v-card style="background:#f5f5f5;">
-                                    <v-container class="align-items-center" max-width='100%' style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
+                                <v-card style="background:#f5f5f5; height:100%; margin: 0; display: flex; flex-direction: column;">
+
+
+                                <v-card-text style="padding-bottom:0px;">
+                                    <v-row style="height:100%; margin-left: -24px;">
+                                        <v-col
+                                        cols="12"
+                                        md="4"
+                                        sm="12"
+                                        style="background: linear-gradient(60deg, #fd2d21, #fc831a); max-width: 100%;">
+                                        <v-container class="align-items-center" max-width='100%'>
                                          <v-col
                                         cols="12"
                                         md="12"
                                         sm="12">
-                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">assignment</i>
-                                            </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Lista de productos de {{formNombre}} </strong></p>
+
+                                            <v-list style="background: white; padding: 0px" two-line>
+                                                <v-list-item>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title style="font-size:1.5rem; color:#ff5300; text-align:center;">Lista de productos</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </v-list>
+
+                                            <v-list style="background: transparent;" dark two-line>
+                                                <v-divider></v-divider>
+                                                <v-list-item>
+                                                    <v-list-item-icon>
+                                                        <v-icon style="font-size:2rem;">mdi-briefcase</v-icon>
+                                                    </v-list-item-icon>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title style="font-size:1.5rem;">{{formNombre}}</v-list-item-title>
+                                                        <v-list-item-subtitle style="font-size:1rem;">Repartidor</v-list-item-subtitle>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                                <v-divider></v-divider>
+                                                <v-list-item>
+                                                    <v-list-item-icon>
+                                                        <v-icon style="font-size:2rem;">mdi-calendar</v-icon>
+                                                    </v-list-item-icon>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title style="font-size:1.5rem;">{{formFecha}}</v-list-item-title>
+                                                        <v-list-item-subtitle style="font-size:1rem;">Fecha de salida</v-list-item-subtitle>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+
+                                                <v-divider></v-divider>
+                                                <v-list-item>
+                                                    <v-list-item-content style="font-size:1.5rem; text-align:center;">
+                                                            <v-btn color="#ff5300" dark @click="closeProductList"><v-icon left>mdi-close</v-icon>Cerrar</v-btn>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </v-list>
                                         </v-col>
                                     </v-container>
-
-                                <v-card-text style="padding-bottom:0px;">
+                                        </v-col>
+                                        <v-col
+                                        cols="12"
+                                        md="8"
+                                        sm="12">
                                     <v-container style="margin-top:1.5rem; max-width: 600px;" >
 
                                         <v-spacer></v-spacer>
@@ -337,20 +407,31 @@
                                             <template v-slot:item.created_at="{ item }">
                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                             </template>
+                                            <template v-slot:item.nombre="{ item }">
+                                                <v-chip>
+                                                    <v-avatar left>
+                                                        <v-icon color="teal">mdi-archive</v-icon>
+                                                        </v-avatar>{{item.nombre | formatUpperCase}}
+                                                </v-chip>
+                                            </template>
+                                            <template v-slot:item.cantidad="{ item }">
+                                                <v-chip color="orange" dark>
+                                                    <v-avatar left>
+                                                        <v-icon>mdi-package-variant</v-icon>
+                                                        </v-avatar>{{item.cantidad}}
+                                                </v-chip>
+                                            </template>
                                             <template v-slot:item.fecha_salida="{ item }">
                                             {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
                                             </template>
 
                                      </v-data-table>
                                     </v-container>
+                                        </v-col>
+                                    </v-row>
                                 </v-card-text>
 
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeProductList">Cerrar</v-btn>
-                                    <v-spacer></v-spacer>
 
-                                </v-card-actions>
                                 </v-card>
                                 </v-dialog>
 
@@ -387,6 +468,7 @@
                   date: '',
                 producto: '',
                 nDeliverer: '',
+                nFecha: '',
                 date1: new Date().toISOString().substr(0, 10),
                 menu:false,
                 loading: true,
@@ -469,6 +551,10 @@
             formNombre (){
                 return this.nDeliverer
             },
+            formFecha(){
+                return this.nFecha
+            },
+
         },
 
         watch: {
@@ -670,6 +756,7 @@
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.id_movement= this.editedItem.id
                 this.nDeliverer = this.editedItem.nombre
+                this.nFecha= this.editedItem.fecha_salida
                 this.getProductsList()
                 this.dialogProductList=true
 
