@@ -15,11 +15,16 @@ class CreditController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //En esta función llamamos a los créditos existentes de los clientes.
     public function index()
     {
+        //obtenemos los créditos que tienen los clientes.
         return Credit::with('Customer')
+        //los ordenamos por la fecha más reciente.
         ->latest('credits.created_at')
+         //solo los creditos dónde el tipo de movimiento sea igual a 1
         ->where('tipoMovimiento',"=" ,1)
+         //Y el estatus igual a 1.
         ->where('status',"=" ,1)
         ->get();
     }
@@ -32,8 +37,10 @@ class CreditController extends Controller
      */
     public function store(Request $request)
     {
-        $provider= Customer::all();
+        //En las siguientes líneas asignamos un nuevo crédito.
         return Credit::create([
+        //De los datos recibidos obtenemos los necesarios para
+        //añadirlos a nuestra tabla en el campo correspondiente.
             'customer_id' => $request['customer_id'],
             'monto' => $request['monto'],
             'descripcion' => $request['descripcion'],
@@ -41,7 +48,6 @@ class CreditController extends Controller
             'tipoMovimiento'=> 1,
             'aPagar'=>$request['monto'],
             'status'=> true
-
         ]);
     }
 
@@ -65,23 +71,41 @@ class CreditController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Guardamos en '$credit' los datos relacionados con el 'id' recibido
         $credit = credit::findOrFail($id);
+        //En 'montoOld' guardamos el valor del campo "apagar" del objeto $credit.
         $montoOld=$credit->aPagar;
+
+        //Validamos nuestro request
         $validator = Validator ::make( $request->all(),[
             'customer_id'=> 'required|Integer',
             'monto' =>'required|Integer',
             'descripcion' => 'required|max:200',
 
         ]);
+
+        //Si hay un error enviamos un mensaje con el error
         if($validator->fails()){
+
             return response()->json(['validation_errors' => $validator->errors()]);
         }
-        $creditAbono=$montoOld-$request['monto'];
-        if($request['monto']<=$montoOld){
+
+
+        //A 'creditAbono' le asignamos la diferencia de '$montoOld' y el valor de 'monto' obtenido
+        //en nuestro request
+        $creditAbono = $montoOld - $request['monto'];
+
+        //Si nuestro 'monto' en request es menor o igual a lo que ahora tiene '$montoOld' actualizamos
+        // lo que tiene '$credit' en su elemento 'monto'.
+        if($request['monto'] <= $montoOld){
             $credit->update([
                 'customer_id' => $request['customer_id'],
-                    'aPagar' =>$creditAbono
+                'aPagar' =>$creditAbono
             ]);
+
+            //Ahora en la misma tabla con los elementos del request
+           // crearemos un abono indicado por el 'tipoMovimiento' igual a 0
+
             Credit::create([
                 'customer_id' => $request['customer_id'],
                 'monto' => $request['monto'],
@@ -94,6 +118,7 @@ class CreditController extends Controller
             ]);
         }
 
+        //Devolvemos el credito encontrado con el monto actualizado
         return $credit;
     }
 
@@ -106,6 +131,7 @@ class CreditController extends Controller
      */
     public function destroy($id)
     {
+        //En el crédito que coincida con el id recibido se actualiza el campo "status" a 0
         $credit = credit::findOrFail($id);
         $credit->update([
             'status' => false,

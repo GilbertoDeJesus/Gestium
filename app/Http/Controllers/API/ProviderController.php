@@ -15,7 +15,7 @@ class ProviderController extends Controller
      */
     public function index()
     {
-
+        //Obtenemos todos los proveedores con "status" igual a 1
         return Provider::where('status','=','1')->get();
     }
 
@@ -27,6 +27,7 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
+        //Creamos un nuevo registro de proveedor con los datos de la entrada
         return Provider::create([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
@@ -55,20 +56,26 @@ class ProviderController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Obtenemos los datos del proveedor que coincida con el "id" recibido.
         $provider = provider::findOrFail($id);
+
+        //Validamos todos los datos de la entrada
         $validator= Validator ::make($request->all(),[
             'nombre'=> 'required|max:40',
             'telefono' =>'required|max:40',
             'email' =>'required|max:40',
         ]);
+        //Si hay un error enviamos un mensaje con el error
         if($validator->fails()){
             return response()->json(['validation_errors' => $validator->errors()]);
         }
+        //Actualizamos los campos del proveedor encontrado
         $provider->update([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
             'email' => $request['email'],
         ]);
+        //Devolvemos el proveedor con la información actualizada.
         return $provider;
 
     }
@@ -81,6 +88,7 @@ class ProviderController extends Controller
      */
     public function destroy($id)
     {
+        //En el proveedor que coincida con el id recibido se actualiza el campo "status" a 0
         $provider = provider::findOrFail($id);
         $provider->update([
             'status'=>false,
