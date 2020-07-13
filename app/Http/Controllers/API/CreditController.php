@@ -7,6 +7,7 @@ use App\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class CreditController extends Controller
 {
@@ -92,5 +93,10 @@ class CreditController extends Controller
         $credit->update([
             'status' => false,
         ]);
+    }
+    public function PDFCredits(){
+        $credits = Credit::all();
+        $pdf = PDF::loadView('credits', compact('credits'));
+        return $pdf->setPaper('a4', 'landscape')->stream('credits.pdf');
     }
 }

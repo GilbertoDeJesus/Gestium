@@ -6,6 +6,7 @@ use App\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class CustomerController extends Controller
 {
@@ -100,5 +101,10 @@ class CustomerController extends Controller
             'status' => false
         ]);
 
+    }
+    public function PDFCustomers(){
+        $customers = Customer::all();
+        $pdf = PDF::loadView('customers', compact('customers'));
+        return $pdf->setPaper('a4', 'landscape')->stream('customers.pdf');
     }
 }

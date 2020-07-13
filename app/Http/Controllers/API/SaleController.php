@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Sale;
 use App\ProductWarehouseMovement;
 use Illuminate\Http\Request;
+use PDF;
 
 class SaleController extends Controller
 {
@@ -140,4 +141,9 @@ class SaleController extends Controller
     public function destroy($id)
     {
     }
+    public function PDFSales(){
+      $sales = Sale::all();
+      $pdf = PDF::loadView('sales', compact('sales'));
+      return $pdf->setPaper('a4', 'landscape')->stream('sales.pdf');
+  }
 }

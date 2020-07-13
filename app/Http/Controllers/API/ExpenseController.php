@@ -6,6 +6,7 @@ use App\Expense;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use PDF;
 
 class ExpenseController extends Controller
 {
@@ -90,5 +91,10 @@ class ExpenseController extends Controller
         $expense->update([
             'status' => false,
         ]);
+    }
+    public function PDFExpenses(){
+        $expenses = Expense::all();
+        $pdf = PDF::loadView('expenses', compact('expenses'));
+        return $pdf->setPaper('a4', 'landscape')->stream('expenses.pdf');
     }
 }

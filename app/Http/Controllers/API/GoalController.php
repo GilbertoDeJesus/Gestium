@@ -6,6 +6,7 @@ use App\Goal;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use PDF;
 
 class GoalController extends Controller
 {
@@ -97,5 +98,10 @@ class GoalController extends Controller
         $goal->update([
             'status' => false,
         ]);
+    }
+    public function PDFGoals(){
+        $goals = Goal::all();
+        $pdf = PDF::loadView('goals', compact('goals'));
+        return $pdf->setPaper('a4', 'landscape')->stream('goals.pdf');
     }
 }

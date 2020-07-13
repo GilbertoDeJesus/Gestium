@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\ProductWarehouseMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PDF;
 
 class WarehouseMovementController extends Controller
 {
@@ -119,4 +120,9 @@ class WarehouseMovementController extends Controller
     public function destroy($id)
     {
     }
+    public function PDFWarehouseMovements(){
+      $warehousemovements = WarehouseMovement::all();
+      $pdf = PDF::loadView('warehousemovements', compact('warehousemovements'));
+      return $pdf->setPaper('a4', 'landscape')->stream('warehousemovements.pdf');
+  }
 }

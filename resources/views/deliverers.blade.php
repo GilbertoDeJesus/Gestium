@@ -1,6 +1,7 @@
 <?php
 $fecha = date('Y-m-d');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,5 +47,11 @@ $fecha = date('Y-m-d');
             </tbody>
           </table>
       </main>    
+      <script>
+        function enviarTexto()
+        {
+          var texto=external
+        }
+      </script>
     </body>
 </html>
