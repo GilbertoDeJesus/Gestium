@@ -494,6 +494,7 @@
                 headers_productos: [
                     {text: 'Nombre', value: 'nombre'},
                     {text: 'Cantidad', value: 'cantidad'},
+                    {text: 'Precio unitario', value: 'precio_venta'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 sales: [],

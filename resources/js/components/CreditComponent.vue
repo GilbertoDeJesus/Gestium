@@ -342,19 +342,19 @@
                 date1: new Date().toISOString().substr(0, 10),
                 menu1:false,
                 headers: [
-                    { text: 'Nombre', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
-                    { text: 'Monto', value: 'monto' },
-                    { text: 'Por pagar', value: 'aPagar'},
+                    { text: 'Nombre', value: 'customer.nombre' }, //Se establecen los titulos de columna de la tabla de Creditos
+                    { text: 'Monto', value: 'monto' },            //Estos se establen en objetos que estan  dentro de un arreglo
+                    { text: 'Por pagar', value: 'aPagar'},        //Dentro de cada objeto se establece el valor de las celdas decada columna
                     //{ text: 'Detalles', value: 'descripcion' },
                     { text: 'Fecha de aprobación', value: 'fecha'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                credits: [],
-                nombres: [],
+                credits: [],//Se declara el arreglo que almacenara la informacion de los creditos
+                nombres: [],//Para guardar los nombre de los clientes se crea el arreglo "nombres"
                 editedIndex: -1,
                 editedItem: {
-                    id: '',
-                    monto: '',
+                    id: '',         //Dentro del objeto "Editediten" se establecen los items que se utilizan para
+                    monto: '',      //los modelos de los componentes de los formularios de creacion, edicion y eliminar
                     descripcion: '',
                     fecha: '',
                     created_at: ''
@@ -372,10 +372,6 @@
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
-                email_form() {
-                    var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    return v => v && regex.test(v) || `Debes ingresar un email valido`
-                },
              }
         },
 
@@ -392,15 +388,15 @@
         },
 
         methods: {
-            editItem (item) {
-                this.editedIndex = this.credits.indexOf(item)
-                if(item.aPagar>0){
-                this.editedItem = Object.assign({}, item) // Clone an object
-                this.dialog = true
+            editItem (item) { //Se manda a llamar al objeto a editar
+                this.editedIndex = this.credits.indexOf(item) //Con indexOf buscamos la posicion de este dentro del arreglo de credits
+                if(item.aPagar>0){ //Comprobacion para saber si el monto por pagar del credito es mayor a 0
+                this.editedItem = Object.assign({}, item) //Clonacion del objeto recibido anteriormente
+                this.dialog = true //Se abre el dialogo(formulario) que permite abonar al credito
                 this.edit_mode = true
                 this.editedItem.monto = ''
                 this.editedItem.descripcion = ''
-                }else{
+                }else{//Si el saldo ya esta saldado de muestra un mensaje informando que el credito ya esta saldado
                     Swal.fire({
                         title:'Este crédito ya ha sido saldado',
                         type:'success',
@@ -409,10 +405,10 @@
                 }
             },
             close () {
-                this.$refs.form.reset()
-                this.dialog = false
+                this.$refs.form.reset()//Cuando de cancela la operacion de editar se resetea el obheto
+                this.dialog = false //Despues se cierra el dialogo que estaba abierto
                 this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedItem = Object.assign({}, this.defaultItem) //Se restablecen los valores iniciales del objeto
                 this.editedIndex = -1
                 })
                 if (this.edit_mode == true) {
@@ -420,25 +416,25 @@
                 }
             },
             async save () {
-                if (this.editedIndex > -1) {
+                if (this.editedIndex > -1) { //Comprobacion para saber si estamos editando o creando un nuevo credito
                     const response = await axios.put(`api/credits/${this.editedItem.id}`, this.editedItem)
-                    .catch(error => console.log(error));
+                    .catch(error => console.log(error));//Cuando se selecciona la opcion de guardar se insertar los nuevos valores ingresados en el objeto de items
                     if (response.data.validation_errors) {
                         Toast.fire({
-                            icon: 'error',
+                            icon: 'error',//Si algun dato es erroneo se muestra un mensaje de alerta
                             title: '¡Ocurrió un error, vuelve a intentarlo!'
                         });
                         console.log(response.data);
                     } else {
                         this.getResults();
                         Toast.fire({
-                            icon: 'success',
+                            icon: 'success', //En caso de que los valores ingresados sean validos se muestra un mensaje de exito
                             title: '¡Datos del credito actualizados!'
                         })
                     }
                 } else {
                     const response = await axios.post('/api/credits',{
-                        'monto': this.editedItem.monto,
+                        'monto': this.editedItem.monto, //Se insertan los valores en la bd
                         'descripcion' : this.editedItem.descripcion,
                         'fecha': this.editedItem.fecha,
                         'customer_id': this.select.id,
@@ -490,16 +486,16 @@
             getResults() {
                 axios.get('api/credits')
                 .then(response => {
-                    this.credits = response.data;
-                    console.log(response.data)
+                    this.credits = response.data; //Se consultan todos los registros de creditos aprobados
+                    console.log(response.data)    //Y se insertan en el arreglo de credits
                     this.loading = false;
                 });
             },
             getNames(){
                  axios.get('api/customers')
                 .then(response => {
-                    this.nombres = response.data;
-                    console.log(response.data)
+                    this.nombres = response.data; //Se obtienen los regisros delos clientes activos
+                    console.log(response.data)    //Se insertan los objetos recibidos en el arreglo de nombres
                     this.loading = false;
                 });
             }
