@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Sale;
 use App\ProductWarehouseMovement;
 use Illuminate\Http\Request;
+use PDF;
 
 class SaleController extends Controller
 {
@@ -17,7 +18,9 @@ class SaleController extends Controller
      */
     public function index()
     {
+        //Obtenemos y devolvemos todas las salidas registradas y se ordenan de acuerdo a la más reciente.
         return Sale::latest()
+        //También se permite acceso a la tabla intermedia entre ventas y clientes
         ->with('customer:id,nombre')
         ->get();
     }
@@ -30,36 +33,54 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+        //Creamos una nueva venta, descontamos los productos vendidos de la salida correspondiente
+        // y llenamos la tabla intermedia de las tablas "warehouse_movement_product y sales.
+
         $total=0;
-       // $sale=Sale::find(4);
+
+        //Creamos la venta con los datos de la entrada
         $sale= Sale::create([
-            'fecha'=>$request['fecha_salida'],
+            'fecha' => $request['fecha_salida'],
             'monto'=>'0',
-            'observacion'=>$request['observacion'],
-            'deliverer_id'=>$request['deliverer_id'],
-            'customer_id'=>$request['customer_id']
+            'observacion' => $request['observacion'],
+            'deliverer_id' => $request['deliverer_id'],
+            'customer_id' => $request['customer_id']
         ]);
 
+        //Obtenemos y recorremos cada uno de los productos que nos da la entrada
         foreach ( $request['products'] as $product) {
-            $movement_product_id=$product['pw_id'];
-            $cantidad=$product['cantidad'];
-            $precio_producto=$product['precio_venta'];
-            $subtotal=($cantidad*$precio_producto);
-            $product_sale=$sale->productwarehousemovement()->attach
-            ($movement_product_id,['cantidad' =>$cantidad,
-            'monto' =>$subtotal]);
-            $total=$total+$subtotal;
 
+            $movement_product_id = $product['pw_id'];
+            $cantidad = $product['cantidad'];
+            $precio_producto = $product['precio_venta'];
+
+            //Obtemos el total a pagar por el precio del producto y la cantidad vendida
+            $subtotal = ($cantidad * $precio_producto);
+
+            // Llenamos la tabla intermedia con los datos de la nueva venta y los demás
+            //datos obtenidos del request y operaciones
+            $product_sale = $sale->productwarehousemovement()->attach
+            ($movement_product_id, ['cantidad' => $cantidad,
+            'monto' => $subtotal]);
+
+            //Calculamos el total de la venta de todos los productos
+            $total = $total+$subtotal;
+
+            //Actualizamos cantidad de productos en la salida siempre y cuando sea menor o igual a la
+            //cantidad existente
            $pwm= Productwarehousemovement::findOrFail($movement_product_id);
-                 $stock=$pwm->cantidad;
-                  if ($product['cantidad']<=$stock ){
+                 $stock = $pwm->cantidad;
+
+                  if ($product['cantidad'] <= $stock ){
                     $pwm->update([
                     'cantidad' => $stock - $cantidad]);
                    }
         }
-        $sale->update([
-            'monto' => $total]);
 
+        //Actualizamos el monto total de la venta en el último registro de venta
+        $sale->update(['monto' => $total]);
+
+        //Devolvemos el registro de la tabla intermedia.
         return $product_sale;
     }
 
@@ -75,26 +96,31 @@ class SaleController extends Controller
     //La función obtine los datos de una venta, sus productos, la cantidad de cada uno
     //y el total a pagar por producto.
     public function getSaleDetail($id){
+
       return ProductWarehouseMovement::
+      //El primer join entre tabla "product_warehouse_movement" en su campo "id" y
+      //la tabla product_warehouse_movement_sale campo "product_sale_id"
         join('product_warehouse_movement_sale',
         'product_warehouse_movement.id', '=' ,
         'product_warehouse_movement_sale.product_sale_id')
 
+        //Join entre tabla "product_warehouse_movement" campo "product_id"
+        // y "productos" campo "id"
       ->join('products',
         'product_warehouse_movement.product_id', '=',
         'products.id')
 
+        //solo obtenemos los campos "id" y "nombre" de la tabla "products"
+        //y campos "cantidad" y monto de la tabla "product_warehouse_movement_sale"
       ->select('products.id as product_id','products.nombre',
         'product_warehouse_movement_sale.cantidad as cantidadVenta',
         'product_warehouse_movement_sale.monto')
 
-      ->where('product_warehouse_movement_sale.sale_id','=', $id)
+        //Donde el campo "sale_id" de la tabla "product_warehouse_movement_sale"
+        //sea igual al "id" recibido
+      ->where('product_warehouse_movement_sale.sale_id', '=', $id)
       ->get();
 
-      /*  return Sale::with("productwarehousemovement")
-        ->where('id', '=',3)
-        ->select('id','monto')
-        ->get();*/
     }
 
     /**
@@ -106,8 +132,10 @@ class SaleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Buscamos la venta que coincida con el "id" recibido y la guarmamos en "$sale"
         $sale = Sale::findOrFail($id);
 
+        //Validamos los datos de la entrada
         $validator = Validator::make( $request->all(), [
             'deliverer_id' => 'required|Integer',
             'customer_id' => 'required|Integer',
@@ -117,18 +145,22 @@ class SaleController extends Controller
             ]
         );
 
+        //Si hay un error enviamos un mensaje con el error
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
 
+        //Acualizamos los datos de la venta encontrada
         $sale->update([
             'deliverer_id' => $request['deliverer_id'],
             'customer_id' => $request['customer_id'],
             'fecha' => $request['fecha'],
             'monto' => $request['monto'],
             'observacion' => $request['observacion']
-                              ]);
-     return $sale;
+            ]);
+
+          // Devolvemos la venta actualizada
+         return $sale;
     }
 
     /**
@@ -139,5 +171,11 @@ class SaleController extends Controller
      */
     public function destroy($id)
     {
+      //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     }
+    public function PDFSales(){
+      $sales = Sale::all();
+      $pdf = PDF::loadView('sales', compact('sales'));
+      return $pdf->setPaper('a4', 'landscape')->stream('sales.pdf');
+  }
 }

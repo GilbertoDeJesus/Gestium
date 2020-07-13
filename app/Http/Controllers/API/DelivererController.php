@@ -18,6 +18,7 @@ class DelivererController extends Controller
      */
     public function index()
     {
+        //Obtenemos todos los repartidores registrados con un 'status' igual a 1
         return Deliverer::where('status','=','1')->get();
     }
 
@@ -29,6 +30,7 @@ class DelivererController extends Controller
      */
     public function store(Request $request)
     {
+        // Devolvemos al nuevo repartidor creado con los datos que se obtienen del $request.
         return Deliverer::create([
             'nombre' => $request['nombre'],
             'aPaterno' => $request['aPaterno'],
@@ -52,19 +54,27 @@ class DelivererController extends Controller
     }
     public function getmovementList($id)
     {
+        //Devolvemos los 3 últimos movimientos realizados por un repartidor
         return Deliverer::findOrFail($id)
         ->warehousemovement()
+        //Con la fecha obtenemos los registros más recientes
         ->latest('created_at')
         ->take(3)
         ->get();
     }
 
     public function getdelivererlist($id_route){
+
+        //Obtenemos y devolvemos todos los repartidores que tiene una ruta
         return Deliverer::join('deliverer_route',
-        'deliverer_route.deliverer_id','=','deliverers.id')
-        ->select('deliverer_route.route_id','deliverers.nombre','deliverer_route.created_at')
-        ->where('deliverer_route.route_id', '=',$id_route)
-        ->where('deliverers.status',"=",1)
+        'deliverer_route.deliverer_id', '=', 'deliverers.id')
+        //Seleccionamos solo los campos "route_id" y "created_at" de la tabla "deliverer_route"
+        //y de la tabla "deliverers" el campo "nombre".
+        ->select('deliverer_route.route_id', 'deliverers.nombre', 'deliverer_route.created_at')
+        //Solo los registros que en su campo "route_id" coincidan con el id recibido
+        ->where('deliverer_route.route_id', '=', $id_route)
+        //Y los repartidores que tengan un "status" igual a 1
+        ->where('deliverers.status', "=", 1)
         ->get();
     }
 
@@ -77,8 +87,10 @@ class DelivererController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Buscamos el repartidor que en su campo "id" coincida con el id recibido
         $deliverer = Deliverer::findOrFail($id);
 
+        //Verificamos la información recibida
         $validator = Validator::make( $request->all(), [
             'nombre' => 'required|min:3',
             'aPaterno' => 'required|min:3',
@@ -90,9 +102,11 @@ class DelivererController extends Controller
 
         ]);
 
+        //Si existe algún error enviamos el mensaje con la información.
         if ($validator->fails()) {
             return response()->json(['validation_errors' => $validator->errors()]);
         }
+        //Actualizamos los datos del repartidor encontrado anteriormente
         $deliverer->update([
             'nombre' => $request['nombre'],
             'aPaterno' => $request['aPaterno'],
@@ -103,8 +117,10 @@ class DelivererController extends Controller
             'email' => $request['email'],
         ]);
 
+        //Devolvemos el repartidor con sus datos actualizados
         return$deliverer;
     }
+    //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     public function PDFDeliverers(){
         $deliverers = Deliverer::all();
         $pdf = PDF::loadView('deliverers', compact('deliverers'));
@@ -119,6 +135,7 @@ class DelivererController extends Controller
      */
     public function destroy($id)
     {
+         //En el repartidor que coincida con el id recibido se actualiza el campo "status" a 0
         $deliverer = deliverer::findOrFail($id);
         $deliverer->update([
             'status' => false,

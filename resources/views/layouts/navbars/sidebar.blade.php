@@ -19,7 +19,6 @@
           </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#customers" aria-expanded="true">
-          {{-- <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i> --}}
           <i class="material-icons">supervised_user_circle</i>
           <p>{{ __('Clientes') }}
             <b class="caret"></b>
@@ -102,6 +101,12 @@
             </li>
           </ul>
         </div>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('reportes') }}" class="nav-link">
+          <i class="material-icons">assignment</i>
+        {{ __('Reportes') }}
+      </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ route('logout') }}"
