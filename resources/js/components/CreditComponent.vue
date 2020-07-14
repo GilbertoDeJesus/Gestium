@@ -405,7 +405,7 @@
                 }
             },
             close () {
-                this.$refs.form.reset()//Cuando de cancela la operacion de editar se resetea el obheto
+                this.$refs.form.reset()//Cuando de cancela la operacion de editar se resetea el objeto
                 this.dialog = false //Despues se cierra el dialogo que estaba abierto
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem) //Se restablecen los valores iniciales del objeto
@@ -418,7 +418,7 @@
             async save () {
                 if (this.editedIndex > -1) { //Comprobacion para saber si estamos editando o creando un nuevo credito
                     const response = await axios.put(`api/credits/${this.editedItem.id}`, this.editedItem)
-                    .catch(error => console.log(error));//Cuando se selecciona la opcion de guardar se insertar los nuevos valores ingresados en el objeto de items
+                    .catch(error => console.log(error));//Cuando se selecciona la opcion de guardar se insertan los nuevos valores ingresados en el objeto de items
                     if (response.data.validation_errors) {
                         Toast.fire({
                             icon: 'error',//Si algun dato es erroneo se muestra un mensaje de alerta

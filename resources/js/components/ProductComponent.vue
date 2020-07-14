@@ -562,29 +562,34 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                //Mediante un objeto se establecen los tectos y valores de estos de un select
                 selectProvider:{
                     id: '',
                     nombre: '',
                 },
+                //Mediante un objeto se establecen los textos y valores de estos de un select
                 selectUnit:{
                     id: '',
                     tipo: '',
                 },
+                //Se indican los campos que tendra el arreglo de unidades
                 units: [
                     {id: ''},
                     {tipo: ''},
                     {created_at: ''},
                 ],
+                //Dentro de un arreglo se establecen los titulos de columna de la tabla de productos
+                //"value" muestra la informacion correspondiente de cada celda de cada columna
                 headers: [
-                    { text: 'Nombre', value: 'nombre' }, /*align: 'start', sortable: false,*/
-                    //{ text: 'Meta', value: 'meta' },
+                    { text: 'Nombre', value: 'nombre' },
                     { text: 'Unidad de medidad', value: 'unit.tipo' },
                     { text: 'Precio de Venta', value: 'precio_venta' },
                     { text: 'Stock', value: 'stock' },
-                    //{ text: 'Descripción', value: 'descripcion' },
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
+                //Para la tabla de unidades se cargan en el arreglo "headersUnits" todos los registros de la tabla Units
+                //Dentro de el arreglo se indican los titulos de columna de la tabla de unidades
                 headersUnits: [
                     { text: 'Clave', value: 'id'},
                     { text: 'Unidad', value: 'tipo'}
@@ -594,10 +599,17 @@
                 unitslist:[],
                 nameUnit: '',
                 editedIndex: -1,
+                //Para poder registrar nuevos tipos de unidades de Medida se necesita crear un objeto que contenga la informacion de esta
+                //Se crea el objeto editUnit y se establecen las variables que este objeto contendra
+                //Estas variables de declaran vacias para asi poder asiganarles un nuevo valor cada que sea necesario
                 editUnit:{
                     id:'',
                     tipo:''
                 },
+                //Para poder registrar nuevos prodiuctos es necesario crear un objeto como se hizo anteriormente
+                //Este objeto contendra la informacion de cada producto que se registre
+                //Se crea el objeto editedItem y se establecen las variables que este objeto contendra
+                //Estas variables de declaran vacias para asi poder asiganarles un nuevo valor cada que sea necesario
                 editedItem: {
                     id: '',
                     nombre: '',
@@ -611,6 +623,8 @@
                     descripcion: '',
                     status: ''
                 },
+                //Se crea el objeto defaultItem el cual contendra los valores de los registros obtenidos de la base de datos
+                //Estas variables de declaran vacias para asi poder asiganarles un nuevo valor cada que sea necesario
                 defaultItem: {
                     id: '',
                     nombre: '',
@@ -630,10 +644,6 @@
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
-                email_form() {
-                    var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                    return v => v && regex.test(v) || `Debes ingresar un email valido`
-                }
              }
         },
 
@@ -650,15 +660,22 @@
         },
 
         methods: {
+            //Se manda a llamar al objeto a editar
             editItem (item) {
+                //Con indexOf buscamos la posicion de este dentro del arreglo de desserts
                 this.editedIndex = this.desserts.indexOf(item)
+                //Clonacion del objeto recibido anteriormente
                 this.editedItem = Object.assign({}, item) // Clone an object
+                //Se abre el dialogo(formulario) que permite editar la informacion de un registro de l tabla de productos
                 this.dialog = true
                 this.edit_mode = true
             },
             close () {
+                //Cuando de cancela la operacion de editar se resetea el objeto
                 this.$refs.form.reset()
+                //Despues se cierra el dialogo que estaba abierto
                 this.dialog = false
+                //Se restablecen los valores iniciales del objeto
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -668,18 +685,23 @@
                 }
             },
              closeUnits () {
+                //Se cierra el dialogo de unidades
                 this.dialogUnits=false
             },
             async save () {
+                //Comprobacion para saber si estamos editando o creando un nuevo producto
                 if (this.editedIndex > -1) {
+                    //Cuando se selecciona la opcion de guardar se insertan los nuevos valores ingresados en el objeto de items
                     const response = await axios.put(`api/products/${this.editedItem.id}`, this.editedItem)
                     .catch(error => console.log(error));
+                    //Si algun dato es erroneo se muestra un mensaje de alerta
                     if (response.data.validation_errors) {
                         Toast.fire({
                             icon: 'error',
                             title: '¡Ocurrió un error, vuelve a intentarlo!'
                         });
                         console.log(response.data);
+                    //En caso de que los valores ingresados sean validos se muestra un mensaje de exito
                     } else {
                         this.getResults();
                         Toast.fire({
@@ -688,7 +710,11 @@
                         })
                     }
                 } else {
+                    //Se insertan los valores ingresados en el formulario en la base de datos
+                    //Mediante un controlador se realiza este registro
                     const response = await axios.post('/api/products',{
+                        //A cada campo de la tabla de prodcutos se le pasan los valores ingresados en el formulario de productos
+                        //Los nuevos valores se obienen de los modelos de cada componente del formulario de agregar producto
                         'nombre': this.editedItem.nombre,
                         'meta': this.editedItem.meta,
                         'descripcion' : this.editedItem.descripcion,
@@ -703,6 +729,7 @@
 
                     if (response) {
                         this.getResults();
+                        //Si el registro procede sin problemas se muestra un mensaje de exito
                         Toast.fire({
                             icon: 'success',
                             title: 'Producto registrado!'
@@ -714,6 +741,10 @@
                 this.close();
             },
             async saveUnits () {
+                //Para poder resgistrar una nueva unidad de medida se comprueba que esta no exista dentro de la tabla de unidades
+                //Con un ciclo for se recorre toda la tabla de productos
+                //Se verifica que la unidad ingresada no se igual que cualquier otra de la tabla de unidades
+                //Al encontrar una coincidencia se guarda el nombre de la unidad encontrada en una variable
                 for (let index = 0; index < this.units.length; index++) {
                     if (this.units[index].tipo == this.editUnit.tipo) {
                         this.nameUnit = this.units[index].tipo
@@ -721,7 +752,10 @@
                     }
 
                 }
+                //Se compruba que la unidad ingresada no sea igual que la coincidencia encontrada
                 if (this.editUnit.tipo== this.nameUnit) {
+                        //Si la unidad ingresada y la unidad encontrada son iguales no se permite el registro de la unidad
+                        //Despues de esto se muestra un mensaje de alerta
                         Swal.fire({
                         title: 'Alerta',
                         text: "Esta unidad ya está registrada!",
@@ -732,9 +766,11 @@
                         this.nameUnit=''
                     }
                     else{
+                        //En caso de existir ninguna coincidencia se prosigue con el registro de la unidad
                         const response = await axios.post('/api/units',{
                         'tipo':this.editUnit.tipo
                         }).catch(error => console.log("Error: " + error));
+                        //Si algo sale mal se muestra un mensaje de advertencia
                         if (response.data.validation_errors) {
                             Toast.fire({
                                 icon: 'error',
@@ -742,6 +778,7 @@
                             });
                             console.log(response.data);
                         } else {
+                            //Si no hay problemas durante el regisro se muestra un mensaje de exito
                             this.getTypeUnit();
                             Toast.fire({
                                 icon: 'success',
@@ -754,8 +791,11 @@
 
             },
             async deleteItem (item) {
+                //Para eliminar un producto se busca primero la posicion de este dentro del arreglo de prodcutos
                 this.editedIndex = this.desserts.indexOf(item)
+                //Se clona el objeto encontrado
                 this.editedItem = Object.assign({}, item)
+                //Se muestra un mensaje de confirmacion para eliminar productos
                 Swal.fire({
                     title: '¿Estás seguro de desactivar este prodcuto?',
                     text: "Se cambiara el status de activo!",
@@ -767,6 +807,8 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
+                        //Si se confirma la operacion se pasa el id del producto al metodo que elimina los registros
+                        //Despues de esto se muestra un mensaje de exito
                         axios.delete(`api/products/${this.editedItem.id}`).then(() => {
                             this.getResults();
                             Swal.fire(
@@ -776,6 +818,7 @@
                             )
 
                         }).catch(() => {
+                            //En caso de que algo salga mal se muestra un mensaje de alerta
                             Swal('Ocurrió un error', 'Algo salió mal con el servidor.', 'warning');
                         });
                     } else {
