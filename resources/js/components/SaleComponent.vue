@@ -448,19 +448,24 @@
                 pre: 0,
                 search: '',
                   date: '',
+                //Con el comando date se obtiene la fecha actual y se crea una nueva fecha
+                //aplicando un formato legible para el usuario
                 date1: new Date().toISOString().substr(0, 10),
                 menu:false,
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                 //Declaramos las propiedades del select_deliverer
                 select_deliverer: {
                     id: '',
                     nombre: '',
                 },
+                 //Declaramos las propiedades del select_route
                 select_route:{
                     route_id: '',
                     municipio: '',
                 },
+                //Declaramos las propiedades del select_product
                 select_product: {
                     id: '',
                     nombre: '',
@@ -468,6 +473,7 @@
                     precio_venta:'',
                     pw_id:'',
                 },
+                //Declaramos las propiedades del select_customer
                 select_customer:{
                     id: '',
                     nombre: '',
@@ -479,11 +485,8 @@
                     precio_venta:'',
                     pw_id:'',
                 },
-                select_tipoM: { text: 'Salida', id: '1' },
-                tipoMovimiento: [
-                    { nombre: 'Salida', id: '1' },
-                    { nombre: 'Devolución', id: '0' },
-                ],
+                //Se asignan los títulos de las columnas de la tabla principal,
+                //así como su valor correspondiente.
                 headers: [
                     { text: 'Cliente', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
                     { text: 'Monto', value: 'monto' },
@@ -491,6 +494,8 @@
                     { text: 'Fecha de venta', value: 'fecha'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
+                //Se asignan los títulos de las columnas de la tabla de productos de una venta,
+                //así como su valor correspondiente.
                 headers_productos: [
                     {text: 'Nombre', value: 'nombre'},
                     {text: 'Cantidad', value: 'cantidad'},
@@ -508,6 +513,8 @@
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
+                //Se crean los objetos a utilizar
+                //Se crean  e indican los elementos que contendra el objeto y su valor predeterminado
                     id: '',
                     //cantidad: '',
                     fecha:'',
@@ -525,12 +532,15 @@
                     created_at: '',
                     status: ''
                 },
+                //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
                 },
+                //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
+                //Mediante el uso de expresiones regulares verificamos que el dato ingresado sea un Email
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
@@ -553,6 +563,8 @@
 
         methods: {
             add(){
+                //Comprobamos que la cantidad ingresada por el usaurio sea menor a la cantidad
+                //que hay en la salida de dónde se toma el producto
                  if(this.editedItem.cantidad>this.select_product.cantidad){
                     Swal.fire({
                         title: 'Alerta',
@@ -567,10 +579,11 @@
                     }
                     else{
 
-
+                 //comprobamos que el producto seleccionado no esté ya registrado
                 for (let index = 0; index < this.productosS.length; index++) {
 
-                    if (this.productosS[index].nombre == this.select_product.nombre) {
+                   //obtenemos con index la posición del arreglo y de este su nombre para compararlo con el nombre seleccionado en el select
+                   if (this.productosS[index].nombre == this.select_product.nombre) {
                         this.producto = this.productosS[index].nombre
                         break
                     }
@@ -592,7 +605,6 @@
 
                 else{
 
-
                     this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
@@ -600,6 +612,8 @@
                     'precio_venta':this.select_product.precio_venta,
                     'pw_id':this.select_product.pw_id
                     }
+                    //Calculamos el total de la venta según los datos guardados por el usaurio
+                    //y alamacenados en "salidaProducto"
                     this.totalPrecio=this.totalPrecio+(this.select_product.precio_venta * this.editedItem.cantidad )
 
                     this.productosS.push(this.salidaProducto);
@@ -612,6 +626,7 @@
                     this.precio=''
 
                 }
+                //Limpiamos nuestros elementos del formulario
                 this.select_product=[0];
                     this.select_product.id='';
                     this.editedItem.cantidad='';
@@ -621,6 +636,7 @@
                     }
 
             },
+            //Método para permitir la modificación de la cantidad de un producto seleccionado
             modifyQuantity(item){
                 this.pre= this.editedItem.cantidad - this.productosS[this.editedIndex].cantidad;
                     console.log(this.pre)
@@ -635,9 +651,12 @@
 
             },
 
+             //Llamamos al objeto a editar
             editItem (item) {
+            //IndexOf nos permite  buscamos la posición de este dentro del arreglo de "sales"
                 this.editedIndex = this.sales.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
+                //Clonamos el objeto
+                this.editedItem = Object.assign({}, item)
                 this.dialog = true
                 this.edit_mode = true
             },
@@ -648,10 +667,12 @@
 
 
             },
+            //Eliminamos de la tabla y de la lista de productos para realizar la venta el producto seleccionado
             deleteItemProducts(item) {
                 const index = this.productosS.indexOf(item)
                 confirm('¿Estas seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
             },
+            //Cerramos el dialogo para cambiar la cantidad de producto a vender
             cancelarEditar(){
                 this.editedItem.cantidad='';
                 this.dialogEditProduct= false
@@ -671,7 +692,8 @@
                 }
             },
             async save () {
-                    const response = await axios.post('/api/sales',{ //llena tabla ventas
+                //Madamos los datos necesarios al controlador para llenar la tabla ventas
+                    const response = await axios.post('/api/sales',{
                         'fecha_salida': this.editedItem.fecha_salida,
                         'monto': this.totalPrecio,
                         'observacion': this.editedItem.observacion,
@@ -725,12 +747,14 @@
                 });
             },
 
+            //En este método obtenemos la cantidad del producto seleccionado
             getStock(){
                 this.stock= this.select_product.cantidad;
                 this.precio=this.select_product.precio_venta;
             },
 
-            getResults() {
+           //Obtenemos todas las ventas realizadas
+           getResults() {
                 axios.get('api/sales')
                 .then(response => {
                     this.sales = response.data;
@@ -738,6 +762,7 @@
                     this.loading = false;
                 });
             },
+            //Obtenemos todos los repartidores activos
             getDeliverers(){
                 axios.get('api/deliverers')
                 .then(response => {
@@ -746,6 +771,7 @@
                     this.loading = false;
                 });
             },
+            //Obtenemos las rutas que tiene un repartidor (según el id otorgado)
             getRoutesList(){
                 this.dis=false
                 axios.get(`api/routes/${this.select_deliverer.id}`)
@@ -755,6 +781,7 @@
                     this.loading = false;
                 });
             },
+            //En este método obtenemos todos los productos que tiene la salida indicada
             getProducts(){
                 axios.get(`api/warehouse_movements/1`)
                 .then(response => {
@@ -763,6 +790,7 @@
                     this.loading = false;
                 });
             },
+            //Obtenemos los clientes que pertenecen a la ruta indicada
             getClientsNames(){
                 this.dis=false
                 axios.get(`api/getCustomer/${this.select_route.route_id}`)
@@ -772,6 +800,8 @@
                     this.loading = false;
                 });
             },
+
+            //Obtemos los productos que tiene la venta seleccionada(id de la venta)
             getSaleDetail(){
                 axios.get(`api/getSaleDetail/3`)
                 .then(response => {
@@ -780,6 +810,7 @@
                     this.loading = false;
                       });
             },
+            //Obtenemos las 3 ultimas salidas que ha realizado un repartidor (enviamos el id del repartidor)
             getmovement(){
                 axios.get(`api/getmovementList/1`)
                 .then(response => {

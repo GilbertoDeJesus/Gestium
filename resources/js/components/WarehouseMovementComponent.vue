@@ -469,29 +469,37 @@
                 producto: '',
                 nDeliverer: '',
                 nFecha: '',
+                //Con el comando date se obtiene la fecha actual y se crea una nueva fecha
+                //aplicando un formato legible para el usuario
                 date1: new Date().toISOString().substr(0, 10),
                 menu:false,
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                //Declaramos las propiedades del select_deliverer
                 select_deliverer: {
                     id: '',
                     nombre: '',
                 },
+                //Declaramos las propiedades del select_product
                  select_product: {
                     id: '',
                     nombre: '',
                 },
+                //Declaramos las propiedades del salidaProducto
                 salidaProducto:{
                     id:'',
                     nombre:'',
                     cantidad:'',
                 },
+                 //Declaramos las propiedades del select_tipoM
                 select_tipoM: { text: 'Salida', id: '1' },
                 tipoMovimiento: [
                     { nombre: 'Salida', id: '1' },
                     { nombre: 'Devolución', id: '0' },
                 ],
+                //Se asignan los títulos de las columnas de la tabla principal,
+                 //así como su valor correspondiente.
                 headers: [
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
                     { text: 'Repartidor', value: 'nombre' },
@@ -499,11 +507,16 @@
                     { text: 'Cantidad de productos', value: 'sum'},
                     { text: 'Lista de productos', value: 'actions', sortable: false },
                 ],
+                //Se asignan los títulos de las columnas de la tabla que se muestra en el dialogo
+                 //para agregar productos en una salida (productos seleccionados)
+                 //así como su valor correspondiente.
                 hedaers_productList: [ /*align: 'start', sortable: false,*/
                     { text: 'Producto', value: 'nombre' },
                     { text: 'Cantidad', value: 'cantidad'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                 ],
+                //Se asignan los títulos de las columnas de la tabla que se muestra en el dialogo
+                //de los productos que tiene la salida seleccionada
                 headers_productos: [
                     {text: 'Nombre', value: 'nombre'},
                     {text: 'Cantidad', value: 'cantidad'},
@@ -516,6 +529,8 @@
                 productos: [],
                 acum:1,
                 editedIndex: -1,
+                //Se crean los objetos a utilizar
+                //Se crean  e indican los elementos que contendra el objeto y su valor predeterminado
                 editedItem: {
                     id: '',
                     cantidad: '',
@@ -530,12 +545,15 @@
                     fecha_salida:'',
                     status: ''
                 },
+                 //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
                 },
+                 //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
+                //Mediante el uso de expresiones regulares verificamos que el dato ingresado sea un Email
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
@@ -545,6 +563,7 @@
         },
 
         computed: {
+            //Verificamos si el formulario es de creación o actualización y dependiendo de esto se le asigna un título
             formTitle () {
                 return this.editedIndex === -1 ? 'Nueva salida' : 'Editar registro'
             },
@@ -566,8 +585,9 @@
         methods: {
             add(){
 
+                //comprobamos que el producto seleccionado no esté ya registrado
                 for (let index = 0; index < this.productosS.length; index++) {
-
+                    //obtenemos con index la posición del arreglo y de este su nombre para compararlo con el nombre seleccionado en el select
                     if (this.productosS[index].nombre == this.select_product.nombre) {
                         this.producto = this.productosS[index].nombre
                         break
@@ -575,7 +595,6 @@
 
                 }
                 if (this.select_product.nombre == this.producto) {
-
                     Swal.fire({
                         title: 'Alerta',
                         text: "Este producto ya esta en la lista!",
@@ -585,14 +604,17 @@
                         });
                     this.producto=''
                 }else{
+                    //guardamos en "salidaProducto" todos los productos seleccionados junto con la cantidad de cada uno
                     this.salidaProducto={
                     'id':this.select_product.id,
                     'nombre':this.select_product.nombre,
                     'cantidad':this.editedItem.cantidad
                     }
 
+                    //Enviamos a nuestro controlador los productos seleccionados y su cantidad
                     this.productosS.push(this.salidaProducto);
                     console.log(this.productosS)
+                    //Limpiamos nuestros elementos del formulario
                     this.select_product=[0];
                     this.select_product.id='';
                     this.editedItem.cantidad='';
@@ -606,6 +628,7 @@
 
 
             },
+
             modifyQuantity(item){
                 //this.editedIndex = this.productosS.indexOf(item)
                 this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
@@ -617,10 +640,12 @@
 
             },
 
+            //Llamamos al objeto a editar
             editItem (item) {
+                 //IndexOf nos permite  buscamos la posición de este dentro del arreglo de "salidas"
                 this.editedIndex = this.salidas.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
-
+                 // Clonamos el objeto
+                this.editedItem = Object.assign({}, item)
                 this.dialog = true
                 this.edit_mode = true
             },
@@ -633,6 +658,7 @@
 
 
             },
+            //Eliminamos de la tabla y de la lista de productos para realizar la salida al producto seleccionado
             deleteItemProducts(item) {
                 const index = this.productosS.indexOf(item)
                 //confirm('¿Esta seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
@@ -659,10 +685,12 @@
                     }
                 });
             },
+            //Cancelamos lae¿ edición de cancelar la cantidad elegida de un producto
             cancelarEditar(){
                 this.editedItem.cantidad='';
                 this.dialogEditProduct= false
             },
+            //Cerramos el dialogo para crear una nuevo movimiento
             close () {
                 this.$refs.form.reset()
                 this.dialog = false
@@ -676,12 +704,14 @@
                     this.edit_mode = false
                 }
             },
+            //Cerramos el dialogo que muestra los productos de una salida
             closeProductList(){
                 this.dialogProductList=false
                 this.productList=[]
             },
             async save () {
-                    const response = await axios.post('/api/warehouse_movements',{ //llena tabla movimientos
+                //Mandamos los datos necesarios a nuestro controlador para llenar la tabla de movimientos y movimientos_producto
+                    const response = await axios.post('/api/warehouse_movements',{
                         'fecha_salida': this.editedItem.fecha_salida,
                         'deliverer_id': this.select_deliverer.id,
                         'products':this.productosS,
@@ -689,6 +719,7 @@
                     }).catch(error => console.log("Error: " + error));
 
 
+                   //De acuerdo al tipo de movimiento se llama la función para agrear (devolución) o realizar salida (salida) de un producto
                    if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
                        const response=await axios.put(`/api/updateS`,
                         this.productosS).catch(error => console.log("Error: " + error));
@@ -721,6 +752,7 @@
                 this.close();
 
             },
+            //Eliminamos de la tabla el movimiento seleccionado y cambiamos su "status"
             async deleteItem (item) {
                 this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -751,6 +783,7 @@
                     }
                 });
             },
+            //Abrimos un dialogo que muestra todos los productos de una salida
             async showdetails(item){
                 this.editedIndex = this.salidas.indexOf(item)
                 this.editedItem = Object.assign({}, item) // Clone an object
@@ -763,6 +796,7 @@
 
             },
 
+            //Obtenemos en "salidas" todas los movimientos realizados
             getResults() {
                 axios.get('api/warehouse_movements')
                 .then(response => {
@@ -771,6 +805,7 @@
                     this.loading = false;
                 });
             },
+            //En este método obtenemos los repartidores con estado activo
             getDeliverers(){
                 axios.get('api/deliverers')
                 .then(response => {
@@ -779,6 +814,7 @@
                     this.loading = false;
                 });
             },
+             //En este método obtenemos los repartidores con estado activo
             getProducts(){
                 axios.get('api/products')
                 .then(response => {
@@ -787,6 +823,7 @@
                     this.loading = false;
                 });
             },
+             //En este método obtenemos todos los productos que tiene la salida elegida (id_movement)
             getProductsList(){
                 axios.get(`api/warehouse_movements/${this.id_movement}`)
                 .then(response => {
