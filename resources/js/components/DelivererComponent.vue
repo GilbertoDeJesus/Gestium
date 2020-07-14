@@ -483,7 +483,7 @@
                 }
             },
             async save () {
-                //Comprobamos si estamos agregando o editando un cliente
+                //Comprobamos si estamos agregando o editando un repartidor
                 if (this.editedIndex > -1) {
                     //Cuando se selecciona la opción de guardar se insertar los nuevos
                     //valores ingresados en el objeto de items (actualizamos)
