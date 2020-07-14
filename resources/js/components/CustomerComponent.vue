@@ -14,7 +14,7 @@
                     <v-col cols="11" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
-                            :items="desserts"
+                            :items="customers"
                             sort-by="calories"
                             class="elevation-4"
                             :search="search"
@@ -339,23 +339,26 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                //Declaramos las propiedades del select
                 select_route:{
                     id: '',
                     municipio: '',
                 },
+                 //Se asignan los títulos de las columnas de la tabla principal,
+                 //así como su valor correspondiente.
                 headers: [
                     { text: 'Nombre', value: 'nombre'},
-                    //{ text: 'Telefono', value: 'telefono' },
-                    //{ text: 'Email', value: 'email' },
                     { text: 'Dirección', value: 'direccion' },
                     { text: 'Establecimiento', value: 'establecimiento' },
-                    //{ text: 'Ruta', value: 'route_id' },
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                desserts: [],
+
+                customers: [],
                 routes:[],
                 editedIndex: -1,
+                //Se crean los objetos a utilizar
+                //Se crean  e indican los elementos que contendra el objeto y su valor predeterminado
                 editedItem: {
                     id: '',
                     nombre: '',
@@ -376,12 +379,15 @@
                     route_id: '',
                     status: ''
                 },
+                //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
                 },
+                //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
+                //Mediante el uso de expresiones regulares verificamos que el dato ingresado sea un Email
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
@@ -390,6 +396,7 @@
         },
 
         computed: {
+            //Verificamos si el formulario es de creación o actualización y dependiendo de esto se le asigna un título
             formTitle () {
                 return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
             },
@@ -402,16 +409,23 @@
         },
 
         methods: {
+            //Llamamod al objeto a editar
             editItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
+                //IndexOf nos permite  buscamor la posicion de este dentro del arreglo de "customers"
+                this.editedIndex = this.customers.indexOf(item)
+                // Clonamos el objeto
+                this.editedItem = Object.assign({}, item)
+                //Se abre el dialogo(formulario) que permite editar la info. del cliente
                 this.dialog = true
                 this.edit_mode = true
             },
             close () {
+                //Cuando de cancela la operación de editar se resetea el objeto
                 this.$refs.form.reset()
+                //Cerramos el dialogo que estaba abierto
                 this.dialog = false
                 this.$nextTick(() => {
+                //Se restablecen los valores iniciales del objeto
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
                 })
@@ -420,16 +434,21 @@
                 }
             },
             async save () {
+                //Comprobamos si estamos agregando o editando un cliente
                 if (this.editedIndex > -1) {
+                    //Cuando se selecciona la opción de guardar se insertar los nuevos valores ingresados en el objeto de items
                     const response = await axios.put(`api/customers/${this.editedItem.id}`, this.editedItem)
                     .catch(error => console.log(error));
+                    //Si algun dato es erroneo se muestra un mensaje de alerta
                     if (response.data.validation_errors) {
                         Toast.fire({
                             icon: 'error',
                             title: '¡Ocurrió un error, vuelve a intentarlo!'
                         });
                         console.log(response.data);
+                        //Si los valores son correctos se muestra un mensaje de exito
                     } else {
+                        //Ejecutamos el método "getResults"
                         this.getResults();
                         Toast.fire({
                             icon: 'success',
@@ -437,6 +456,7 @@
                         })
                     }
                 } else {
+                    //Enviamos los datos a nuestro controlador para insertarlo en la bd
                     const response = await axios.post('/api/customers',{
                         'nombre': this.editedItem.nombre,
                         'telefono': this.editedItem.telefono,
@@ -459,8 +479,9 @@
 
                 this.close();
             },
+            //Eliminamos de la tabla al cliente seleccionado y cambiamos su "status"
             async deleteItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+                this.editedIndex = this.customers.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
                     title: '¿Estás seguro de desactivar este cliente?',
@@ -490,18 +511,23 @@
                 });
             },
 
+            //obtenemos la consulta de la función index
             getResults() {
                 axios.get('api/customers')
                 .then(response => {
-                    this.desserts = response.data;
+                    //guardamos lo obtenido en el arreglo "customers"
+                    this.customers = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
             },
+
+            //obtenemos de nuestro controlador la ruta a la que pertenecen los clientes
             getRoutesList(){
                 this.dis=false
                 axios.get('api/routes')
                 .then(response => {
+                   // Se insertan los objetos recibidos en el arreglo "routes"
                     this.routes = response.data;
                     console.log(response.data)
                     this.loading = false;
