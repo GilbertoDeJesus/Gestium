@@ -314,16 +314,21 @@
                 id_Route: 0,
                 numRep: 0,
                 nameDeliverer: '',
+                //Declaramos las propiedades del select
                 select: {
                     id: '',
                     nombre: '',
                 },
+                //Se asignan los títulos de las columnas de la tabla principal,
+                 //así como su valor correspondiente.
                 headers: [ /*align: 'start', sortable: false,*/
                     { text: 'Municipio', value: 'municipio' },
                     { text: 'Creado', value: 'created_at'},
                     { text: 'Num. de repartidores', value: 'deliverer.length'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
+                //Se asignan los títulos de las columnas de la tabla que se muestra en el dialogo,
+                 //así como su valor correspondiente.
                 headersDeliverers: [
                     { text: 'Nombre', value: 'nombre'},
                     { text: 'Registrado', value: 'created_at'}
@@ -336,6 +341,8 @@
                     {created_at: ''},
                 ],
                 editedIndex: -1,
+                //Se crean los objetos a utilizar
+                //Se crean  e indican los elementos que contendra el objeto y su valor predeterminado
                 editedItem: {
                     id: '',
                     nombre: '',
@@ -352,12 +359,15 @@
                     status: '',
                     numDev: ''
                 },
+                //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
                 },
+                //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
+                //Mediante el uso de expresiones regulares verificamos que el dato ingresado sea un Email
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
@@ -367,6 +377,7 @@
         },
 
         computed: {
+            //Verificamos si el formulario es de creación o actualización y dependiendo de esto se le asigna un título
             formTitle () {
                 return this.editedIndex === -1 ? 'Nueva Ruta' : 'Editar registro'
             },
@@ -380,23 +391,33 @@
         },
 
         methods: {
+             //Llamamos al objeto a editar
             editItem (item) {
+                //IndexOf nos permite  buscamos la posición de este dentro del arreglo de "routes"
                 this.editedIndex = this.desserts.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
+                 // Clonamos el objeto
+                this.editedItem = Object.assign({}, item)
+                //Se abre el dialogo(formulario) que permite asignar un repartidor a una ruta
                 this.dialog = true
                 this.edit_mode = true
             },
+
             addDeliverers (item){
                 this.editedIndex = this.desserts.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
+                this.editedItem = Object.assign({}, item)
                 this.id_Route=this.editedItem.id
+                //llamamos al método "getDelivererRoute"
                 this.getDelivererRoute()
+                //abrimos el dialogo para añadir un nuevo repartidor
                 this.dialogAddDeliverer = true
             },
             close () {
+                //Cuando de cancela la operación de editar se resetea el objeto
                 this.$refs.form.reset()
+                //Cerramos el dialogo que estaba abierto
                 this.dialog = false
                 this.$nextTick(() => {
+                //Se restablecen los valores iniciales del objeto
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
                 })
@@ -404,10 +425,13 @@
                     this.edit_mode = false
                 }
             },
+            //Cerramos el dialogo para asignar nuevos repartidores a una ruta
             closeDeliverer () {
                 this.dialogAddDeliverer=false
             },
             async save () {
+                 //vamos a crear una ruta y asignar una ruta enviando nuestros datos de los formularios
+                 //a la función indicada del controlador solicitado
                     const response = await axios.post('/api/routes',{
                         'municipio': this.editedItem.municipio,
                         'status': this.editedItem.status,
@@ -427,6 +451,7 @@
                 this.close();
             },
             async saveDeliverer () {
+                //comprobamos que el repartidor seleccionado no está asigando a la ruta que elegimos
                 for (let index = 0; index < this.route.length; index++) {
                     if (this.route[index].nombre == this.select.nombre) {
                         this.nameDeliverer = this.route[index].nombre
@@ -446,6 +471,7 @@
                         this.nameDeliverer=''
                     }
                     else{
+                        //Enviamos la lista de los nuevos repartidores para asignarlos a la ruta elegida
                         const response = await axios.post('/api/createdeliverer_route',{
                         'id':this.editedItem.id,
                         'deliverer_id': this.select.id
@@ -470,6 +496,7 @@
 
 
             },
+            //Eliminamos de la tabla a la ruta seleccionada y cambiamos su "status"
             async deleteItem (item) {
                 this.editedIndex = this.desserts.indexOf(item)
                 this.editedItem = Object.assign({}, item)
@@ -501,9 +528,11 @@
                 });
             },
 
+            //Obtenemos todas las rutas que devuelve la consulta de nuestro controlador solicitado
             getResults() {
                 axios.get('api/routes')
                 .then(response => {
+                    //Lo guardamos en el arreglo
                     this.desserts = response.data;
                     console.log(response.data)
                     this.loading = false;
@@ -512,6 +541,7 @@
                 });
 
             },
+            //Obtenemos todos los reprtiores con estado activo
             getDeliverers(){
                 axios.get('api/deliverers')
                 .then(response => {
@@ -520,6 +550,8 @@
                     this.loading = false;
                 });
             },
+            //obtenemos de nuestro controlador los repartidores que tiene una ruta
+            //y lo guardamos en el arreglo "route"
             getDelivererRoute(){
                 axios.get(`api/getDelivererList/${this.id_Route}`)
                 .then(response => {

@@ -14,7 +14,7 @@
                     <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
-                            :items="desserts"
+                            :items="deliverers"
                             sort-by="calories"
                             class="elevation-3"
                             :search="search"
@@ -386,23 +386,26 @@
                 dialog: false,
                 search: '',
                 date: '',
+                //Con el comando date se obtiene la fecha actual y se crea una nueva fecha
+                //aplicando un formato legible para el usuario
                 date1: new Date().toISOString().substr(0, 10),
                 menu1:false,
                 menu2:false,
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                 //Se asignan los títulos de las columnas de la tabla principal,
+                 //así como su valor correspondiente.
                 headers: [
                     { text: 'Nombre', value: 'nombre'} , /*align: 'start', sortable: false,*/
                     { text: 'Telefono', value: 'telefono' },
-                    //{ text: 'Email', value: 'email' },
-                    //{ text: "Fecha de nacimiento", value: "fecha_nacimiento"},
-                    //{ text: "Fecha de contratación", value: "fecha_contratacion"},
                     { text: 'Registrado', value: 'created_at'},
                     { text: 'Acciones', value: 'actions', sortable: false },
                 ],
-                desserts: [],
+                deliverers: [],
                 editedIndex: -1,
+                 //Se crean los objetos a utilizar
+                //Se crean  e indican los elementos que contendra el objeto y su valor predeterminado
                 editedItem: {
                     id: '',
                     nombre: '',
@@ -425,12 +428,15 @@
                     fecha_contratacion: '',
                     status: ''
                 },
+                //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
                 },
+                //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
                     return v => v && v.length >= length || `Longitud mínima de ${length} caracteres`
                 },
+                //Mediante el uso de expresiones regulares verificamos que el dato ingresado sea un Email
                 email_form() {
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
@@ -439,6 +445,7 @@
         },
 
         computed: {
+            //Verificamos si el formulario es de creación o actualización y dependiendo de esto se le asigna un título
             formTitle () {
                 return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
             },
@@ -451,16 +458,23 @@
         },
 
         methods: {
+             //Llamamod al objeto a editar
             editItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
-                this.editedItem = Object.assign({}, item) // Clone an object
+                //IndexOf nos permite  buscamor la posicion de este dentro del arreglo de "deliverers"
+                this.editedIndex = this.deliverers.indexOf(item)
+                // Clonamos el objeto
+                this.editedItem = Object.assign({}, item)
+                //Se abre el dialogo(formulario) que permite editar la info. del repartidor
                 this.dialog = true
                 this.edit_mode = true
             },
             close () {
+                //Cuando de cancela la operación de editar se resetea el objeto
                 this.$refs.form.reset()
+                //Cerramos el dialogo que estaba abierto
                 this.dialog = false
                 this.$nextTick(() => {
+                 //Se restablecen los valores iniciales del objeto
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
                 })
@@ -469,16 +483,22 @@
                 }
             },
             async save () {
+                //Comprobamos si estamos agregando o editando un repartidor
                 if (this.editedIndex > -1) {
+                    //Cuando se selecciona la opción de guardar se insertar los nuevos
+                    //valores ingresados en el objeto de items (actualizamos)
                     const response = await axios.put(`api/deliverers/${this.editedItem.id}`, this.editedItem)
                     .catch(error => console.log(error));
+                    //Si algun dato es erroneo se muestra un mensaje de alerta
                     if (response.data.validation_errors) {
                         Toast.fire({
                             icon: 'error',
                             title: '¡Ocurrió un error, vuelve a intentarlo!'
                         });
                         console.log(response.data);
+                         //Si los valores son correctos se muestra un mensaje de exito
                     } else {
+                        //Ejecutamos el método "getResults"
                         this.getResults();
                         Toast.fire({
                             icon: 'success',
@@ -486,6 +506,7 @@
                         })
                     }
                 } else {
+                     //Enviamos los datos a nuestro controlador para insertarlo en la bd
                     const response = await axios.post('/api/deliverers',{
                         'nombre': this.editedItem.nombre,
                         'aPaterno': this.editedItem.aPaterno,
@@ -509,8 +530,9 @@
 
                 this.close();
             },
+            //Eliminamos de la tabla al repartidor seleccionado y cambiamos su "status"
             async deleteItem (item) {
-                this.editedIndex = this.desserts.indexOf(item)
+                this.editedIndex = this.deliverers.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 Swal.fire({
                     title: '¿Estás seguro de desactivar este repartidor?',
@@ -540,10 +562,11 @@
                 });
             },
 
+            //obtenemos en el arreglo "deliverers" lo que devulve la consulta del controlador solicitada
             getResults() {
                 axios.get('api/deliverers')
                 .then(response => {
-                    this.desserts = response.data;
+                    this.deliverers = response.data;
                     console.log(response.data)
                     this.loading = false;
                 });
