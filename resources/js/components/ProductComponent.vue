@@ -382,6 +382,7 @@
                                                         v-model="selectProvider"
 
                                                         :items="providers"
+
                                                         item-text="nombre"
                                                         item-value="id"
                                                         label="Proveedor"

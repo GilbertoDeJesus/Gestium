@@ -218,8 +218,16 @@
                                                             <v-data-table
                                                             :headers="headers_productos"
                                                             :items="productosS"
+                                                            sort-by="calories"
+                                                            :loading="loading" loading-text="Estamos cargando tu información"
+                                                            :items-per-page="6"
+                                                            :footer-props="{
+                                                                'items-per-page-options': [7, 10, 20]
+
+                                                            }"
                                                             dense
                                                             >
+
 
                                                              <template v-slot:item.actions="{ item }">
                                                                 <v-icon small class="mr-2" @click="editItemProduct(item)"> mdi-pencil </v-icon>
@@ -273,7 +281,7 @@
                                                                 color="#ff5400"
                                                                 dense
                                                                 border="left"
-                                                                elevation="4">No se ha realizado ninguna saida.</v-alert>
+                                                                elevation="4">No se ha seleccionado ningun producto.</v-alert>
                                                             </template>
                                                             </v-data-table>
                                                         </v-col>
@@ -343,7 +351,7 @@
                                                         <v-icon style="font-size:2rem;">mdi-briefcase</v-icon>
                                                     </v-list-item-icon>
                                                     <v-list-item-content>
-                                                        <v-list-item-title style="font-size:1.5rem;">{{formNombre}}</v-list-item-title>
+                                                        <v-list-item-title style="font-size:1.5rem;">{{formNombre | formatUpperCase}}</v-list-item-title>
                                                         <v-list-item-subtitle style="font-size:1rem;">Repartidor</v-list-item-subtitle>
                                                     </v-list-item-content>
                                                 </v-list-item>
@@ -353,7 +361,7 @@
                                                         <v-icon style="font-size:2rem;">mdi-calendar</v-icon>
                                                     </v-list-item-icon>
                                                     <v-list-item-content>
-                                                        <v-list-item-title style="font-size:1.5rem;">{{formFecha}}</v-list-item-title>
+                                                        <v-list-item-title style="font-size:1.5rem;">{{formFecha | formatDateTime | formatUpperCase}}</v-list-item-title>
                                                         <v-list-item-subtitle style="font-size:1rem;">Fecha de salida</v-list-item-subtitle>
                                                     </v-list-item-content>
                                                 </v-list-item>
@@ -503,7 +511,7 @@
                 headers: [
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
                     { text: 'Repartidor', value: 'nombre' },
-                    { text: 'Fecha de salida', value: 'fecha_salida'},
+                    { text: 'Fecha de salida', value: 'created_at'},
                     { text: 'Cantidad de productos', value: 'sum'},
                     { text: 'Lista de productos', value: 'actions', sortable: false },
                 ],
@@ -584,7 +592,7 @@
 
         methods: {
             add(){
-
+                this.productosS=[]
                 //comprobamos que el producto seleccionado no esté ya registrado
                 for (let index = 0; index < this.productosS.length; index++) {
                     //obtenemos con index la posición del arreglo y de este su nombre para compararlo con el nombre seleccionado en el select
@@ -631,11 +639,22 @@
 
             modifyQuantity(item){
                 //this.editedIndex = this.productosS.indexOf(item)
-                this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
-                this.editedIndex = -1
-                this.editedItem.cantidad='';
-                //this.indexCantidad=null;
-                this.dialogEditProduct = false
+
+                if (this.editedItem.cantidad != "") {
+                    this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
+                    this.editedIndex = -1
+                    this.editedItem.cantidad='';
+                    //this.indexCantidad=null;
+                    this.dialogEditProduct = false
+                }else{
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'No has ingresado una cantidad',
+
+                        })
+                }
+
 
 
             },
@@ -692,9 +711,9 @@
             },
             //Cerramos el dialogo para crear una nuevo movimiento
             close () {
+                this.productosS=[]
                 this.$refs.form.reset()
                 this.dialog = false
-                this.productosS=[]
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -789,7 +808,7 @@
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.id_movement= this.editedItem.id
                 this.nDeliverer = this.editedItem.nombre
-                this.nFecha= this.editedItem.fecha_salida
+                this.nFecha= this.editedItem.created_at
                 this.getProductsList()
                 this.dialogProductList=true
 

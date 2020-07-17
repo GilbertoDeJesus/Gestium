@@ -25,9 +25,9 @@ class WarehouseMovementController extends Controller
        ->join('product_warehouse_movement', 'warehouse_movements.id', '=',
         'product_warehouse_movement.warehouse_movement_id')
         //Enviamos la suma de todos los productos solicitados en el movimiento
-       ->select('warehouse_movements.id', 'warehouse_movements.fecha_salida',
+       ->select('warehouse_movements.id', 'warehouse_movements.fecha_salida', 'warehouse_movements.created_at',
          WarehouseMovement::raw('sum(cantidad) as sum'), 'deliverers.nombre')
-       ->groupBy('warehouse_movements.id', 'warehouse_movements.fecha_salida',
+       ->groupBy('warehouse_movements.id', 'warehouse_movements.fecha_salida', 'warehouse_movements.created_at',
         'deliverers.nombre')
        ->get();
     }

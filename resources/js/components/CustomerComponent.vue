@@ -228,7 +228,7 @@
                                                         v-if="!edit_mode"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre')]"
+                                                        :rules="[required('telefono')]"
                                                         v-model="editedItem.telefono"
                                                         :counter="15"
                                                         type="text"
@@ -243,7 +243,7 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
+                                                        :rules="[required('dirección'), minimum_length(4)]"
                                                         v-model="editedItem.direccion"
                                                         :counter="45"
                                                         label="Dirección"
@@ -259,7 +259,7 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
+                                                        :rules="[required('establecimiento'), minimum_length(4)]"
                                                         v-model="editedItem.establecimiento"
                                                         :counter="30"
                                                         label="Establecimiento"
