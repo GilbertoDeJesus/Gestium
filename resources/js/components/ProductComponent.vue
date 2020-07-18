@@ -26,13 +26,7 @@
                             <template v-slot:item.created_at="{ item }">
                                {{item.created_at | formatDateTime | formatUpperCase}}
                             </template>
-                        <!--    <template v-slot:item.nombre="{ item }">
-                                <v-chip class="ma-2">
-                                    <v-avatar left>
-                                        <v-icon color="teal">mdi-archive</v-icon>
-                                    </v-avatar>{{item.nombre | formatUpperCase}}
-                                </v-chip>
-                            </template> -->
+
                             <template v-slot:item.nombre="{ item }">
                                 <v-row
                                     class="px-6 py-3"
@@ -49,6 +43,7 @@
                                         <v-chip
                                             pill
                                             v-on="on"
+                                            title="Ver detalles"
                                         >
                                             <v-avatar left>
                                             <v-icon color="teal">mdi-archive</v-icon>
@@ -59,8 +54,8 @@
                                         <v-card width="350">
                                         <v-list dark>
                                             <v-list-item>
-                                            <v-list-item-avatar>
-                                                <v-icon large color="indigo">mdi-package-variant</v-icon>
+                                            <v-list-item-avatar color="teal">
+                                                <v-icon large color="white">mdi-package-variant</v-icon>
                                             </v-list-item-avatar>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.nombre | formatUpperCase}}</v-list-item-title>
@@ -78,7 +73,7 @@
                                         <v-list two-line dense>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal" >mdi-weight-kilogram</v-icon>
+                                                <v-icon color="indigo" >mdi-weight-kilogram</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.unit.tipo}}</v-list-item-title>
@@ -87,7 +82,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal" >monetization_on</v-icon>
+                                                <v-icon color="indigo" >monetization_on</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.precio_compra}}</v-list-item-title>
@@ -96,7 +91,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal" >monetization_on</v-icon>
+                                                <v-icon color="indigo" >monetization_on</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.precio_venta}}</v-list-item-title>
@@ -105,7 +100,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal" >mdi-table-large</v-icon>
+                                                <v-icon color="indigo" >mdi-table-large</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.stock}}</v-list-item-title>
@@ -114,7 +109,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal" >mdi-comment-text</v-icon>
+                                                <v-icon color="indigo" >mdi-comment-text</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.descripcion}}</v-list-item-title>
@@ -123,7 +118,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal" >mdi-calendar</v-icon>
+                                                <v-icon color="indigo" >mdi-calendar</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.created_at | formatDateTime | formatUpperCase}}</v-list-item-title>
@@ -177,101 +172,126 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialogUnits" scrollable max-width="650px">
+                                <v-dialog v-model="dialogUnits" scrollable max-width="900px">
                                     <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" outlined dark v-on="on"><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
                                 </template>
 
-                                <v-card style="border-radius:20px;">
-                                    <v-container class="align-items-center" style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
-                                         <v-col
-                                        cols="12"
-                                        md="12"
-                                        sm="12">
-                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
-                                                <i class="material-icons" style="font-size:85px;">straighten</i>
-                                            </p>
-                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>Agregar unidades de medida</strong></p>
-                                        </v-col>
-                                    </v-container>
+                                <v-card style="border-radius:10px; height:100%; margin: 0; display: flex; flex-direction: column;">
 
-                                <v-card-text style="padding-bottom:0px;">
-                                    <v-container style="padding-bottom:0px;">
-                                        <v-form v-model="valid" ref="form">
-                                            <v-container>
+                                <v-card-text style="padding-bottom:0px; height:100%; padding-left:12px;" >
+
+                                        <v-form v-model="valid" ref="form" style="height:100%; margin-bottom: 0px;">
+
                                                 <v-row>
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
-                                                    sm="12">
-                                                        <v-row>
+                                                    md="5"
+                                                    sm="12"
+                                                    style="background: linear-gradient(60deg, #fd2d21, #fc831a);">
+                                                    <v-container class="align-items-center">
+                                                     <v-container class="align-items-center">
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        style="margin-bottom: 2rem;">
+                                                            <p style="text-align: center; margin-bottom: 5px;">
+                                                                <v-icon style="font-size:95px; color:#ffffff;">mdi-weight-kilogram</v-icon>
+                                                            </p>
+                                                            <p style="text-align: center; color:#ffffff; font-size:22px; margin-bottom: -10px;">Agregar unidades</p>
+                                                        </v-col>
+                                                    </v-container>
+                                                    <v-row>
                                                             <v-col
                                                             cols="12"
                                                             md="12"
                                                             sm="12"
+                                                            style="margin-bottom: 3rem;"
                                                             >
                                                             <v-text-field
                                                             :rules="[required('tipo')]"
+
                                                                 v-model="editUnit.tipo"
                                                                 label="Nueva unidad de medida"
                                                                 type="text"
                                                                 clearable
+                                                                dark
                                                                 prepend-icon="straighten"
                                                                 required
                                                             ></v-text-field>
                                                             </v-col>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="6">
+                                                                <v-btn outlined color="#fff" @click="closeUnits">Cancelar</v-btn>
+                                                            </v-col>
+                                                            <v-col
+                                                            cols="12"
+                                                            md="6"
+                                                            sm="6">
+                                                                <v-btn color="#fff" style="float: right; color: #ff5200;" :disabled="!valid"  @click="saveUnits" >Guardar</v-btn>
+                                                            </v-col>
                                                         </v-row>
+                                                    </v-container>
                                                     </v-col>
+
                                                     <v-col
                                                     cols="12"
-                                                    md="12"
+                                                    md="7"
                                                     sm="12">
+                                                    <v-container class="align-items-center">
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="12"
+                                                        style="padding-bottom: 0px;">
+                                                            <p style="text-align: center; font-size:28px; margin-bottom: -10px;"><strong>Listado de Unidades</strong></p>
+                                                            <v-container style="margin-top:1.5rem;" >
+
+                                                                <v-spacer></v-spacer>
+                                                                    <v-text-field
+                                                                        v-model="searchU"
+                                                                        prepend-inner-icon="search"
+                                                                        label="Buscar unidades"
+                                                                        hide-details
+                                                                        filled
+                                                                        rounded
+                                                                        single-line
+                                                                        dense
+                                                                        color="#ff5200"
+                                                                        clearable
+                                                                    ></v-text-field>
+                                                                <v-spacer></v-spacer>
+
+                                                            </v-container>
+                                                        </v-col>
+
+                                                    </v-container>
+                                                    <v-container>
                                                         <v-data-table
                                                             :headers="headersUnits"
                                                             :items="units"
                                                             sort-by="calories"
                                                             class="elevation-3"
-                                                            :search="search"
+                                                            :search="searchU"
                                                             :loading="loading" loading-text="Estamos cargando tu información"
                                                             :items-per-page="6"
                                                             :footer-props="{
                                                                 'items-per-page-options': [7, 10, 20]
                                                             }">
-
-                                                            <template v-slot:top>
-                                                            <v-toolbar flat color="white">
-                                                                <v-toolbar-title class="orange--text text--accent-4 font-weight-bold">Unidades de medida</v-toolbar-title>
-                                                                <v-divider
-                                                                class="mx-4"
-                                                                inset
-                                                                vertical
-                                                                ></v-divider>
-                                                                <v-text-field
-                                                                    v-model="search"
-                                                                    append-icon="search"
-                                                                    label="Buscar"
-                                                                    single-line
-                                                                    hide-details
-                                                                    color="#ff5200"
-                                                                ></v-text-field>
-                                                            </v-toolbar>
-                                                            </template>
                                                             <template v-slot:item.created_at="{ item }">
                                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                                             </template>
                                                         </v-data-table>
+                                                    </v-container>
                                                     </v-col>
                                                 </v-row>
-                                            </v-container>
-                                        </v-form>
-                                    </v-container>
-                                </v-card-text>
 
-                                <v-card-actions>
-                                    <v-btn class="ma-2" outlined color="#ff5300" @click="closeUnits">Cancelar</v-btn>
-                                    <v-spacer></v-spacer>
-                                    <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid"  @click="saveUnits">Guardar</v-btn>
-                                </v-card-actions>
+                                        </v-form>
+
+                                </v-card-text>
                                 </v-card>
                                 </v-dialog>
 
@@ -529,10 +549,21 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                <v-btn
+                                color="secondary"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                class="mr-1"
+                                title="Editar producto">
                                     <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
                                 </v-btn>
-                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                <v-btn
+                                color="red" s
+                                tyle="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                title="Eliminar producto">
                                     <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                                 </v-btn>
                             </template>
@@ -560,6 +591,7 @@
                 dialog: false,
                 dialogUnits: false,
                 search: '',
+                searchU: '',
                 loading: true,
                 valid: false,
                 edit_mode: false,
@@ -687,7 +719,9 @@
             },
              closeUnits () {
                 //Se cierra el dialogo de unidades
+                this.$refs.form.reset()
                 this.dialogUnits=false
+                //this.editUnit.tipo=''
             },
             async save () {
                 //Comprobacion para saber si estamos editando o creando un nuevo producto
@@ -799,7 +833,7 @@
                 //Se muestra un mensaje de confirmacion para eliminar productos
                 Swal.fire({
                     title: '¿Estás seguro de desactivar este prodcuto?',
-                    text: "Se cambiara el status de activo!",
+                    text: "Este producto dejara de estar disponible",
                     type: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#ff5300',

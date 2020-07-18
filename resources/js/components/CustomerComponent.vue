@@ -43,6 +43,7 @@
                                         <v-chip
                                             pill
                                             v-on="on"
+                                            title="Ver detalles"
                                         >
                                             <v-avatar left>
                                             <v-icon color="teal">mdi-account-circle</v-icon>
@@ -53,8 +54,8 @@
                                         <v-card width="380">
                                         <v-list dark>
                                             <v-list-item>
-                                            <v-list-item-avatar>
-                                                <v-icon color="teal" large>mdi-account-circle</v-icon>
+                                            <v-list-item-avatar color="teal">
+                                                <v-icon color="white" large>mdi-account-circle</v-icon>
                                             </v-list-item-avatar>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.nombre | formatUpperCase}}</v-list-item-title>
@@ -306,10 +307,21 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                <v-btn
+                                color="secondary"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                class="mr-1"
+                                title="Editar registro de cliente">
                                     <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
                                 </v-btn>
-                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                <v-btn
+                                color="red"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                title="Eliminar cliente">
                                     <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                                 </v-btn>
                             </template>

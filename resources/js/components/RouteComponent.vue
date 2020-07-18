@@ -275,10 +275,10 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                                <v-btn color="secondary" style="min-width: 30px; min-height: 30px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                <v-btn color="secondary" style="min-width: 20px; min-height: 25px; padding: 0px 4.888889px;" x-small dark class="mr-1">
                                     <v-icon  @click="addDeliverers(item)"> person_add </v-icon>
                                 </v-btn>
-                                <v-btn color="red" style="min-width: 30px; min-height: 30px; padding: 0px 5.888889px;" x-small dark >
+                                <v-btn color="red" style="min-width: 20px; min-height: 25px; padding: 0px 4.888889px;" x-small dark >
                                     <v-icon  @click="deleteItem(item)"> mdi-cancel </v-icon>
                                 </v-btn>
                             </template>

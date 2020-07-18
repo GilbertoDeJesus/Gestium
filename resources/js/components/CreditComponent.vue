@@ -46,7 +46,7 @@
 
                             <template v-slot:item.customer.nombre="{ item }" style="left: 350px;">
                                 <v-row
-
+                                    class="px-2 py-3"
                                     align="center"
                                     style="left: 350px;"
                                     >
@@ -60,6 +60,7 @@
                                         <v-chip
                                             pill
                                             v-on="on"
+                                            title="Ver detalles"
                                         >
                                             <v-avatar left >
                                                 <v-icon color="teal">mdi-account-circle</v-icon>
@@ -69,8 +70,8 @@
                                         <v-card width="400">
                                         <v-list dark>
                                             <v-list-item>
-                                            <v-list-item-avatar>
-                                                <v-icon color="teal" large>mdi-account-circle</v-icon>
+                                            <v-list-item-avatar color="teal">
+                                                <v-icon color="white" large>mdi-account-circle</v-icon>
                                             </v-list-item-avatar>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.customer.nombre | formatUpperCase}}</v-list-item-title>
@@ -184,13 +185,12 @@
                                                     v-if="edit_mode"
                                                     >
                                                     <v-text-field
-                                                       :rules="[required('descripcion'), minimum_length(8)]"
+
                                                         v-model="editedItem.descripcion"
                                                         label="Descripción del abono"
                                                         type="text"
                                                         prepend-icon="post_add"
                                                         clearable
-                                                        required
                                                     ></v-text-field>
                                                     </v-col>
                                                      <v-col
@@ -301,10 +301,21 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                <v-btn
+                                color="secondary"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                class="mr-1"
+                                title="Realizar abonos">
                                     <v-icon small @click="editItem(item)">mdi-credit-card-multiple </v-icon>
                                 </v-btn>
-                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                <v-btn
+                                color="red"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                title="Desactivar credito">
                                     <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                                 </v-btn>
                             </template>
@@ -343,7 +354,7 @@
                 menu1:false,
                 headers: [
                     { text: 'Nombre', value: 'customer.nombre' }, //Se establecen los titulos de columna de la tabla de Creditos
-                    { text: 'Monto', value: 'monto' },            //Estos se establen en objetos que estan  dentro de un arreglo
+                    { text: 'Monto aprobado', value: 'monto' },            //Estos se establen en objetos que estan  dentro de un arreglo
                     { text: 'Por pagar', value: 'aPagar'},        //Dentro de cada objeto se establece el valor de las celdas decada columna
                     //{ text: 'Detalles', value: 'descripcion' },
                     { text: 'Fecha de aprobación', value: 'fecha'},

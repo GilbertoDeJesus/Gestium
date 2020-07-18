@@ -100,6 +100,7 @@
                                                         sm="6"
                                                         >
                                                         <v-autocomplete
+
                                                             v-model="select_deliverer"
                                                             :items="nombres"
                                                             item-text="nombre"
@@ -196,7 +197,6 @@
                                                         </v-col>
                                                         <v-spacer></v-spacer>
                                                         <v-btn
-
                                                         :disabled="!valid"
                                                         dark class="ma-2"
                                                         color="#ff5300"
@@ -403,15 +403,10 @@
                                          <v-data-table
                                         :headers="hedaers_productList"
                                         :items="productList"
-                                        sort-by="calories"
+                                        :items-per-page="7"
                                         class="elevation-3"
                                         :search="searchP"
-                                        :loading="loading" loading-text="Estamos cargando tu información"
-                                        :items-per-page="6"
-                                        :footer-props="{
-                                            'items-per-page-options': [7, 10, 20]
-
-                                        }">
+                                        >
                                             <template v-slot:item.created_at="{ item }">
                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                             </template>
@@ -484,6 +479,7 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+
                 //Declaramos las propiedades del select_deliverer
                 select_deliverer: {
                     id: '',
@@ -566,6 +562,10 @@
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
                 },
+                reuqiredSelect(propertyName){
+                    return v=> v && v.value == '' || `Debes seleccionar un ${propertyName}`
+                },
+
 
              }
         },
@@ -592,7 +592,7 @@
 
         methods: {
             add(){
-                this.productosS=[]
+
                 //comprobamos que el producto seleccionado no esté ya registrado
                 for (let index = 0; index < this.productosS.length; index++) {
                     //obtenemos con index la posición del arreglo y de este su nombre para compararlo con el nombre seleccionado en el select
@@ -602,38 +602,43 @@
                     }
 
                 }
-                if (this.select_product.nombre == this.producto) {
+                if (this.select_deliverer.nombre == '') {
                     Swal.fire({
-                        title: 'Alerta',
-                        text: "Este producto ya esta en la lista!",
                         type: 'error',
-                        confirmButtonColor: '#d33',
-                        confirmButtonText: 'Entendido'
+                        title: 'Oops...',
+                        text: 'No se ha seleccionado un repartidor',
+
                         });
-                    this.producto=''
                 }else{
-                    //guardamos en "salidaProducto" todos los productos seleccionados junto con la cantidad de cada uno
-                    this.salidaProducto={
-                    'id':this.select_product.id,
-                    'nombre':this.select_product.nombre,
-                    'cantidad':this.editedItem.cantidad
+
+                    if (this.select_product.nombre == this.producto) {
+                        Swal.fire({
+                            title: 'Alerta',
+                            text: "Este producto ya esta en la lista!",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                        this.producto=''
+                    }else{
+                        //guardamos en "salidaProducto" todos los productos seleccionados junto con la cantidad de cada uno
+                        this.salidaProducto={
+                        'id':this.select_product.id,
+                        'nombre':this.select_product.nombre,
+                        'cantidad':this.editedItem.cantidad
+                        }
+
+                        //Enviamos a nuestro controlador los productos seleccionados y su cantidad
+                        this.productosS.push(this.salidaProducto);
+                        console.log(this.productosS)
+                        //Limpiamos nuestros elementos del formulario
+                        this.select_product=[0];
+                        this.select_product.id='';
+                        this.editedItem.cantidad='';
+                        this.producto=''
+
                     }
-
-                    //Enviamos a nuestro controlador los productos seleccionados y su cantidad
-                    this.productosS.push(this.salidaProducto);
-                    console.log(this.productosS)
-                    //Limpiamos nuestros elementos del formulario
-                    this.select_product=[0];
-                    this.select_product.id='';
-                    this.editedItem.cantidad='';
-                    this.producto=''
-
                 }
-                this.select_product=[0];
-                    this.select_product.id='';
-                    this.editedItem.cantidad='';
-                    this.producto=''
-
 
             },
 
@@ -717,7 +722,7 @@
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
-                this.productosS=[]
+
                 })
                 if (this.edit_mode == true) {
                     this.edit_mode = false
