@@ -145,8 +145,25 @@ class WarehouseMovementController extends Controller
     {
       //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     }
-    public function PDFWarehouseMovements(){
-      $warehousemovements = WarehouseMovement::all();
+    public function PDFWarehouseMovements(Request $request){
+      $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+          $warehousemovements = WarehouseMovement::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->where('deliverer_id', "=", $id)
+          ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf)){
+          $warehousemovements = WarehouseMovement::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->get();    
+        }elseif(!empty($id)){
+          $swarehousemovements = WarehouseMovement::where("deliverer_id","=",$id)
+          ->get(); 
+        }else{
+          $warehousemovements =WarehouseMovement::all();
+        }
       $pdf = PDF::loadView('warehousemovements', compact('warehousemovements'));
       return $pdf->setPaper('a4', 'landscape')->stream('warehousemovements.pdf');
   }

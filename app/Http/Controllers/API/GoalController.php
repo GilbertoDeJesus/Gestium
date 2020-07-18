@@ -100,8 +100,29 @@ class GoalController extends Controller
         ]);
     }
     //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
-    public function PDFGoals(){
-        $goals = Goal::all();
+    public function PDFGoals(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+            $goals = Goal::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('id', "=", $id)
+            ->get();    
+        }elseif(!empty($id)){
+            $goals = Goal::where("deliverer_id","=",$id)
+            ->get(); 
+        }elseif(!empty($status)){
+            $goals = Goal::where("status","==",$status)
+            ->get(); 
+        }elseif(!empty($fechai) && !empty($fechaf)){
+            $goals = Goal::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+        }else{
+            $goals =Goal::all();
+        }
         $pdf = PDF::loadView('goals', compact('goals'));
         return $pdf->setPaper('a4', 'landscape')->stream('goals.pdf');
     }

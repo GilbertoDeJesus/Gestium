@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Provider;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class ProviderController extends Controller
@@ -93,5 +94,32 @@ class ProviderController extends Controller
         $provider->update([
             'status'=>false,
         ]);
+    }
+    public function PDFProviders(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+            $providers = Provider::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('id', "=", $id)
+            ->get();    
+        }elseif(!empty($id)){
+            $providers = Provider::where("id","=",$id)
+            ->get(); 
+        }elseif(!empty($status)){
+            $providers = Provider::where("status","==",$status)
+            ->get(); 
+        }elseif(!empty($fechai) && !empty($fechaf)){
+            $providers = Provider::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+        }
+        else{
+            $providers =Provider::all();
+        }
+        $pdf = PDF::loadView('providers', compact('providers'));
+        return $pdf->setPaper('a4', 'landscape')->stream('providers.pdf');
     }
 }

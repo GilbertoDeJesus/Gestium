@@ -121,9 +121,30 @@ class DelivererController extends Controller
         return$deliverer;
     }
     //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
-    public function PDFDeliverers(){
-        $deliverers = Deliverer::all();
-        $pdf = PDF::loadView('deliverers', compact('deliverers'));
+    public function PDFDeliverers(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+            $deliverers = Deliverer::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('id', "=", $id)
+            ->get();    
+        }elseif(!empty($id)){
+            $deliverers = Deliverer::where("id","=",$id)
+            ->get(); 
+        }elseif(!empty($status)){
+            $deliverers = Deliverer::where("status","==",$status)
+            ->get(); 
+        }elseif(!empty($fechai) && !empty($fechaf)){
+            $deliverers = Deliverer::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+        }else{
+            $deliverers =Deliverer::all();
+        }
+        $pdf = PDF::loadView('deliverers', compact('deliverers', 'fechai', 'fechaf', 'id', 'status'));
         return $pdf->setPaper('a4', 'landscape')->stream('deliverers.pdf');
     }
 

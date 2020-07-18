@@ -161,7 +161,7 @@ class SaleController extends Controller
 
           // Devolvemos la venta actualizada
          return $sale;
-    }
+    } 
 
     /**
      * Remove the specified resource from storage.
@@ -173,8 +173,46 @@ class SaleController extends Controller
     {
       //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     }
-    public function PDFSales(){
-      $sales = Sale::all();
+    public function PDFSales(Request $request){
+      $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $idc = $request->input('idcliente');
+        $idr = $request->input('idruta');
+        $status = $request->input('status');
+        $nombre = $request->input('nombre');
+        if(!empty($fechai) && !empty($fechaf) && !empty($idr) && !empty($idc)){
+          $sales = Sale::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->where('route_id', "=", $idr)
+          ->where('customer_id', "=", $idc)
+          ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idr)){
+          $sales = Sale::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->where('route_id', "=", $idr)
+          ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idc)){
+            $sales = Sale::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('customer_id', "=", $idc)
+            ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf)){
+          $sales = Sale::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->get();    
+        }elseif(!empty($idc) && !empty($idr)){
+          $sales = Sale::where("customer_id","=",$idc)
+          ->where('route_id',"=",$idr)
+          ->get(); 
+        }elseif(!empty($idc)){
+          $sales = Sale::where("customer_id","=",$idc)
+          ->get(); 
+        }elseif(!empty($idr)){
+            $sales = Sale::where("route_id","=",$idr)
+            ->get(); 
+        }else{
+            $sales =Sale::all();
+        }
       $pdf = PDF::loadView('sales', compact('sales'));
       return $pdf->setPaper('a4', 'landscape')->stream('sales.pdf');
   }

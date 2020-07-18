@@ -93,8 +93,29 @@ class ExpenseController extends Controller
         ]);
     }
     //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
-    public function PDFExpenses(){
-        $expenses = Expense::all();
+    public function PDFExpenses(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+            $expenses = Expense::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('deliverer_id', "=", $id)
+            ->get();    
+        }elseif(!empty($id)){
+            $expenses = Expense::where("deliverer_id","=",$id)
+            ->get(); 
+        }elseif(!empty($status)){
+            $expenses = Expense::where("status","==",$status)
+            ->get(); 
+        }elseif(!empty($fechai) && !empty($fechaf)){
+            $expenses = Expense::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+        }else{
+            $expenses =Expense::all();
+        }
         $pdf = PDF::loadView('expenses', compact('expenses'));
         return $pdf->setPaper('a4', 'landscape')->stream('expenses.pdf');
     }
