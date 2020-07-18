@@ -59,7 +59,7 @@
                                         </v-chip>
                                         </template>
                                         <v-card width="380">
-                                        <v-list color="indigo" dark>
+                                        <v-list dark>
                                             <v-list-item>
                                             <v-list-item-avatar color="teal">
                                                 <v-icon color="white" large>mdi-account-circle</v-icon>
@@ -81,7 +81,7 @@
                                         <v-list two-line>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal">mdi-phone</v-icon>
+                                                <v-icon color="indigo">mdi-phone</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.telefono}}</v-list-item-title>
@@ -90,7 +90,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal">mdi-calendar-text</v-icon>
+                                                <v-icon color="indigo">mdi-calendar-text</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.fecha_nacimiento}}</v-list-item-title>
@@ -99,7 +99,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal">mdi-calendar-blank</v-icon>
+                                                <v-icon color="indigo">mdi-calendar-blank</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.fecha_contratacion}}</v-list-item-title>
@@ -108,7 +108,7 @@
                                             </v-list-item>
                                             <v-list-item>
                                             <v-list-item-icon>
-                                                <v-icon color="teal">mdi-calendar</v-icon>
+                                                <v-icon color="indigo">mdi-calendar</v-icon>
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>{{item.created_at | formatDateTime | formatUpperCase}}</v-list-item-title>
