@@ -508,8 +508,8 @@
                 routes:[],
                 productos:[],
                 clientes:[],
-                saleDetails:[],
                 movementlist:[],
+                saleDetails:[],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -780,16 +780,19 @@
                     console.log(response.data)
                     this.loading = false;
                 });
-            },
-            //En este método obtenemos todos los productos que tiene la salida indicada
-            getProducts(){
-                axios.get(`api/warehouse_movements/1`)
+                //Obtenemos la ultima salida que ha realizado un repartidor (enviamos el id del repartidor)
+                // getmovement(){
+                axios.get(`api/getmovementList/${this.select_deliverer.id}`)
                 .then(response => {
-                    this.productos = response.data;
+                    this.movementlist = response.data;
                     console.log(response.data)
                     this.loading = false;
-                });
+                    this.getProducts();
+                 });
+
             },
+            //En este método obtenemos todos los productos que tiene la salida indicada
+
             //Obtenemos los clientes que pertenecen a la ruta indicada
             getClientsNames(){
                 this.dis=false
@@ -810,14 +813,14 @@
                     this.loading = false;
                       });
             },
-            //Obtenemos las 3 ultimas salidas que ha realizado un repartidor (enviamos el id del repartidor)
-            getmovement(){
-                axios.get(`api/getmovementList/1`)
+            getProducts(){
+                axios.get(`api/warehouse_movements/${this.movementlist[0].id}`)
+                //${this.movementlist[0].id}
                 .then(response => {
-                    this.movementlist = response.data;
+                    this.productos = response.data;
                     console.log(response.data)
                     this.loading = false;
-                      });
+                });
             },
 
         },
@@ -825,9 +828,9 @@
         created () {
             this.getResults();
             this.getDeliverers();
-            this.getProducts();
+            //this.getProducts();
             this.getSaleDetail();
-            this.getmovement();
+            //this.getmovement();
         },
     }
 </script>
