@@ -36,8 +36,25 @@ class EntryController extends Controller
         ]);
     }
     //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
-    public function PDFEntries(){
-        $entries = Entry::all();
+    public function PDFEntries(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+          $entries = Entry::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->where('provider_id', "=", $id)
+          ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf)){
+          $entries = Entry::where("created_at",">=",$fechai)
+          ->where('created_at',"<=", $fechaf)
+          ->get();    
+        }elseif(!empty($id)){
+          $entries = Entry::where("provider_id","=",$id)
+          ->get(); 
+        }else{
+          $entries =Entry::all();
+        }
         $pdf = PDF::loadView('entries', compact('entries'));
         return $pdf->setPaper('a4', 'landscape')->stream('entries.pdf');
     }

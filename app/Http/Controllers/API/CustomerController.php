@@ -112,8 +112,43 @@ class CustomerController extends Controller
         ]);
         //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     }
-    public function PDFCustomers(){
-        $customers = Customer::all();
+    public function PDFCustomers(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $nombre = $request->input('nombre');
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id) && !empty($nombre)){
+            $customers = Customer::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('route_id', "=", $id)
+            ->where('nombre',"=", $nombre)
+            ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf) && !empty($id)){
+            $customers = Customer::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('route_id', "=", $id)
+            ->get();    
+        }elseif(!empty($nombre) && !empty($id)){
+            $customers = Customer::where("nombre","=",$nombre)
+            ->where('route_id',"=", $id)
+            ->get(); 
+        }elseif(!empty($id)){
+            $customers = Customer::where("route_id","=",$id)
+            ->get(); 
+        }elseif(!empty($nombre)){
+            $customers = Customer::where("nombre","=",$nombre)
+            ->get(); 
+        }elseif(!empty($status)){
+            $customers = Customer::where("status","==",$status)
+            ->get(); 
+        }elseif(!empty($fechai) && !empty($fechaf)){
+            $customers = Customer::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+        }else{
+            $customers =Customer::all();
+        }
         $pdf = PDF::loadView('customers', compact('customers'));
         return $pdf->setPaper('a4', 'landscape')->stream('customers.pdf');
     }

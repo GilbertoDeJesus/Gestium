@@ -173,10 +173,21 @@
                             </v-toolbar>
                             </template>
                             <template v-slot:item.actions="{ item }">
-                                <v-btn color="secondary" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark class="mr-1">
+                                <v-btn
+                                color="secondary"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                class="mr-1"
+                                title="Editar registro de proveedor">
                                     <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
                                 </v-btn>
-                                <v-btn color="red" style="min-width: 28px; padding: 0px 5.888889px;" x-small dark >
+                                <v-btn
+                                color="red"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
+                                x-small
+                                dark
+                                title="Eliminar proveedor">
                                     <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
                                 </v-btn>
                             </template>
@@ -269,6 +280,7 @@
                 this.editedIndex = this.providers.indexOf(item)
                 // Clonamos el objeto
                 this.editedItem = Object.assign({}, item)
+                this.dialog = true
                 this.edit_mode = true
             },
             close () {

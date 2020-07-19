@@ -139,8 +139,29 @@ class CreditController extends Controller
         ]);
         //Se crea una funcion que llama los datos de la base de datos y los muestra en un pdf de forma horizontal
     }
-    public function PDFCredits(){
-        $credits = Credit::all();
+    public function PDFCredits(Request $request){
+        $fechai = $request->input('fechai');
+        $fechaf = $request->input('fechaf');
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+            $credits = Credit::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('customer_id', "=", $id)
+            ->get();    
+        }elseif(!empty($id)){
+            $credits = Credit::where("customer_id","=",$id)
+            ->get(); 
+        }elseif(!empty($status)){
+            $credits = Credit::where("status","==",$status)
+            ->get(); 
+        }elseif(!empty($fechai) && !empty($fechaf)){
+            $credits = Credit::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+        }else{
+            $credits =Credit::all();
+        }
         $pdf = PDF::loadView('credits', compact('credits'));
         return $pdf->setPaper('a4', 'landscape')->stream('credits.pdf');
     }

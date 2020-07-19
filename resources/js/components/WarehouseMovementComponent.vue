@@ -100,6 +100,7 @@
                                                         sm="6"
                                                         >
                                                         <v-autocomplete
+
                                                             v-model="select_deliverer"
                                                             :items="nombres"
                                                             item-text="nombre"
@@ -196,7 +197,6 @@
                                                         </v-col>
                                                         <v-spacer></v-spacer>
                                                         <v-btn
-
                                                         :disabled="!valid"
                                                         dark class="ma-2"
                                                         color="#ff5300"
@@ -218,8 +218,16 @@
                                                             <v-data-table
                                                             :headers="headers_productos"
                                                             :items="productosS"
+                                                            sort-by="calories"
+                                                            :loading="loading" loading-text="Estamos cargando tu información"
+                                                            :items-per-page="6"
+                                                            :footer-props="{
+                                                                'items-per-page-options': [7, 10, 20]
+
+                                                            }"
                                                             dense
                                                             >
+
 
                                                              <template v-slot:item.actions="{ item }">
                                                                 <v-icon small class="mr-2" @click="editItemProduct(item)"> mdi-pencil </v-icon>
@@ -273,7 +281,7 @@
                                                                 color="#ff5400"
                                                                 dense
                                                                 border="left"
-                                                                elevation="4">No se ha realizado ninguna saida.</v-alert>
+                                                                elevation="4">No se ha seleccionado ningun producto.</v-alert>
                                                             </template>
                                                             </v-data-table>
                                                         </v-col>
@@ -343,7 +351,7 @@
                                                         <v-icon style="font-size:2rem;">mdi-briefcase</v-icon>
                                                     </v-list-item-icon>
                                                     <v-list-item-content>
-                                                        <v-list-item-title style="font-size:1.5rem;">{{formNombre}}</v-list-item-title>
+                                                        <v-list-item-title style="font-size:1.5rem;">{{formNombre | formatUpperCase}}</v-list-item-title>
                                                         <v-list-item-subtitle style="font-size:1rem;">Repartidor</v-list-item-subtitle>
                                                     </v-list-item-content>
                                                 </v-list-item>
@@ -353,7 +361,7 @@
                                                         <v-icon style="font-size:2rem;">mdi-calendar</v-icon>
                                                     </v-list-item-icon>
                                                     <v-list-item-content>
-                                                        <v-list-item-title style="font-size:1.5rem;">{{formFecha}}</v-list-item-title>
+                                                        <v-list-item-title style="font-size:1.5rem;">{{formFecha | formatDateTime | formatUpperCase}}</v-list-item-title>
                                                         <v-list-item-subtitle style="font-size:1rem;">Fecha de salida</v-list-item-subtitle>
                                                     </v-list-item-content>
                                                 </v-list-item>
@@ -395,15 +403,10 @@
                                          <v-data-table
                                         :headers="hedaers_productList"
                                         :items="productList"
-                                        sort-by="calories"
+                                        :items-per-page="7"
                                         class="elevation-3"
                                         :search="searchP"
-                                        :loading="loading" loading-text="Estamos cargando tu información"
-                                        :items-per-page="6"
-                                        :footer-props="{
-                                            'items-per-page-options': [7, 10, 20]
-
-                                        }">
+                                        >
                                             <template v-slot:item.created_at="{ item }">
                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                             </template>
@@ -476,6 +479,7 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+
                 //Declaramos las propiedades del select_deliverer
                 select_deliverer: {
                     id: '',
@@ -503,7 +507,7 @@
                 headers: [
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
                     { text: 'Repartidor', value: 'nombre' },
-                    { text: 'Fecha de salida', value: 'fecha_salida'},
+                    { text: 'Fecha de salida', value: 'created_at'},
                     { text: 'Cantidad de productos', value: 'sum'},
                     { text: 'Lista de productos', value: 'actions', sortable: false },
                 ],
@@ -558,6 +562,10 @@
                     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                     return v => v && regex.test(v) || `Debes ingresar un email valido`
                 },
+                reuqiredSelect(propertyName){
+                    return v=> v && v.value == '' || `Debes seleccionar un ${propertyName}`
+                },
+
 
              }
         },
@@ -594,48 +602,64 @@
                     }
 
                 }
-                if (this.select_product.nombre == this.producto) {
+                if (this.select_deliverer.nombre == '') {
                     Swal.fire({
-                        title: 'Alerta',
-                        text: "Este producto ya esta en la lista!",
                         type: 'error',
-                        confirmButtonColor: '#d33',
-                        confirmButtonText: 'Entendido'
+                        title: 'Oops...',
+                        text: 'No se ha seleccionado un repartidor',
+
                         });
-                    this.producto=''
                 }else{
-                    //guardamos en "salidaProducto" todos los productos seleccionados junto con la cantidad de cada uno
-                    this.salidaProducto={
-                    'id':this.select_product.id,
-                    'nombre':this.select_product.nombre,
-                    'cantidad':this.editedItem.cantidad
+
+                    if (this.select_product.nombre == this.producto) {
+                        Swal.fire({
+                            title: 'Alerta',
+                            text: "Este producto ya esta en la lista!",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                        this.producto=''
+                    }else{
+                        //guardamos en "salidaProducto" todos los productos seleccionados junto con la cantidad de cada uno
+                        this.salidaProducto={
+                        'id':this.select_product.id,
+                        'nombre':this.select_product.nombre,
+                        'cantidad':this.editedItem.cantidad
+                        }
+
+                        //Enviamos a nuestro controlador los productos seleccionados y su cantidad
+                        this.productosS.push(this.salidaProducto);
+                        console.log(this.productosS)
+                        //Limpiamos nuestros elementos del formulario
+                        this.select_product=[0];
+                        this.select_product.id='';
+                        this.editedItem.cantidad='';
+                        this.producto=''
+
                     }
-
-                    //Enviamos a nuestro controlador los productos seleccionados y su cantidad
-                    this.productosS.push(this.salidaProducto);
-                    console.log(this.productosS)
-                    //Limpiamos nuestros elementos del formulario
-                    this.select_product=[0];
-                    this.select_product.id='';
-                    this.editedItem.cantidad='';
-                    this.producto=''
-
                 }
-                this.select_product=[0];
-                    this.select_product.id='';
-                    this.editedItem.cantidad='';
-                    this.producto=''
-
 
             },
 
             modifyQuantity(item){
                 //this.editedIndex = this.productosS.indexOf(item)
-                this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
-                this.editedIndex = -1
-                this.editedItem.cantidad='';
-                //this.indexCantidad=null;
-                this.dialogEditProduct = false
+
+                if (this.editedItem.cantidad != "") {
+                    this.productosS[this.editedIndex].cantidad=this.editedItem.cantidad
+                    this.editedIndex = -1
+                    this.editedItem.cantidad='';
+                    //this.indexCantidad=null;
+                    this.dialogEditProduct = false
+                }else{
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'No has ingresado una cantidad',
+
+                        })
+                }
+
 
 
             },
@@ -692,13 +716,13 @@
             },
             //Cerramos el dialogo para crear una nuevo movimiento
             close () {
+                this.productosS=[]
                 this.$refs.form.reset()
                 this.dialog = false
-                this.productosS=[]
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
-                this.productosS=[]
+
                 })
                 if (this.edit_mode == true) {
                     this.edit_mode = false
@@ -789,7 +813,7 @@
                 this.editedItem = Object.assign({}, item) // Clone an object
                 this.id_movement= this.editedItem.id
                 this.nDeliverer = this.editedItem.nombre
-                this.nFecha= this.editedItem.fecha_salida
+                this.nFecha= this.editedItem.created_at
                 this.getProductsList()
                 this.dialogProductList=true
 
