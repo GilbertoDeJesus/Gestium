@@ -8,7 +8,7 @@
                         cols="12"
                         md="12"
                         sm="12">
-                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de salidas de productos registradas</strong></p>
+                            <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;"><strong>Listado de salidas de productos registradas</strong></p>
                          </v-col>
                     </v-container>
                     <v-col cols="10" sm="12" md="10">
@@ -447,7 +447,7 @@
                                 color="#ff5400"
                                 dense
                                 border="left"
-                                elevation="4">No se ha realizado ninguna saida.</v-alert>
+                                elevation="4">No se ha realizado ninguna salida.</v-alert>
                             </template>
                         </v-data-table>
                     </v-col>

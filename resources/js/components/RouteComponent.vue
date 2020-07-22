@@ -8,7 +8,7 @@
                         cols="12"
                         md="12"
                         sm="12">
-                            <p style="text-align: center; font-size:28px; margin-bottom: -10px;"><strong>Listado de rutas activas</strong></p>
+                            <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;"><strong>Listado de rutas activas</strong></p>
                          </v-col>
                     </v-container>
                     <v-col cols="10" sm="12" md="10">

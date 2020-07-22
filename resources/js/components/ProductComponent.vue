@@ -8,7 +8,7 @@
                         cols="12"
                         md="12"
                         sm="12">
-                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de productos disponibles</strong></p>
+                            <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;">Listado de productos disponibles</p>
                          </v-col>
                     </v-container>
                     <v-col cols="12" sm="12" md="12">
@@ -174,7 +174,7 @@
 
                                 <v-dialog v-model="dialogUnits" scrollable max-width="900px">
                                     <template v-slot:activator="{ on }">
-                                    <v-btn color="#ff5300" outlined dark v-on="on"><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
+                                    <v-btn color="#ff5300" outlined dark v-on="on" v-on:click="getTypeUnit"><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
                                 </template>
 
                                 <v-card style="border-radius:10px; height:100%; margin: 0; display: flex; flex-direction: column;">
@@ -247,12 +247,12 @@
                                                         md="12"
                                                         sm="12"
                                                         style="padding-bottom: 0px;">
-                                                            <p style="text-align: center; font-size:28px; margin-bottom: -10px;"><strong>Listado de Unidades</strong></p>
+                                                            <p style="text-align: center; font-size:28px; margin-bottom: 5px;"><strong>Listado de Unidades</strong></p>
                                                             <v-container style="margin-top:1.5rem;" >
 
                                                                 <v-spacer></v-spacer>
                                                                     <v-text-field
-                                                                        v-model="searchU"
+                                                                        v-model="tipo"
                                                                         prepend-inner-icon="search"
                                                                         label="Buscar unidades"
                                                                         hide-details
@@ -261,7 +261,6 @@
                                                                         single-line
                                                                         dense
                                                                         color="#ff5200"
-                                                                        clearable
                                                                     ></v-text-field>
                                                                 <v-spacer></v-spacer>
 
@@ -270,7 +269,27 @@
 
                                                     </v-container>
                                                     <v-container>
-                                                        <v-data-table
+                                                        <v-simple-table
+                                                        fixed-header
+                                                        height="300px"
+                                                        light
+                                                        class="elevation-3">
+                                                            <template v-slot:default>
+                                                            <thead>
+                                                                <tr>
+                                                                <th class="text-left">Clave</th>
+                                                                <th class="text-left">Unidad</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for="item in searchU" :key="item.tipo">
+                                                                <td>{{ item.id }}</td>
+                                                                <td>{{ item.tipo }}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                            </template>
+                                                        </v-simple-table>
+                                                    <!--    <v-data-table
                                                             :headers="headersUnits"
                                                             :items="units"
                                                             sort-by="calories"
@@ -284,7 +303,7 @@
                                                             <template v-slot:item.created_at="{ item }">
                                                             {{item.created_at | formatDateTime | formatUpperCase}}
                                                             </template>
-                                                        </v-data-table>
+                                                        </v-data-table> -->
                                                     </v-container>
                                                     </v-col>
                                                 </v-row>
@@ -559,8 +578,8 @@
                                     <v-icon small @click="editItem(item)"> mdi-pencil </v-icon>
                                 </v-btn>
                                 <v-btn
-                                color="red" s
-                                tyle="min-width: 28px; padding: 0px 5.888889px;"
+                                color="red"
+                                style="min-width: 28px; padding: 0px 5.888889px;"
                                 x-small
                                 dark
                                 title="Eliminar producto">
@@ -591,7 +610,7 @@
                 dialog: false,
                 dialogUnits: false,
                 search: '',
-                searchU: '',
+                tipo: '',
                 loading: true,
                 valid: false,
                 edit_mode: false,
@@ -684,6 +703,10 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'Nuevo registro' : 'Editar registro'
             },
+            searchU: function () {
+                return this.units.filter((item) => item.tipo.includes(this.tipo));
+            },
+
         },
 
         watch: {
@@ -719,8 +742,9 @@
             },
              closeUnits () {
                 //Se cierra el dialogo de unidades
-                this.$refs.form.reset()
+                //this.$refs.form.reset()
                 this.dialogUnits=false
+                this.tipo=''
                 //this.editUnit.tipo=''
             },
             async save () {
