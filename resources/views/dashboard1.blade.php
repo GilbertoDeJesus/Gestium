@@ -17,8 +17,6 @@
             <a class="list-group-item list-group-item-action-primary" id="list-entradas-list" data-toggle="list" href="#list-entradas" role="tab" aria-controls="entradas">Reporte de Entradas</a>
             <a class="list-group-item list-group-item-action-primary" id="list-almacen-list" data-toggle="list" href="#list-almacen" role="tab" aria-controls="almacen">Reporte de Almacen</a>
             <a class="list-group-item list-group-item-action-primary" id="list-ventas-list" data-toggle="list" href="#list-ventas" role="tab" aria-controls="ventas">Reporte de Ventas</a>
-            <a class="list-group-item list-group-item-action-primary" id="list-gastos-list" data-toggle="list" href="#list-gastos" role="tab" aria-controls="gastos">Reporte de Gastos</a>
-            <a class="list-group-item list-group-item-action-primary" id="list-metas-list" data-toggle="list" href="#list-metas" role="tab" aria-controls="metas">Reporte de Metas</a>
             <a class="list-group-item list-group-item-action-primary" id="list-rutas-list" data-toggle="list" href="#list-rutas" role="tab" aria-controls="rutas">Reporte de Rutas</a>
             <a class="list-group-item list-group-item-action-primary" id="list-clientes-list" data-toggle="list" href="#list-clientes" role="tab" aria-controls="clientes">Reporte de Clientes</a>
             <a class="list-group-item list-group-item-action-primary" id="list-creditos-list" data-toggle="list" href="#list-creditos" role="tab" aria-controls="creditos">Reporte de Creditos</a>
@@ -30,30 +28,30 @@
             <div class="tab-pane fade show active" id="list-repartidores" role="tabpanel" aria-labelledby="list-repartidores-list">
               <div>
               <h1>REPORTE REPARTIDORES</h1>
-              <form method="post" action="pdfrepartidores">
+              <form method="post" method="get" action="pdfrepartidores" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
                     <div class="col">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
+                  <label for="name">BUSCAR POR STATUS</label>
+                  <select name="status" id="input" class="form-control">
+                      <option value="" selected>-- Inserte un status --</option>
                       <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
+                      <option [ngValue]="0">Desactivos</option>
+                  </select>
                 </div>
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID</label>
-                  <input type="text" class="form-control" id="name" name="id" />
+                  <label for="name">BUSCAR POR NOMBRE</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Inserte un nombre --</option>
+                    @foreach ($deliverers as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
@@ -64,30 +62,30 @@
             
             <div class="tab-pane fade" id="list-proveedores" role="tabpanel" aria-labelledby="list-proveedores-list">
               <h1>REPORTE PROVEEDORES</h1>
-              <form method="post" action="pdfproveedores">
+              <form method="post" action="pdfproveedores" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
                     <div class="col">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
+                  <label for="name">BUSCAR POR STATUS</label>
+                  <select name="status" id="input" class="form-control">
+                      <option value="" selected>-- Inserte un status --</option>
                       <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
+                      <option [ngValue]="0">Desactivos</option>
+                  </select>
                 </div>
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID</label>
-                  <input type="text" class="form-control" id="name" name="id" />
+                  <label for="name">BUSCAR POR NOMBRE</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Inserte un nombre --</option>
+                    @foreach ($provider as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
@@ -98,44 +96,37 @@
 
             <div class="tab-pane fade" id="list-productos" role="tabpanel" aria-labelledby="list-productos-list">
               <h1>REPORTE PRODUCTOS</h1>
-              <form method="post" action="pdfproductos">
+              <form method="post" action="pdfproductos" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
                     <div class="col">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <label for="name">BUSCAR POR ID DE UNIDAD</label>
-                  <input type="text" class="form-control" id="name" name="idu" />
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
-                      <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR META</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="meta">
-                      <option selected></option>
-                      <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
+                  <label for="name">BUSCAR POR NOMBRE</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Inserte un nombre --</option>
+                    @foreach ($product as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
+                  <label for="name">BUSCAR POR META</label>
+                  <select name="meta" id="input" class="form-control">
+                    <option value="" selected>-- Elija una opcion --</option>
+                    <option value="1">Activos</option>
+                    <option [ngValue]="0">Desactivos</option>
+                </select>  
                 </div>
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DE PROVEEDOR</label>
-                  <input type="text" class="form-control" id="name" name="idp" />
-                  <label for="name">BUSCAR POR NOMBRE</label>
-                  <input type="text" class="form-control" id="name" name="nombre" />
+                  <label for="name">BUSCAR POR PROVEEDOR</label>
+                  <select name="" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Proveedor--</option>
+                    @foreach ($provider as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
@@ -145,7 +136,7 @@
 
             <div class="tab-pane fade" id="list-entradas" role="tabpanel" aria-labelledby="list-entradas-list">
               <h1>REPORTE ENTRADAS</h1>
-              <form method="post" action="pdfalmacen">
+              <form method="post" action="pdfalmacen" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
@@ -156,8 +147,13 @@
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DEL PROVEEDOR</label>
-                  <input type="text" class="form-control" id="name" name="id" />
+                  <label for="name">BUSCAR POR PROVEEDOR</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Proveedor--</option>
+                    @foreach ($provider as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
@@ -167,7 +163,7 @@
 
             <div class="tab-pane fade" id="list-almacen" role="tabpanel" aria-labelledby="list-almacen-list">
               <h1>REPORTE ALMACEN</h1>
-              <form method="post" action="pdfalmacen">
+              <form method="post" action="pdfalmacen" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
@@ -179,7 +175,12 @@
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
                   <label for="name">BUSCAR POR ID DEL REPARTIDOR</label>
-                  <input type="text" class="form-control" id="name" name="id" />
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Proveedor--</option>
+                    @foreach ($deliverers as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
@@ -189,127 +190,91 @@
 
             <div class="tab-pane fade" id="list-ventas" role="tabpanel" aria-labelledby="list-ventas-list">
               <h1>REPORTE VENTAS</h1>
-              <form method="post" action="pdfventas">
+              <form method="post" action="pdfventas" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
                     <div class="col">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <label for="name">BUSCAR POR ID DEL CLIENTE</label>
-                  <input type="text" class="form-control" id="name" name="idcliente" />
+                  <label for="name">BUSCAR POR CLIENTE</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Cliente--</option>
+                    @foreach ($customer as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                 </div>
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DE LA RUTA</label>
-                  <input type="text" class="form-control" id="name" name="idruta" />
+                  <label for="name">BUSCAR POR RUTA</label>
+                  <select name="idruta" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Ruta--</option>
+                    @foreach ($route as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
                 </div>
               </form>  
             </div>
-            
-              <div class="tab-pane fade" id="list-gastos" role="tabpanel" aria-labelledby="list-gastos-list">
-              <h1>REPORTE GASTOS</h1>
-              <form method="post" action="pdfgastos">
-                {{@csrf_field()}}
-                <div class="container">
-                  <div class="row">
-                    <div class="col">
-                  <label for="name">FECHA INICIAL</label>
-                  <input type="date" id="picker" name="fechai" class="form-control">
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
-                      <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col">
-                  <label for="name">FECHA FINAL</label>
-                  <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DEL REPARTIDOR</label>
-                  <input type="text" class="form-control" id="name" name="id" />
-                  <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
-                </div>
-              </div>
-                </div>
-              </form>   
-            </div>
-
-            <div class="tab-pane fade" id="list-metas" role="tabpanel" aria-labelledby="list-metas-list">
-              <h1>REPORTE METAS</h1>
-              <form method="post" action="pdfmetas">
-                {{@csrf_field()}}
-                <div class="container">
-                  <div class="row">
-                    <div class="col">
-                  <label for="name">FECHA INICIAL</label>
-                  <input type="date" id="picker" name="fechai" class="form-control">
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
-                      <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col">
-                  <label for="name">FECHA FINAL</label>
-                  <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DEL REPARTIDOR</label>
-                  <input type="text" class="form-control" id="name" name="id" />
-                  <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
-                </div>
-              </div>
-                </div>
-              </form>   
-            </div>
 
             <div class="tab-pane fade" id="list-rutas" role="tabpanel" aria-labelledby="list-rutas-list">
               <h1>REPORTE RUTAS</h1>
-              <a class="btn btn-primary btn-lg btn-block" href="/pdfrutas" role="button">Generar Reporte</a>
-            </div>
-
-            <div class="tab-pane fade" id="list-clientes" role="tabpanel" aria-labelledby="list-clientes-list">
-              <h1>REPORTE CLIENTES</h1>
-              <form method="post" action="pdfclientes">
+              <form method="post" action="pdfrutas" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
                     <div class="col">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
-                      <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
                 </div>
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DE LA RUTA</label>
-                  <input type="text" class="form-control" id="name" name="id" />
+                  <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
+                </div>
+              </div>
+                </div>
+              </form>   
+           </div>
+
+            <div class="tab-pane fade" id="list-clientes" role="tabpanel" aria-labelledby="list-clientes-list">
+              <h1>REPORTE CLIENTES</h1>
+              <form method="post" action="pdfclientes" target="somewhere_new">
+                {{@csrf_field()}}
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
+                  <label for="name">FECHA INICIAL</label>
+                  <input type="date" id="picker" name="fechai" class="form-control">
+                  <label for="name">BUSCAR POR STATUS</label>
+                  <select name="status" id="input" class="form-control">
+                      <option value="" selected>-- Inserte un status --</option>
+                      <option value="1">Activos</option>
+                      <option [ngValue]="0">Desactivos</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="name">FECHA FINAL</label>
+                  <input type="date" id="picker" name="fechaf" class="form-control">
+                  <label for="name">BUSCAR POR RUTA</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Ruta--</option>
+                    @foreach ($route as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <label for="name">BUSCAR POR NOMBRE</label>
-                  <input type="text" class="form-control" id="name" name="nombre" />
+                  <select name="nombre" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Cliente--</option>
+                    @foreach ($customer as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>
@@ -319,30 +284,30 @@
 
             <div class="tab-pane fade" id="list-creditos" role="tabpanel" aria-labelledby="list-creditos-list">
               <h1>REPORTE CREDITOS</h1>
-              <form method="post" action="pdfcreditos">
+              <form method="post" action="pdfcreditos" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
                     <div class="col">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <br>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">BUSCAR POR STATUS</label>
-                    </div>
-                    <select class="form-control input" id="inputGroupSelect01" name="status">
-                      <option selected></option>
+                  <label for="name">BUSCAR POR STATUS</label>
+                  <select name="status" id="input" class="form-control">
+                      <option value="" selected>-- Inserte un status --</option>
                       <option value="1">Activos</option>
-                      <option value="0">Desactivos</option>
-                    </select>
-                  </div>
+                      <option [ngValue]="0">Desactivos</option>
+                  </select>
                 </div>
                 <div class="col">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DEL CLIENTE</label>
-                  <input type="text" class="form-control" id="name" name="id" />
+                  <label for="name">BUSCAR POR CLIENTE</label>
+                  <select name="id" id="input" class="form-control">
+                    <option value="" selected>-- Escoja un Cliente--</option>
+                    @foreach ($customer as $item)
+                      <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
+                    @endforeach
+                  </select>
                   <button type="submit" class="btn btn-primary btn-lg btn-block">GENERAR REPORTE</button>
                 </div>
               </div>

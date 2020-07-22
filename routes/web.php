@@ -24,11 +24,10 @@ Route::any('/pdfproductos', 'API\ProductController@PDFProducts')->name('descarga
 Route::any('/pdfentradas', 'API\EntryController@PDFEntries')->name('descargarPDFEntries');
 Route::any('/pdfalmacen', 'API\WarehouseMovementController@PDFWarehouseMovements')->name('descargarPDFWarehouseMovements');
 Route::any('/pdfventas', 'API\SaleController@PDFSales')->name('descargarPDFSales');
-Route::any('/pdfmetas', 'API\GoalController@PDFGoals')->name('descargarPDFGoals');
-Route::any('/pdfgastos', 'API\ExpenseController@PDFExpenses')->name('descargarPDFExpenses');
 Route::any('/pdfclientes', 'API\CustomerController@PDFCustomers')->name('descargarPDFCustomers');
 Route::any('/pdfcreditos', 'API\CreditController@PDFCredits')->name('descargarPDFCredits');
 Route::get('/reportes', 'ReporteController@index')->name('reportes');
+Route::any('/pdfrutas', 'API\RouteController@PDFRoutes')->name('descargarPDFRoutes');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('{path}','HomeController@index')->where( 'path', '([A-z\/_.\d-]+)?' );
 

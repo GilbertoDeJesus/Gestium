@@ -126,7 +126,12 @@ class DelivererController extends Controller
         $fechaf = $request->input('fechaf');
         $id = $request->input('id');
         $status = $request->input('status');
-        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
+        if(!empty($fechai) && !empty($fechaf) && !empty($status)){
+            $deliverers = Deliverer::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->where('status', "=", $status)
+            ->get();    
+        }elseif(!empty($fechai) && !empty($fechaf) && !empty($id)){
             $deliverers = Deliverer::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('id', "=", $id)
@@ -135,8 +140,8 @@ class DelivererController extends Controller
             $deliverers = Deliverer::where("id","=",$id)
             ->get(); 
         }elseif(!empty($status)){
-            $deliverers = Deliverer::where("status","==",$status)
-            ->get(); 
+            $deliverers = Deliverer::where("status","=",$status)
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
             $deliverers = Deliverer::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)

@@ -168,261 +168,56 @@ class ProductController extends Controller
     public function PDFProducts(Request $request){
         $fechai = $request->input('fechai');
         $fechaf = $request->input('fechaf');
-        $idu = $request->input('idu');
         $idp = $request->input('idp');
-        $nombre = $request->input('nombre');
-        $status = $request->input('status');
+        $nombre = $request->input('id');
         $meta = $request->input('meta');
-        if(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp) && !empty($nombre) && !empty($status) && !empty($meta)){
+        if(!empty($fechai) && !empty($fechaf) && !empty($nombre) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->where('meta', "=", $meta)
-            ->where('status', "=", $status)
+            ->where('nombre',"=", $nombre)
+            ->where('meta',"=", $meta)
             ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp) && !empty($nombre) && !empty($status)){
+        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta) && !empty($idp) && !empty($nombre) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($meta) && !empty($nombre) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('meta', "=", $meta)
-            ->where('nombre', "=", $nombre)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp) && !empty($meta) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('meta', "=", $meta)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($idu) && !empty($idp) && !empty($meta) && !empty($status) && !empty($nombre)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('meta', "=", $meta)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp) && !empty($nombre)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp) && !empty($meta)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('meta', "=", $meta)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($status) && !empty($nombre)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('status', "=", $status)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($meta) && !empty($nombre)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('meta', "=", $meta)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($status) && !empty($idp) && !empty($nombre)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $status)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta) && !empty($idp) && !empty($nombre)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($status) && !empty($idu) && !empty($idp) && !empty($nombre)){
-            $products = Product::where("status","=",$status)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($meta) && !empty($idu) && !empty($idp) && !empty($nombre)){
-            $products = Product::where("status","=",$meta)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta) && !empty($nombre)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
-            ->where('nombre', "=", $nombre)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta) && !empty($idu)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
-            ->where('unit_id', "=", $idu)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta) && !empty($idp)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
-            ->where('provider_id', "=", $idp)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($nombre) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('nombre', "=", $nombre)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('provider_id', "=", $idp)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu) && !empty($idp)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
-            ->where('provider_id', "=", $idp)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($idp) && !empty($status)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('provider_id', "=", $idp)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($idp) && !empty($meta)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('provider_id', "=", $idp)
-            ->where('meta', "=", $meta)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($idp) && !empty($idu)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('provider_id', "=", $idp)
-            ->where('unit_id', "=", $idu)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($meta) && !empty($status)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('provider_id', "=", $idp)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($meta) && !empty($idp) && !empty($status)){
-            $products = Product::where("meta","=",$meta)
-            ->where('provider_id', "=", $idp)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($idu) && !empty($idp) && !empty($status)){
-            $products = Product::where("unit_id","=",$idu)
-            ->where('provider_id', "=", $idp)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($idu) && !empty($status)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('unit_id', "=", $idu)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($meta) && !empty($status)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('meta', "=", $meta)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($nombre) && !empty($idp) && !empty($idu)){
-            $products = Product::where("nombre","=",$nombre)
-            ->where('provider_id', "=", $idp)
-            ->where('unit_id', "=", $idu)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idu)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('unit_id', "=", $idu)
+            ->where('provider_id',"=", $idp)
+            ->where('meta',"=", $meta)
             ->get();    
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->where('provider_id', "=", $idp)
+            ->where('provider_id',"=", $idp)
             ->get();    
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($nombre)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->where('nombre', "=", $nombre)
+            ->where('id',"=", $nombre)
             ->get();    
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->where('meta', "=", $meta)
+            ->where('meta',"=", $meta)
             ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($status)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('status', "=", $status)
+        }elseif(!empty($meta) && !empty($idp)){
+            $products = Product::where("meta","=",$meta)
+            ->where('provider_id',"=", $idp)
             ->get();    
         }elseif(!empty($fechai) && !empty($fechaf)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->get();    
-        }elseif(!empty($idu)){
-            $products = Product::where("unit_id","=",$idu)
-            ->get(); 
         }elseif(!empty($idp)){
             $products = Product::where("provider_id","=",$idp)
             ->get(); 
         }elseif(!empty($meta)){
             $products = Product::where("meta","=",$meta)
             ->get(); 
-        }elseif(!empty($status)){
-            $products = Product::where("status","==",$status)
-            ->get(); 
         }elseif(!empty($nombre)){
-            $products = Product::where("nombre",">=",$nombre)
+            $products = Product::where("id","=",$nombre)
             ->get();    
         }else{
             $products =Product::all();
         }
-        $products = Product::all();
         $pdf = PDF::loadView('products', compact('products'));
         return $pdf->setPaper('a4', 'landscape')->stream('products.pdf');
     }

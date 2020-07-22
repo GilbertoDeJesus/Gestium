@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Route;
+use PDF;
 use Illuminate\Support\Facades\Validator;
 
 class RouteController extends Controller
@@ -121,6 +122,19 @@ class RouteController extends Controller
 
         //Devolvemos la ruta con su campo actualizado.
         return $route;
+    }
+    public function PDFRoutes(Request $request){
+        $fechai = $request->input('fechai');
+          $fechaf = $request->input('fechaf');
+          if(!empty($fechai) && !empty($fechaf)){
+            $routes = Route::where("created_at",">=",$fechai)
+            ->where('created_at',"<=", $fechaf)
+            ->get();    
+          }else{
+            $routes =Route::all();
+          }
+        $pdf = PDF::loadView('routes', compact('routes'));
+        return $pdf->setPaper('a4', 'landscape')->stream('routes.pdf');
     }
 
     /**
