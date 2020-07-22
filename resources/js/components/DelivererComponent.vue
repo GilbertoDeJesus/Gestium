@@ -8,7 +8,7 @@
                         cols="12"
                         md="12"
                         sm="12">
-                            <p style="text-align: center; font-size:25px; margin-bottom: -10px;"><strong>Listado de repartidores activos</strong></p>
+                            <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;"><strong>Listado de repartidores activos</strong></p>
                          </v-col>
                     </v-container>
                     <v-col cols="12" sm="12" md="11">

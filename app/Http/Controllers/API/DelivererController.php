@@ -59,7 +59,7 @@ class DelivererController extends Controller
         ->warehousemovement()
         //Con la fecha obtenemos los registros más recientes
         ->latest('created_at')
-        ->take(3)
+        ->take(1)
         ->get();
     }
 

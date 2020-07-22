@@ -8,7 +8,7 @@
                         cols="12"
                         md="12"
                         sm="12">
-                            <p style="text-align: center; font-size:30px; margin-bottom: -5px;"><strong>Ventas</strong></p>
+                            <p style="text-align: center; font-size:30px; font-weight:700; margin-bottom: -5px;"><strong>Ventas</strong></p>
                          </v-col>
                     </v-container>
                     <v-col cols="10" sm="12" md="10">
@@ -28,6 +28,21 @@
                             </template>
                             <template v-slot:item.fecha_salida="{ item }">
                                {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.customer.nombre="{ item }">
+                               <v-chip class="ma-2">
+                                    <v-avatar left >
+                                        <v-icon color="teal">mdi-account-circle</v-icon>
+                                    </v-avatar>{{item.customer.nombre | formatUpperCase}}
+                                </v-chip>
+                            </template>
+                            <template v-slot:item.monto="{item}">
+                                <v-chip color="orange" dark>
+                                    <v-avatar left color="green">
+                                        <v-icon color="white">monetization_on</v-icon>
+                                    </v-avatar>{{item.monto}}
+                                </v-chip>
+
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">
@@ -124,25 +139,6 @@
                                                             ></v-date-picker>
                                                         </v-dialog>
                                                         </v-col>
-                                                        <v-col
-                                                        cols="12"
-                                                        md="12"
-                                                        sm="6"
-                                                        >
-                                                        <v-textarea
-                                                        v-model="editedItem.observacion"
-                                                            hide-details
-                                                            clearable
-                                                            rounded
-                                                            filled
-                                                            dense
-                                                            label="Descripcion"
-                                                            type="text"
-                                                            rows="1"
-                                                            prepend-icon="mdi-comment-text"
-                                                            persistent-hint
-                                                        ></v-textarea>
-                                                        </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -214,6 +210,27 @@
                                                             return-object
                                                             ></v-autocomplete>
                                                         </v-col>
+                                                        <v-col
+                                                        cols="12"
+                                                        md="12"
+                                                        sm="6"
+                                                        >
+                                                        <v-textarea
+                                                        v-model="editedItem.observacion"
+                                                            hide-details
+                                                            clearable
+                                                            rounded
+                                                            filled
+                                                            dense
+                                                            label="Descripcion"
+                                                            type="text"
+                                                            rows="1"
+                                                            prepend-icon="mdi-comment-text"
+                                                            hint="*Opcional"
+                                                            persistent-hint
+                                                        ></v-textarea>
+                                                        </v-col>
+
                                                         </v-row>
                                                     </v-container>
                                                     </v-col>
@@ -488,11 +505,11 @@
                 //Se asignan los títulos de las columnas de la tabla principal,
                 //así como su valor correspondiente.
                 headers: [
-                    { text: 'Cliente', value: 'customer.nombre' }, /*align: 'start', sortable: false,*/
+                    { text: '#', value: 'id' }, /*align: 'start', sortable: false,*/
+                    { text: 'Cliente', value: 'customer.nombre' },
                     { text: 'Monto', value: 'monto' },
-                    { text: 'Observación', value: 'observacion'},
-                    { text: 'Fecha de venta', value: 'fecha'},
-                    { text: 'Acciones', value: 'actions', sortable: false },
+                    { text: 'Fecha de venta', value: 'created_at'},
+                    //{ text: 'Acciones', value: 'actions', sortable: false },
                 ],
                 //Se asignan los títulos de las columnas de la tabla de productos de una venta,
                 //así como su valor correspondiente.
@@ -508,8 +525,8 @@
                 routes:[],
                 productos:[],
                 clientes:[],
-                saleDetails:[],
                 movementlist:[],
+                saleDetails:[],
                 acum:1,
                 editedIndex: -1,
                 editedItem: {
@@ -695,7 +712,6 @@
                 //Madamos los datos necesarios al controlador para llenar la tabla ventas
                     const response = await axios.post('/api/sales',{
                         'fecha_salida': this.editedItem.fecha_salida,
-                        'monto': this.totalPrecio,
                         'observacion': this.editedItem.observacion,
                         'products':this.productosS,
                         'deliverer_id':this.select_deliverer.id,
@@ -780,16 +796,19 @@
                     console.log(response.data)
                     this.loading = false;
                 });
-            },
-            //En este método obtenemos todos los productos que tiene la salida indicada
-            getProducts(){
-                axios.get(`api/warehouse_movements/1`)
+                //Obtenemos la ultima salida que ha realizado un repartidor (enviamos el id del repartidor)
+                // getmovement(){
+                axios.get(`api/getmovementList/${this.select_deliverer.id}`)
                 .then(response => {
-                    this.productos = response.data;
+                    this.movementlist = response.data;
                     console.log(response.data)
                     this.loading = false;
-                });
+                    this.getProducts();
+                 });
+
             },
+            //En este método obtenemos todos los productos que tiene la salida indicada
+
             //Obtenemos los clientes que pertenecen a la ruta indicada
             getClientsNames(){
                 this.dis=false
@@ -810,14 +829,14 @@
                     this.loading = false;
                       });
             },
-            //Obtenemos las 3 ultimas salidas que ha realizado un repartidor (enviamos el id del repartidor)
-            getmovement(){
-                axios.get(`api/getmovementList/1`)
+            getProducts(){
+                axios.get(`api/warehouse_movements/${this.movementlist[0].id}`)
+                //${this.movementlist[0].id}
                 .then(response => {
-                    this.movementlist = response.data;
+                    this.productos = response.data;
                     console.log(response.data)
                     this.loading = false;
-                      });
+                });
             },
 
         },
@@ -825,9 +844,9 @@
         created () {
             this.getResults();
             this.getDeliverers();
-            this.getProducts();
+            //this.getProducts();
             this.getSaleDetail();
-            this.getmovement();
+            //this.getmovement();
         },
     }
 </script>
