@@ -81,7 +81,6 @@ class CreditController extends Controller
         $validator = Validator ::make( $request->all(),[
             'customer_id'=> 'required|Integer',
             'monto' =>'required|Integer',
-            'descripcion' => 'required|max:200',
 
         ]);
 
@@ -148,17 +147,17 @@ class CreditController extends Controller
             $credits = Credit::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('customer_id', "=", $id)
-            ->get();    
+            ->get();
         }elseif(!empty($id)){
             $credits = Credit::where("customer_id","=",$id)
-            ->get(); 
+            ->get();
         }elseif(!empty($status)){
             $credits = Credit::where("status","==",$status)
-            ->get(); 
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
             $credits = Credit::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->get();    
+            ->get();
         }else{
             $credits =Credit::all();
         }

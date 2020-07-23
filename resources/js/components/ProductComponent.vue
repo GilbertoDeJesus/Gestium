@@ -172,7 +172,7 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialogUnits" scrollable max-width="900px">
+                                <v-dialog v-model="dialogUnits" scrollable max-width="900px" persistent>
                                     <template v-slot:activator="{ on }">
                                     <v-btn color="#ff5300" outlined dark v-on="on" v-on:click="getTypeUnit"><v-icon left>mdi-pencil</v-icon>Unidades</v-btn>
                                 </template>
@@ -321,7 +321,7 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialog" scrollable max-width="810px">
+                                <v-dialog v-model="dialog" scrollable max-width="810px" persistent>
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" dark v-on="on" ><v-icon left>queue</v-icon>Nuevo Producto</v-btn>
                                 </template>

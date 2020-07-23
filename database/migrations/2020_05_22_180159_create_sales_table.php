@@ -17,7 +17,7 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->date('fecha')->required();
             $table->decimal('monto',8,2);
-            $table->string('observacion');
+            $table->string('observacion')->nullable();
             $table->unsignedBigInteger('deliverer_id');
             $table->unsignedBigInteger('customer_id');
             $table->timestamps();

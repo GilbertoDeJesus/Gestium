@@ -94,7 +94,7 @@
                                             </v-list-item-icon>
                                             <v-list-item-content>
                                                 <v-list-item-title>Descripción</v-list-item-title>
-                                                <v-list-item-subtitle>{{item.descripcion | formatUpperCase}}</v-list-item-subtitle>
+                                                <v-list-item-subtitle>{{item.descripcion}}</v-list-item-subtitle>
                                             </v-list-item-content>
                                             </v-list-item>
                                             <v-list-item>
@@ -138,7 +138,7 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialog" max-width="500px">
+                                <v-dialog v-model="dialog" max-width="500px" persistent>
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>mdi-credit-card-multiple</v-icon>Nuevo Credito</v-btn>
                                 </template>
@@ -164,7 +164,7 @@
                                                     <v-col
                                                     cols="12"
                                                     md="12"
-                                                    sm="6"
+                                                    sm="12"
                                                     v-if="!edit_mode"
                                                     >
                                                     <v-select
@@ -177,37 +177,6 @@
                                                         persistent-hint
                                                         return-object
                                                         ></v-select>
-                                                    </v-col>
-                                                     <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    v-if="edit_mode"
-                                                    >
-                                                    <v-text-field
-
-                                                        v-model="editedItem.descripcion"
-                                                        label="Descripción del abono"
-                                                        type="text"
-                                                        prepend-icon="post_add"
-                                                        clearable
-                                                    ></v-text-field>
-                                                    </v-col>
-                                                     <v-col
-                                                    cols="12"
-                                                    md="12"
-                                                    sm="6"
-                                                    v-if="!edit_mode"
-                                                    >
-                                                    <v-text-field
-                                                    :rules="[required('descripcion'), minimum_length(8)]"
-                                                        v-model="editedItem.descripcion"
-                                                        label="Descripción"
-                                                        type="text"
-                                                        prepend-icon="post_add"
-                                                        clearable
-                                                        required
-                                                    ></v-text-field>
                                                     </v-col>
 
                                                     <v-col
@@ -224,7 +193,6 @@
                                                         clearable
                                                         label="Monto"
                                                         prepend-icon="attach_money"
-                                                        hint="*Solo si está seguro"
                                                         persistent-hint
                                                     ></v-text-field>
                                                     </v-col>
@@ -247,40 +215,45 @@
                                                     ></v-text-field>
                                                     </v-col>
 
-
-
                                                     <v-col
                                                     cols="12"
                                                     md="6"
+                                                    sm="6"
+                                                    >
+                                                    <h4 style="line-height: 3.5em; font-size: 1.025rem;"><v-icon>mdi-calendar</v-icon>&nbsp;<b>Fecha:</b>&nbsp;&nbsp;{{fecha}}</h4>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
                                                     sm="12"
+                                                    v-if="!edit_mode"
                                                     >
-                                                    <v-dialog
-                                                        ref="dialog"
-                                                        v-model="menu1"
-                                                        :return-value.sync="date1"
-                                                        persistent
-                                                        width="290px"
-                                                    >
-                                                        <template v-slot:activator="{ on }">
-                                                        <v-text-field
-                                                            v-model="editedItem.fecha"
-                                                            label="Fecha de aprobación"
-                                                            prepend-icon="event"
-                                                            readonly
-                                                            v-on="on"
-                                                        ></v-text-field>
-                                                        </template>
-                                                        <v-date-picker
-                                                        :rules="[required('fecha')]"
-                                                        v-model="editedItem.fecha"
-                                                        locale="mx"
-                                                        type="date"
-                                                        format="YYYY-MM-dd"
-                                                        color="#fd2d21"
+                                                    <v-text-field
+                                                        v-model="editedItem.descripcion"
+                                                        label="Descripción"
+                                                        type="text"
+                                                        hint="*Opcional"
+                                                        persistent-hint
+                                                        prepend-icon="post_add"
+                                                        clearable
                                                         required
-                                                        @input="menu1 = false"
-                                                    ></v-date-picker>
-                                                    </v-dialog>
+                                                    ></v-text-field>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="12"
+                                                    sm="12"
+                                                    v-if="edit_mode"
+                                                    >
+                                                    <v-text-field
+                                                        v-model="editedItem.descripcion"
+                                                        label="Descripción del abono"
+                                                        type="text"
+                                                        hint="*Opcional"
+                                                        persistent-hint
+                                                        prepend-icon="post_add"
+                                                        clearable
+                                                    ></v-text-field>
                                                     </v-col>
 
                                                 </v-row>
@@ -390,6 +363,9 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'Nuevo registro' : 'Registrar abono'
             },
+            fecha () {
+                return this.date1
+            }
         },
 
         watch: {
@@ -440,14 +416,14 @@
                         this.getResults();
                         Toast.fire({
                             icon: 'success', //En caso de que los valores ingresados sean validos se muestra un mensaje de exito
-                            title: '¡Datos del credito actualizados!'
+                            title: '¡Abono realizado con exito!'
                         })
                     }
                 } else {
                     const response = await axios.post('/api/credits',{
                         'monto': this.editedItem.monto, //Se insertan los valores en la bd
                         'descripcion' : this.editedItem.descripcion,
-                        'fecha': this.editedItem.fecha,
+                        'fecha': this.date1,
                         'customer_id': this.select.id,
                     }).catch(error => console.log("Error: " + error));
 

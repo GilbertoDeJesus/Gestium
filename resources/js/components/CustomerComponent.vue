@@ -151,7 +151,7 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialog" max-width="550px">
+                                <v-dialog v-model="dialog" max-width="550px" persistent>
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>person_add</v-icon>Agregar</v-btn>
                                 </template>

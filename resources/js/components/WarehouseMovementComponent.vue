@@ -66,7 +66,7 @@
                                 inset
                                 vertical
                                 ></v-divider>
-                                <v-dialog v-model="dialog" scrollable max-width="900px">
+                                <v-dialog v-model="dialog" scrollable max-width="900px" persistent>
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>playlist_add</v-icon>Nueva Salida</v-btn>
                                 </template>
@@ -117,34 +117,7 @@
                                                         md="6"
                                                         sm="6"
                                                         >
-                                                        <v-dialog
-                                                            ref="dialog"
-                                                            v-model="menu"
-                                                            :return-value.sync="date1"
-                                                            persistent
-                                                            width="290px"
-                                                        >
-                                                            <template v-slot:activator="{ on }">
-                                                            <v-text-field
-                                                                :rules="[required('fecha'), minimum_length(1)]"
-                                                                v-model="editedItem.fecha_salida"
-                                                                label="Fecha de salida"
-                                                                prepend-icon="event"
-                                                                readonly
-                                                                v-on="on"
-                                                            ></v-text-field>
-                                                            </template>
-                                                            <v-date-picker
-                                                            :rules="[required('fecha de salida')]"
-                                                            v-model="editedItem.fecha_salida"
-                                                            locale="mx"
-                                                            format="YYYY-MM-dd"
-                                                            required
-                                                            color="#fd2d21"
-                                                            @input="menu = false"
-                                                            ></v-date-picker>
-                                                        </v-dialog>
-
+                                                        <h4 style="line-height: 3.5em; font-size: 1.025rem;"><v-icon>mdi-calendar</v-icon>&nbsp;<b>Fecha:</b>&nbsp;&nbsp;{{fecha}}</h4>
                                                         </v-col>
                                                         <v-col
                                                         cols="12"
@@ -215,6 +188,7 @@
                                                         md="12"
                                                         sm="12"
                                                         >
+
                                                             <v-data-table
                                                             :headers="headers_productos"
                                                             :items="productosS"
@@ -223,7 +197,6 @@
                                                             :items-per-page="6"
                                                             :footer-props="{
                                                                 'items-per-page-options': [7, 10, 20]
-
                                                             }"
                                                             dense
                                                             >
@@ -581,6 +554,9 @@
             formFecha(){
                 return this.nFecha
             },
+            fecha(){
+                return this.date1
+            },
 
         },
 
@@ -717,11 +693,13 @@
             //Cerramos el dialogo para crear una nuevo movimiento
             close () {
                 this.productosS=[]
-                this.$refs.form.reset()
+                //this.$refs.form.reset()
                 this.dialog = false
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
+                this.select_deliverer=[0]
+                this.editedItem.cantidad=null;
 
                 })
                 if (this.edit_mode == true) {
@@ -736,7 +714,7 @@
             async save () {
                 //Mandamos los datos necesarios a nuestro controlador para llenar la tabla de movimientos y movimientos_producto
                     const response = await axios.post('/api/warehouse_movements',{
-                        'fecha_salida': this.editedItem.fecha_salida,
+                        'fecha_salida': this.date1,
                         'deliverer_id': this.select_deliverer.id,
                         'products':this.productosS,
                         'tipoMovimiento': this.select_tipoM.id

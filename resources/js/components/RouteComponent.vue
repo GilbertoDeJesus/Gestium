@@ -100,10 +100,13 @@
                                                         v-model="editedItem.municipio"
                                                         label="Municipio"
                                                         type="text"
+                                                        filled
+                                                        rounded
+                                                        single-line
                                                         clearable
-                                                        prepend-icon="explore"
+                                                        prepend-inner-icon="explore"
                                                         required
-                                                        style="padding-top:2.5rem;"
+                                                        style="padding-top:1.5rem;"
                                                     ></v-text-field>
                                                     </v-col>
                                                     <v-col
@@ -118,7 +121,12 @@
                                                             item-text="nombre"
                                                             item-value="id"
                                                             label="Selecccione al repartidor"
-                                                            prepend-icon="local_shipping"
+                                                            filled
+                                                            rounded
+                                                            hide-details
+                                                            single-line
+                                                            clearable
+                                                            prepend-inner-icon="local_shipping"
                                                             persistent-hint
                                                             return-object
                                                             ></v-autocomplete>

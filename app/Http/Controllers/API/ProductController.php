@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-
+use App\Entry;
 use App\Http\Controllers\Controller;
 use App\Product;
 use PDF;
@@ -30,8 +30,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //Creamos y devolvemos un nuevo producto con los datos obtenidos del $request.
-        return Product::create([
+        //Creamos un nuevo producto con los datos obtenidos del $request.
+        $product=Product::create([
             'provider_id' => $request['provider_id'],
             'unit_id' => $request['unit_id'],
             'nombre' => $request['nombre'],
@@ -43,6 +43,22 @@ class ProductController extends Controller
             'stock_minimo' => $request['stock_minimo'],
             'status' => true
         ]);
+
+        //Creamos un nuevo registro en la tabla de entradas
+        $entry= Entry::create([
+            'provider_id' => $request['provider_id'],
+            'observacion' => $request['descripcion'],
+            'fecha_entrada' =>date("d-m-y")
+        ]);
+
+        //Llenamos la tabla formada por entradas y productos
+        $entry->product()->attach
+        ($product['id'], ['cantidad' => $request['stock'],
+        'precio_compra' => $request['precio_compra']
+        ]);
+
+        //Devolvemos el registro del producto creado
+        return $product;
     }
 
     /**
@@ -176,45 +192,45 @@ class ProductController extends Controller
             ->where('created_at',"<=", $fechaf)
             ->where('nombre',"=", $nombre)
             ->where('meta',"=", $meta)
-            ->get();    
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('provider_id',"=", $idp)
             ->where('meta',"=", $meta)
-            ->get();    
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('provider_id',"=", $idp)
-            ->get();    
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($nombre)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('id',"=", $nombre)
-            ->get();    
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('meta',"=", $meta)
-            ->get();    
+            ->get();
         }elseif(!empty($meta) && !empty($idp)){
             $products = Product::where("meta","=",$meta)
             ->where('provider_id',"=", $idp)
-            ->get();    
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->get();    
+            ->get();
         }elseif(!empty($idp)){
             $products = Product::where("provider_id","=",$idp)
-            ->get(); 
+            ->get();
         }elseif(!empty($meta)){
             $products = Product::where("meta","=",$meta)
-            ->get(); 
+            ->get();
         }elseif(!empty($nombre)){
             $products = Product::where("id","=",$nombre)
-            ->get();    
+            ->get();
         }else{
             $products =Product::all();
         }
