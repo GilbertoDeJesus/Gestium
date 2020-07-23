@@ -665,7 +665,7 @@
                 editedItem: {
                     id: '',
                     nombre: '',
-                    meta: '',
+                    meta: false,
                     unidadM: '',
                     provider_id:'',
                     precio_compra:'',

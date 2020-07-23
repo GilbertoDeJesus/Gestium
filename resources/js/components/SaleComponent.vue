@@ -709,7 +709,7 @@
                 }
             },
             async save () {
-                //Madamos los datos necesarios al controlador para llenar la tabla ventas
+                //Mandamos los datos necesarios al controlador para llenar la tabla ventas
                     const response = await axios.post('/api/sales',{
                         'fecha_salida': this.editedItem.fecha_salida,
                         'observacion': this.editedItem.observacion,
@@ -729,7 +729,9 @@
                         this.totalPrecio= 0
 
                      }
+                     this.getStock();
                 this.close();
+
 
             },
             async deleteItem (item) {
@@ -831,7 +833,6 @@
             },
             getProducts(){
                 axios.get(`api/warehouse_movements/${this.movementlist[0].id}`)
-                //${this.movementlist[0].id}
                 .then(response => {
                     this.productos = response.data;
                     console.log(response.data)
