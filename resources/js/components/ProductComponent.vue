@@ -246,16 +246,16 @@
                                                         cols="12"
                                                         md="12"
                                                         sm="12"
-                                                        style="padding-bottom: 0px;">
+                                                        style="padding-bottom: 0px; ">
                                                             <p style="text-align: center; font-size:28px; margin-bottom: 5px;"><strong>Listado de Unidades</strong></p>
-                                                            <v-container style="margin-top:1.5rem;" >
+                                                            <v-container style="margin-top:1.5rem; padding-bottom: 0px; margin-bottom: -10px;" >
 
                                                                 <v-spacer></v-spacer>
                                                                     <v-text-field
                                                                         v-model="tipo"
                                                                         prepend-inner-icon="search"
                                                                         label="Buscar unidades"
-                                                                        hide-details
+                                                                        hint="*Inicie con la primer letra en mayuscula "
                                                                         filled
                                                                         rounded
                                                                         single-line
@@ -271,7 +271,7 @@
                                                     <v-container>
                                                         <v-simple-table
                                                         fixed-header
-                                                        height="300px"
+                                                        height="290px"
                                                         light
                                                         class="elevation-3">
                                                             <template v-slot:default>
