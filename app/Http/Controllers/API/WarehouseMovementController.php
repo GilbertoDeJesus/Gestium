@@ -29,6 +29,7 @@ class WarehouseMovementController extends Controller
          WarehouseMovement::raw('sum(cantidad) as sum'), 'deliverers.nombre')
        ->groupBy('warehouse_movements.id', 'warehouse_movements.fecha_salida', 'warehouse_movements.created_at',
         'deliverers.nombre')
+        ->where("product_warehouse_movement.tipoMovimiento", '=',1)
        ->get();
     }
 
@@ -94,7 +95,7 @@ class WarehouseMovementController extends Controller
           pertenecen a la tabla movimientos_producto.*/
         ->select('products.id', 'products.nombre',  'products.precio_venta',
         'product_warehouse_movement.cantidad', 'product_warehouse_movement.id as pw_id',
-        'warehouse_movements.fecha_salida')
+        'warehouse_movements.fecha_salida','warehouse_movements.deliverer_id as deliverer_id')
          /*Se devolveran los resultados donde el campo warehouse_movement_id de la tabla
            movimiento_producto coincida con el 'id' que recibe en un principio la función*/
         ->where('product_warehouse_movement.warehouse_movement_id', '=', $id )
@@ -160,7 +161,7 @@ class WarehouseMovementController extends Controller
           ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
           ->where('deliverer_id', "=", $id)
-          ->get();    
+          ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
           $warehousemovements = ProductWarehouseMovement::join('products',
           'product_warehouse_movement.product_id', '=', 'products.id')
@@ -171,8 +172,9 @@ class WarehouseMovementController extends Controller
         'warehouse_movements.fecha_salida')
           ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
-          ->get();    
+          ->get();
         }elseif(!empty($id)){
+<<<<<<< HEAD
           $warehousemovements = ProductWarehouseMovement::join('products',
           'product_warehouse_movement.product_id', '=', 'products.id')
           ->join('warehouse_movements', 'product_warehouse_movement.warehouse_movement_id',
@@ -182,6 +184,10 @@ class WarehouseMovementController extends Controller
         'warehouse_movements.fecha_salida')
           ->where("deliverer_id","=",$id)
           ->get(); 
+=======
+          $swarehousemovements = WarehouseMovement::where("deliverer_id","=",$id)
+          ->get();
+>>>>>>> e4f0bb1eb5c2613574eccde95f6cea400cb5e65c
         }else{
           $warehousemovements =ProductWarehouseMovement::join('products',
           'product_warehouse_movement.product_id', '=', 'products.id')
