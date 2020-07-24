@@ -67,7 +67,7 @@
                                 vertical
                                 ></v-divider>
 
-                                <v-dialog v-model="dialog" max-width="400px">
+                                <v-dialog v-model="dialog" max-width="400px" persistent>
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>mdi-plus-network</v-icon>Nueva Ruta</v-btn>
                                 </template>
@@ -96,13 +96,9 @@
                                                     sm="12"
                                                     >
                                                     <v-text-field
-                                                    :rules="[required('nombre')]"
                                                         v-model="editedItem.municipio"
                                                         label="Municipio"
                                                         type="text"
-                                                        filled
-                                                        rounded
-                                                        single-line
                                                         clearable
                                                         prepend-inner-icon="explore"
                                                         required
@@ -121,10 +117,7 @@
                                                             item-text="nombre"
                                                             item-value="id"
                                                             label="Selecccione al repartidor"
-                                                            filled
-                                                            rounded
-                                                            hide-details
-                                                            single-line
+
                                                             clearable
                                                             prepend-inner-icon="local_shipping"
                                                             persistent-hint
@@ -145,7 +138,7 @@
                                 </v-card>
                                 </v-dialog>
 
-                                <v-dialog v-model="dialogAddDeliverer" scrollable max-width="900px">
+                                <v-dialog v-model="dialogAddDeliverer" scrollable max-width="900px" persistent>
 
                                 <v-card style="border-radius:10px; height:100%; margin: 0; display: flex; flex-direction: column;">
 
@@ -421,7 +414,8 @@
             },
             close () {
                 //Cuando de cancela la operación de editar se resetea el objeto
-                this.$refs.form.reset()
+                //this.$refs.form.reset()
+                this.route = []
                 //Cerramos el dialogo que estaba abierto
                 this.dialog = false
                 this.$nextTick(() => {
@@ -435,7 +429,9 @@
             },
             //Cerramos el dialogo para asignar nuevos repartidores a una ruta
             closeDeliverer () {
-                this.dialogAddDeliverer=false
+                this.dialogAddDeliverer = false
+                this.editedItem.municipio = ''
+                this.select = [0]
             },
             async save () {
                  //vamos a crear una ruta y asignar una ruta enviando nuestros datos de los formularios

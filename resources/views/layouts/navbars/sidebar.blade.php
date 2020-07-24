@@ -105,7 +105,7 @@
       <li class="nav-item">
         <a href="{{ route('reportes') }}" class="nav-link">
           <i class="material-icons">assignment</i>
-        {{ __('Reportes') }}
+            <p>{{ __('Reportes') }}</p>
       </a>
       </li>
       <li class="nav-item">

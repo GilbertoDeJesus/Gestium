@@ -210,9 +210,7 @@
                                                             style="margin-bottom: 3rem;"
                                                             >
                                                             <v-text-field
-                                                            :rules="[required('tipo')]"
-
-                                                                v-model="editUnit.tipo"
+                                                            v-model="editUnit.tipo"
                                                                 label="Nueva unidad de medida"
                                                                 type="text"
                                                                 clearable
@@ -399,9 +397,25 @@
                                                     cols="12"
                                                     md="4"
                                                     sm="6"
+                                                    v-if="!edit_mode"
                                                     >
                                                     <v-text-field
                                                     :rules="[required('stock mínimo')]"
+                                                        v-model="editedItem.stock_minimo"
+                                                        label="Stock minimo"
+                                                        type="number"
+                                                        prepend-icon="insert_chart_outlined"
+                                                        clearable
+                                                        required
+                                                    ></v-text-field>
+                                                    </v-col>
+                                                    <v-col
+                                                    cols="12"
+                                                    md="4"
+                                                    sm="6"
+                                                    v-if="edit_mode"
+                                                    >
+                                                    <v-text-field
                                                         v-model="editedItem.stock_minimo"
                                                         label="Stock minimo"
                                                         type="number"
@@ -441,7 +455,7 @@
 
                                                         v-model="editedItem.precio_compra"
                                                         :counter=true
-                                                        type="text"
+                                                        type="number"
                                                         clearable
                                                         prepend-icon="attach_money"
                                                         label="Precio de compra"
@@ -460,7 +474,7 @@
                                                     :rules="[required('precio de compra')]"
                                                         v-model="editedItem.precio_compra"
                                                         :counter="5"
-                                                        type="text"
+                                                        type="number"
                                                         clearable
                                                         prepend-icon="attach_money"
                                                         label="Precio de compra"
@@ -476,7 +490,7 @@
                                                     <v-text-field
                                                         v-model="editedItem.precio_venta"
                                                         :counter=true
-                                                        type="text"
+                                                        type="number"
                                                         clearable
                                                         label="Precio de venta"
                                                         prepend-icon="local_atm"
@@ -494,7 +508,7 @@
                                                         :rules="[required('precio de venta')]"
                                                         v-model="editedItem.precio_venta"
                                                         :counter="5"
-                                                        type="text"
+                                                        type="number"
                                                         clearable
                                                         label="Precio de venta"
                                                         prepend-icon="local_atm"
@@ -508,7 +522,6 @@
                                                     sm="12"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('descripcion'), minimum_length(8)]"
                                                         v-model="editedItem.descripcion"
                                                         :counter="45"
                                                         label="Descripción"
@@ -815,14 +828,28 @@
                 if (this.editUnit.tipo== this.nameUnit) {
                         //Si la unidad ingresada y la unidad encontrada son iguales no se permite el registro de la unidad
                         //Despues de esto se muestra un mensaje de alerta
-                        Swal.fire({
-                        title: 'Alerta',
-                        text: "Esta unidad ya está registrada!",
-                        type: 'error',
-                        confirmButtonColor: '#d33',
-                        confirmButtonText: 'Entendido'
-                        });
-                        this.nameUnit=''
+                        if (this.editUnit.tipo == "") {
+                            Swal.fire({
+                            title: 'Alerta',
+                            text: "No ha ingresado el nombre de la unidad",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                            this.nameUnit=''
+                            this.editUnit.tipo = ''
+                        }else{
+                            Swal.fire({
+                            title: 'Alerta',
+                            text: "Esta unidad ya está registrada!",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                            this.nameUnit=''
+                            this.editUnit.tipo = ''
+                        }
+
                     }
                     else{
                         //En caso de existir ninguna coincidencia se prosigue con el registro de la unidad

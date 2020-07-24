@@ -17,17 +17,17 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->boolean('meta')->FALSE;
-            $table->string('descripcion');
+            $table->string('descripcion')->nullable();
             $table->decimal('precio_compra',8,2);
             $table->decimal('precio_venta',8,2);
             $table->integer('stock');
             $table->integer('stock_minimo');
             $table->boolean('status')->TRUE;
-            
+
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('provider_id');
             $table->timestamps();
-            
+
 
             $table->foreign('provider_id')->references('id')->on('providers');
             $table->foreign('unit_id')->references('id')->on('units');

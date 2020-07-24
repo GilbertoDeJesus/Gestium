@@ -383,7 +383,7 @@
                                                                 color="#ff5400"
                                                                 dense
                                                                 border="left"
-                                                                elevation="4">No se ha realizado ninguna saida.</v-alert>
+                                                                elevation="4">No se han seleccionado productos.</v-alert>
                                                             </template>
                                                             </v-data-table>
                                                         </v-col>

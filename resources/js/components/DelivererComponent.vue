@@ -151,7 +151,7 @@
                                 inset
                                 vertical
                                 ></v-divider>
-                                <v-dialog v-model="dialog" max-width="650px">
+                                <v-dialog v-model="dialog" max-width="650px" persistent>
                                 <template v-slot:activator="{ on }">
                                     <v-btn color="#ff3f00" outlined dark v-on="on" ><v-icon left>person_add</v-icon>Nuevo Repartidor</v-btn>
                                 </template>
@@ -195,7 +195,7 @@
                                                     sm="4"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
+                                                        :rules="[required('Apellido paterno'), minimum_length(4)]"
                                                         v-model="editedItem.aPaterno"
                                                         :counter="15"
                                                         label="Apellido paterno"
@@ -211,7 +211,7 @@
                                                     sm="4"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
+                                                        :rules="[required('Apellido materno'), minimum_length(4)]"
                                                         v-model="editedItem.aMaterno"
                                                         :counter="15"
                                                         label="Apellido materno"
@@ -262,7 +262,7 @@
                                                         v-if="!edit_mode"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(8)]"
+                                                        :rules="[required('Telefono'), minimum_length(8)]"
                                                         v-model="editedItem.telefono"
                                                         :counter="15"
                                                         type="text"

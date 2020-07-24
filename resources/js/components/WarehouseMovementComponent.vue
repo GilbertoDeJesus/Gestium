@@ -588,14 +588,24 @@
                 }else{
 
                     if (this.select_product.nombre == this.producto) {
-                        Swal.fire({
+                        if (this.select_deliverer.nombre == '') {
+                            Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'No se ha seleccionado un repartidor',
+
+                            });
+                        }else{
+                            Swal.fire({
                             title: 'Alerta',
                             text: "Este producto ya esta en la lista!",
                             type: 'error',
                             confirmButtonColor: '#d33',
                             confirmButtonText: 'Entendido'
                             });
-                        this.producto=''
+                            this.producto=''
+                        }
+
                     }else{
                         //guardamos en "salidaProducto" todos los productos seleccionados junto con la cantidad de cada uno
                         this.salidaProducto={
@@ -695,6 +705,7 @@
                 this.productosS=[]
                 //this.$refs.form.reset()
                 this.dialog = false
+                this.select_product = [0]
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -712,6 +723,15 @@
                 this.productList=[]
             },
             async save () {
+                if (this.productosS.length == 0) {
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "No ha seleccionado ningun producto",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                }else{
                 //Mandamos los datos necesarios a nuestro controlador para llenar la tabla de movimientos y movimientos_producto
                     const response = await axios.post('/api/warehouse_movements',{
                         'fecha_salida': this.date1,
@@ -752,6 +772,7 @@
 
                      }
                 this.close();
+                }
 
             },
             //Eliminamos de la tabla el movimiento seleccionado y cambiamos su "status"
