@@ -6,6 +6,7 @@ use App\Entry;
 use App\Http\Controllers\Controller;
 use App\Product;
 use PDF;
+use App\ProductWarehouseMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 class ProductController extends Controller
@@ -115,6 +116,13 @@ class ProductController extends Controller
            $id_product->update([
            'stock' => $id_product->stock + $p['cantidad'] ]);
 
+           //Actualizamos el campo "cantidad" de la salida a la que corresponde la devolución
+           $pwm= Productwarehousemovement::findOrFail($p['pw_id']);
+                 $stock = $pwm->cantidad;
+
+                  if ($p['cantidad'] <= $stock ){
+                    $pwm->update(['cantidad' => $stock -  $p['cantidad']]);
+                   }
         }
     }
 

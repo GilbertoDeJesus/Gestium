@@ -119,7 +119,7 @@
                                                         >
                                                         <h4 style="line-height: 3.5em; font-size: 1.025rem;"><v-icon>mdi-calendar</v-icon>&nbsp;<b>Fecha:</b>&nbsp;&nbsp;{{fecha}}</h4>
                                                         </v-col>
-                                                        <v-col
+                                                       <!--<v-col
                                                         cols="12"
                                                         md="12"
                                                         sm="6"
@@ -134,7 +134,7 @@
                                                             persistent-hint
                                                             return-object
                                                             ></v-select>
-                                                        </v-col>
+                                                        </v-col>-->
 
                                                         <v-col
                                                         cols="12"
@@ -339,6 +339,13 @@
                                                     </v-list-item-content>
                                                 </v-list-item>
 
+                                                 <v-divider></v-divider>
+                                                <v-list-item>
+                                                    <v-list-item-content style="font-size:1.5rem; text-align:center;">
+                                                            <v-btn color="#ff5300" dark @click="returnProduct">Devolver</v-btn>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+
                                                 <v-divider></v-divider>
                                                 <v-list-item>
                                                     <v-list-item-content style="font-size:1.5rem; text-align:center;">
@@ -470,11 +477,11 @@
                     cantidad:'',
                 },
                  //Declaramos las propiedades del select_tipoM
-                select_tipoM: { text: 'Salida', id: '1' },
+                /*select_tipoM: { text: 'Salida', id: '1' },
                 tipoMovimiento: [
                     { nombre: 'Salida', id: '1' },
                     { nombre: 'Devolución', id: '0' },
-                ],
+                ],*/
                 //Se asignan los títulos de las columnas de la tabla principal,
                  //así como su valor correspondiente.
                 headers: [
@@ -717,6 +724,35 @@
                     this.edit_mode = false
                 }
             },
+           async returnProduct(){
+                 const responseR = await axios.post('/api/warehouse_movements',{
+                        'fecha_salida': this.productList[0].fecha_salida,
+                        'deliverer_id': this.productList[0].deliverer_id,
+                        'products':this.productList,
+                        'tipoMovimiento': 0
+                    }).catch(error => console.log("Error: " + error));
+
+                   const response1=await axios.put(`/api/returnProduct`,
+                   this.productList).catch(error => console.log("Error: " + error));
+
+                   if (response1) {
+                        this.getResults();
+                        console.log(response1.data);
+
+                     }
+
+                    if (responseR) {
+                        this.getResults();
+                        Toast.fire({
+                            icon: 'success',
+                            title: '¡Devolución hecha!'
+                        })
+                        console.log(responseR.data);
+
+                    }
+                 this.dialogProductList=false;
+
+            },
             //Cerramos el dialogo que muestra los productos de una salida
             closeProductList(){
                 this.dialogProductList=false
@@ -737,30 +773,24 @@
                         'fecha_salida': this.date1,
                         'deliverer_id': this.select_deliverer.id,
                         'products':this.productosS,
-                        'tipoMovimiento': this.select_tipoM.id
+                        'tipoMovimiento': 1
                     }).catch(error => console.log("Error: " + error));
 
 
                    //De acuerdo al tipo de movimiento se llama la función para agrear (devolución) o realizar salida (salida) de un producto
-                   if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
-                       const response=await axios.put(`/api/updateS`,
+                   //if (this.select_tipoM.id=='1') { //comprueba el tipo de movimietno
+                       const response1 = await axios.put(`/api/updateS`,
                         this.productosS).catch(error => console.log("Error: " + error));
-                        if (response) {
+                        if (response1) {
                         this.getResults();
-                        console.log(response.data);
+                        console.log(response1.data);
                         this.productosS=[];
 
-                    }
-                    }else{
-                       const response=await axios.put(`/api/returnProduct`,
-                        this.productosS).catch(error => console.log("Error: " + error));
+                    //}
+                  //  }else{
+                   //    const response=await axios.put(`/api/returnProduct`,
+                      //  this.productosS).catch(error => console.log("Error: " + error));
 
-                    if (response) {
-                        this.getResults();
-                        console.log(response.data);
-                        this.productosS=[];
-
-                     }
                     }
                     if (response) {
                         this.getResults();
