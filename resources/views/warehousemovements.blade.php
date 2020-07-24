@@ -19,7 +19,10 @@ $fecha = date('Y-m-d');
             <thead>
               <tr class="bg-warning">
                 <th scope="col">#</th>
-                <th scope="col">Id del Repartidor</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio de Venta</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Tipo de Movimiento</th>
                 <th scope="col">Fecha de salida</th>
               </tr>
             </thead>
@@ -27,7 +30,10 @@ $fecha = date('Y-m-d');
               @foreach ($warehousemovements as $warehousemovement)
               <tr>
                   <th scope="row">{{ $warehousemovement->id }}</th>
-                  <td>{{ $warehousemovement->deliverer_id }}</td>
+                  <td>{{ $warehousemovement->nombre }}</td>
+                  <td>{{ $warehousemovement->precio_venta }}</td>
+                  <td>{{ $warehousemovement->cantidad }}</td>
+                  <td>{{ $warehousemovement->tipoMovimiento }}</td>
                   <td>{{ $warehousemovement->fecha_salida }}</td>
               </tr>
               @endforeach
