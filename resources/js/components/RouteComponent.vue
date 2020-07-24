@@ -416,6 +416,8 @@
                 //Cuando de cancela la operación de editar se resetea el objeto
                 //this.$refs.form.reset()
                 this.route = []
+                this.select =[0]
+                this.editedItem.municipio = ''
                 //Cerramos el dialogo que estaba abierto
                 this.dialog = false
                 this.$nextTick(() => {
@@ -429,13 +431,28 @@
             },
             //Cerramos el dialogo para asignar nuevos repartidores a una ruta
             closeDeliverer () {
+                this.route = []
                 this.dialogAddDeliverer = false
                 this.editedItem.municipio = ''
                 this.select = [0]
+                this.$nextTick(() => {
+                //Se restablecen los valores iniciales del objeto
+                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+                })
             },
             async save () {
                  //vamos a crear una ruta y asignar una ruta enviando nuestros datos de los formularios
                  //a la función indicada del controlador solicitado
+                 if (this.editedItem.municipio == "") {
+                     Swal.fire({
+                            title: 'Alerta',
+                            text: "No ha ingresado el nombre de la Ruta",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                 }else{
                     const response = await axios.post('/api/routes',{
                         'municipio': this.editedItem.municipio,
                         'status': this.editedItem.status,
@@ -450,9 +467,8 @@
                         })
                         console.log(response.data);
                     }
-
-
-                this.close();
+                    this.close();
+                 }
             },
             async saveDeliverer () {
                 //comprobamos que el repartidor seleccionado no está asigando a la ruta que elegimos
@@ -464,17 +480,18 @@
 
                 }
                 if (this.select.nombre == this.nameDeliverer) {
-                        //confirm('Este repartidor ya esta registrado')
-                        Swal.fire({
-                        title: 'Alerta',
-                        text: "Este repartidor ya esta registrado!",
-                        type: 'error',
-                        confirmButtonColor: '#d33',
-                        confirmButtonText: 'Entendido'
-                        });
-                        this.nameDeliverer=''
-                    }
-                    else{
+
+                    Swal.fire({
+                    title: 'Alerta',
+                    text: "Este repartidor ya esta registrado!",
+                    type: 'error',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Entendido'
+                    });
+                    this.nameDeliverer=''
+                    this.select = [0]
+
+                    }else{
                         //Enviamos la lista de los nuevos repartidores para asignarlos a la ruta elegida
                         const response = await axios.post('/api/createdeliverer_route',{
                         'id':this.editedItem.id,
@@ -495,6 +512,7 @@
                         }
                         this.dialogAddDeliverer=false
                         this.nameDeliverer=''
+                        this.editedItem.municipio = ''
                     }
                     this.nameDeliverer=''
 
