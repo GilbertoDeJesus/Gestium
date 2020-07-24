@@ -94,51 +94,14 @@
                                                         cols="12"
                                                         md="12"
                                                         sm="12">
-                                                            <p style="text-align: center; color:#ffffff; margin-bottom: -5px;">
+                                                            <p style="text-align: center; color:#ffffff; margin-bottom: 5px;">
                                                                 <i class="material-icons" style="font-size:85px;">shopping_cart</i>
                                                             </p>
-                                                            <p style="text-align: center; color:#ffffff; font-size:24px; margin-bottom: -10px;"><strong>{{ formTitle }}</strong></p>
+                                                            <p style="text-align: center; color:#ffffff; font-size:20px; margin-bottom: -10px;"><v-icon color="#fff">mdi-calendar</v-icon>&nbsp;{{fecha | formatDateTimeShort | formatUpperCase}}</p>
                                                         </v-col>
                                                     </v-container>
                                                     <v-container style="padding:1.5rem;">
                                                     <v-row justify="center">
-                                                        <v-col
-                                                        cols="12"
-                                                        md="12"
-                                                        sm="12"
-                                                        >
-                                                        <v-dialog
-                                                            ref="dialog"
-                                                            v-model="menu"
-                                                            :return-value.sync="date1"
-                                                            persistent
-                                                            width="290px"
-                                                        >
-                                                            <template v-slot:activator="{ on }">
-                                                            <v-text-field
-                                                                v-model="editedItem.fecha_salida"
-                                                                hide-details
-                                                                rounded
-                                                                filled
-                                                                dense
-                                                                clearable
-                                                                label="Fecha"
-                                                                prepend-icon="event"
-                                                                readonly
-                                                                v-on="on"
-                                                            ></v-text-field>
-                                                            </template>
-                                                            <v-date-picker
-                                                            :rules="[required('fecha de salida')]"
-                                                            v-model="editedItem.fecha_salida"
-                                                            locale="mx"
-                                                            format="YYYY-MM-dd"
-                                                            required
-                                                            color="#fd2d21"
-                                                            @input="menu = false"
-                                                            ></v-date-picker>
-                                                        </v-dialog>
-                                                        </v-col>
 
                                                         <v-col
                                                         cols="12"
@@ -217,14 +180,13 @@
                                                         >
                                                         <v-textarea
                                                         v-model="editedItem.observacion"
-                                                            hide-details
+
                                                             clearable
                                                             rounded
                                                             filled
-                                                            dense
+
                                                             label="Descripcion"
                                                             type="text"
-                                                            rows="1"
                                                             prepend-icon="mdi-comment-text"
                                                             hint="*Opcional"
                                                             persistent-hint
@@ -313,7 +275,7 @@
                                                         md="6"
                                                         sm="6"
                                                         >
-                                                        <v-btn dark class="ma-2" outlined color="#ff5300"   @click="add">Agregar</v-btn>
+                                                        <v-btn dark class="ma-2" outlined color="#ff5300"   @click="add" :disabled="!valid">Agregar</v-btn>
                                                         </v-col>
                                                     </v-row>
                                                     <v-divider
@@ -369,7 +331,7 @@
                                                                         text
                                                                         @click="modifyQuantity(item)"
                                                                         >
-                                                                        Guardar
+                                                                        Aceptar
                                                                         </v-btn>
                                                                     </v-card-actions>
                                                                     </v-card>
@@ -411,7 +373,7 @@
                                                         md="12"
                                                         sm="12"
                                                         >
-                                                            <v-btn dark class="ma-2" x-large block color="#ff5300" :disabled="!valid"  @click="save">Guardar</v-btn>
+                                                            <v-btn dark class="ma-2" x-large block color="#ff5300" :disabled="!valid"  @click="save">Aceptar</v-btn>
                                                         </v-col>
                                                     </v-row>
                                                     </v-col>
@@ -570,6 +532,9 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'Nueva Venta' : 'Editar registro'
             },
+            fecha () {
+                return this.date1
+            }
         },
 
         watch: {
@@ -607,7 +572,15 @@
 
                 }
                 if (this.select_product.nombre == this.producto) {
-
+                    if ( this.select_product.nombre == "" || this.select_product.nombre == undefined || this.select_product.nombre == null && this.editedItem.cantidad >=0)  {
+                        Swal.fire({
+                        title: 'Alerta',
+                        text: "Seleccione un producto e ingrese una cantidad",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                    }else{
                     Swal.fire({
                         title: 'Alerta',
                         text: "Este producto ya esta en la lista!",
@@ -615,6 +588,7 @@
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'Entendido'
                         });
+                    }
                     this.producto=''
                     this.stock=''
                     this.precio=''
@@ -622,25 +596,48 @@
 
                 else{
 
-                    this.salidaProducto={
-                    'id':this.select_product.id,
-                    'nombre':this.select_product.nombre,
-                    'cantidad':this.editedItem.cantidad,
-                    'precio_venta':this.select_product.precio_venta,
-                    'pw_id':this.select_product.pw_id
-                    }
-                    //Calculamos el total de la venta según los datos guardados por el usaurio
-                    //y alamacenados en "salidaProducto"
-                    this.totalPrecio=this.totalPrecio+(this.select_product.precio_venta * this.editedItem.cantidad )
+                    if (this.editedItem.cantidad <= 0 || this.editedItem.cantidad == undefined || this.editedItem.cantidad == null || this.editedItem.cantidad == '' ) {
 
-                    this.productosS.push(this.salidaProducto);
-                    console.log(this.productosS)
-                    this.select_product=[0];
-                    this.select_product.id='';
-                    this.editedItem.cantidad='';
-                    this.producto=''
-                    this.stock=''
-                    this.precio=''
+                        if ( this.select_product.nombre == "" || this.select_product.nombre == undefined || this.select_product.nombre == null )  {
+                            Swal.fire({
+                            title: 'Alerta',
+                            text: "No ha seleccionado ningun producto!",
+                            type: 'warning',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                        }else{
+                            Swal.fire({
+                            title: 'Cantidad invalida',
+                            text: "Ingrese un numero mayor a 0!",
+                            type: 'warning',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                            this.editedItem.cantidad = ''
+                        }
+                        this.editedItem.cantidad = ''
+                    }else{
+                        this.salidaProducto={
+                        'id':this.select_product.id,
+                        'nombre':this.select_product.nombre,
+                        'cantidad':this.editedItem.cantidad,
+                        'precio_venta':this.select_product.precio_venta,
+                        'pw_id':this.select_product.pw_id
+                        }
+                        //Calculamos el total de la venta según los datos guardados por el usaurio
+                        //y alamacenados en "salidaProducto"
+                        this.totalPrecio=this.totalPrecio+(this.select_product.precio_venta * this.editedItem.cantidad )
+
+                        this.productosS.push(this.salidaProducto);
+                        console.log(this.productosS)
+                        this.select_product=[0];
+                        this.select_product.id='';
+                        this.editedItem.cantidad='';
+                        this.producto=''
+                        this.stock=''
+                        this.precio=''
+                    }
 
                 }
                 //Limpiamos nuestros elementos del formulario
@@ -695,14 +692,16 @@
                 this.dialogEditProduct= false
             },
             close () {
-                this.$refs.form.reset()
+                //this.$refs.form.reset()
                 this.dialog = false
                 this.productosS=[]
+                this.select_deliverer = [0]
+                this.select_route = [0]
+                this.select_customer = [0]
                 this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
                 this.totalPrecio= 0
-                this.productosS=[]
                 })
                 if (this.edit_mode == true) {
                     this.edit_mode = false
@@ -710,8 +709,17 @@
             },
             async save () {
                 //Mandamos los datos necesarios al controlador para llenar la tabla ventas
+                if (this.productosS.length == 0) {
+                    Swal.fire({
+                        title: 'Alerta',
+                        text: "No ha agregado ningun producto!",
+                        type: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Entendido'
+                        });
+                }else{
                     const response = await axios.post('/api/sales',{
-                        'fecha_salida': this.editedItem.fecha_salida,
+                        'fecha_salida': this.date1,
                         'observacion': this.editedItem.observacion,
                         'products':this.productosS,
                         'deliverer_id':this.select_deliverer.id,
@@ -730,8 +738,8 @@
 
                      }
                      this.getStock();
-                this.close();
-
+                    this.close();
+                }
 
             },
             async deleteItem (item) {
