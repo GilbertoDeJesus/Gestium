@@ -488,7 +488,7 @@
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
                     { text: 'Repartidor', value: 'nombre' },
                     { text: 'Fecha de salida', value: 'created_at'},
-                    { text: 'Cantidad de productos', value: 'sum'},
+                    { text: 'Total productos restantes', value: 'sum'},
                     { text: 'Lista de productos', value: 'actions', sortable: false },
                 ],
                 //Se asignan los títulos de las columnas de la tabla que se muestra en el dialogo
@@ -496,7 +496,7 @@
                  //así como su valor correspondiente.
                 hedaers_productList: [ /*align: 'start', sortable: false,*/
                     { text: 'Producto', value: 'nombre' },
-                    { text: 'Cantidad', value: 'cantidad'},
+                    { text: 'Restantes', value: 'cantidad'},
                     { text: 'Fecha de salida', value: 'fecha_salida'},
                 ],
                 //Se asignan los títulos de las columnas de la tabla que se muestra en el dialogo
