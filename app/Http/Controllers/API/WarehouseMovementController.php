@@ -151,19 +151,47 @@ class WarehouseMovementController extends Controller
         $fechaf = $request->input('fechaf');
         $id = $request->input('id');
         if(!empty($fechai) && !empty($fechaf) && !empty($id)){
-          $warehousemovements = WarehouseMovement::where("created_at",">=",$fechai)
+          $warehousemovements = ProductWarehouseMovement::join('products',
+          'product_warehouse_movement.product_id', '=', 'products.id')
+          ->join('warehouse_movements', 'product_warehouse_movement.warehouse_movement_id',
+          '=','warehouse_movements.id')
+          ->select('products.id', 'products.nombre',  'products.precio_venta',
+        'product_warehouse_movement.cantidad', 'product_warehouse_movement.id as pw_id',
+        'warehouse_movements.fecha_salida')
+          ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
           ->where('deliverer_id', "=", $id)
           ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
-          $warehousemovements = WarehouseMovement::where("created_at",">=",$fechai)
+          $warehousemovements = ProductWarehouseMovement::join('products',
+          'product_warehouse_movement.product_id', '=', 'products.id')
+          ->join('warehouse_movements', 'product_warehouse_movement.warehouse_movement_id',
+          '=','warehouse_movements.id')
+          ->select('products.id', 'products.nombre',  'products.precio_venta',
+        'product_warehouse_movement.cantidad', 'product_warehouse_movement.tipoMovimiento',
+        'warehouse_movements.fecha_salida')
+          ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
           ->get();
         }elseif(!empty($id)){
-          $swarehousemovements = WarehouseMovement::where("deliverer_id","=",$id)
-          ->get();
+          $warehousemovements = ProductWarehouseMovement::join('products',
+          'product_warehouse_movement.product_id', '=', 'products.id')
+          ->join('warehouse_movements', 'product_warehouse_movement.warehouse_movement_id',
+          '=','warehouse_movements.id')
+          ->select('products.id', 'products.nombre',  'products.precio_venta',
+        'product_warehouse_movement.cantidad', 'product_warehouse_movement.tipoMovimiento',
+        'warehouse_movements.fecha_salida')
+          ->where("deliverer_id","=",$id)
+          ->get(); 
         }else{
-          $warehousemovements =WarehouseMovement::all();
+          $warehousemovements =ProductWarehouseMovement::join('products',
+          'product_warehouse_movement.product_id', '=', 'products.id')
+          ->join('warehouse_movements', 'product_warehouse_movement.warehouse_movement_id',
+          '=','warehouse_movements.id')
+          ->select('products.id', 'products.nombre',  'products.precio_venta',
+        'product_warehouse_movement.cantidad', 'product_warehouse_movement.tipoMovimiento',
+        'warehouse_movements.fecha_salida')
+        ->get();
         }
       $pdf = PDF::loadView('warehousemovements', compact('warehousemovements'));
       return $pdf->setPaper('a4', 'landscape')->stream('warehousemovements.pdf');

@@ -22,6 +22,9 @@ $fecha = date('Y-m-d');
                 <th scope="col">Observación</th>
                 <th scope="col">Fecha de Entrada</th>
                 <th scope="col">Proveedor</th>
+                <th scope="col">Nombre del Producto</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio de Compra</th>
               </tr>
             </thead>
             <tbody>
@@ -31,6 +34,9 @@ $fecha = date('Y-m-d');
                   <td>{{ $entry->observacion }}</td>
                   <td>{{ $entry->fecha_entrada }}</td>
                   <td>{{ $entry->provider_id }}</td>
+                  <td>{{ $entry->nombre }}</td>
+                  <td>{{ $entry->cantidad }}</td>
+                  <td>{{ $entry->precio_compra }}</td>
               </tr>
               @endforeach
             </tbody>

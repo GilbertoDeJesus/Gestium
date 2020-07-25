@@ -136,7 +136,7 @@
 
             <div class="tab-pane fade" id="list-entradas" role="tabpanel" aria-labelledby="list-entradas-list">
               <h1 style="color: #00000099;">REPORTE DE ENTRADAS</h1>
-              <form method="post" action="pdfalmacen" target="somewhere_new">
+              <form method="post" action="pdfentradas" target="somewhere_new">
                 {{@csrf_field()}}
                 <div class="container">
                   <div class="row">
@@ -174,7 +174,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
-                  <label for="name">BUSCAR POR ID DEL REPARTIDOR</label>
+                  <label for="name">BUSCAR POR REPARTIDOR</label>
                   <select name="id" id="input" class="form-control">
                     <option value="" selected>-- Escoja un Proveedor--</option>
                     @foreach ($deliverers as $item)

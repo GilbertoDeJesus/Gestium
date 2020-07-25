@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Entry;
+use App\EntryProduct;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -41,19 +42,47 @@ class EntryController extends Controller
         $fechaf = $request->input('fechaf');
         $id = $request->input('id');
         if(!empty($fechai) && !empty($fechaf) && !empty($id)){
-          $entries = Entry::where("created_at",">=",$fechai)
+          $entries = EntryProduct::join('products',
+          'entry_product.product_id', '=', 'products.id')
+          ->join('entries', 'entry_product.entry_id',
+          '=','entries.id')
+          ->select('products.nombre',
+        'entry_product.cantidad', 'entries.id', 'entry_product.precio_compra',
+        'products.provider_id', 'entries.observacion', 'entries.fecha_entrada')
+          ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
           ->where('provider_id', "=", $id)
           ->get();    
         }elseif(!empty($fechai) && !empty($fechaf)){
-          $entries = Entry::where("created_at",">=",$fechai)
+          $entries = EntryProduct::join('products',
+          'entry_product.product_id', '=', 'products.id')
+          ->join('entries', 'entry_product.entry_id',
+          '=','entries.id')
+          ->select('products.nombre',
+        'entry_product.cantidad', 'entries.id', 'entry_product.precio_compra',
+        'products.provider_id', 'entries.observacion', 'entries.fecha_entrada')
+          ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
           ->get();    
         }elseif(!empty($id)){
-          $entries = Entry::where("provider_id","=",$id)
+          $entries = EntryProduct::join('products',
+          'entry_product.product_id', '=', 'products.id')
+          ->join('entries', 'entry_product.entry_id',
+          '=','entries.id')
+          ->select('products.nombre',
+        'entry_product.cantidad', 'entries.id', 'entry_product.precio_compra',
+        'products.provider_id', 'entries.observacion', 'entries.fecha_entrada')
+          ->where("provider_id","=",$id)
           ->get(); 
         }else{
-          $entries =Entry::all();
+          $entries =EntryProduct::join('products',
+          'entry_product.product_id', '=', 'products.id')
+          ->join('entries', 'entry_product.entry_id',
+          '=','entries.id')
+          ->select('products.nombre',
+        'entry_product.cantidad', 'entries.id', 'entry_product.precio_compra',
+        'products.provider_id', 'entries.observacion', 'entries.fecha_entrada')
+        ->get();
         }
         $pdf = PDF::loadView('entries', compact('entries'));
         return $pdf->setPaper('a4', 'landscape')->stream('entries.pdf');
