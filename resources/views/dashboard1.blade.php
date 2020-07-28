@@ -121,7 +121,7 @@
                   <label for="name">FECHA FINAL</label>
                   <input type="date" id="picker" name="fechaf" class="form-control">
                   <label for="name">BUSCAR POR PROVEEDOR</label>
-                  <select name="" id="input" class="form-control">
+                  <select name="idp" id="input" class="form-control">
                     <option value="" selected>-- Escoja un Proveedor--</option>
                     @foreach ($provider as $item)
                       <option value="{{$item['id']}}">{{ $item['nombre']}}</option>

@@ -195,6 +195,7 @@ class ProductController extends Controller
         $idp = $request->input('idp');
         $nombre = $request->input('id');
         $meta = $request->input('meta');
+        
         if(!empty($fechai) && !empty($fechaf) && !empty($nombre) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
