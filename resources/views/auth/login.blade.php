@@ -32,7 +32,7 @@
                     <i class="material-icons">email</i>
                   </span>
                 </div>
-                <input type="email" name="email" class="form-control" placeholder="{{ __('Email...') }}" value="{{ old('email', 'admin@gmail.com') }}" required>
+                <input type="email" name="email" class="form-control" placeholder="{{ __('Email...') }}" required>
               </div>
               @if ($errors->has('email'))
                 <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
@@ -47,7 +47,7 @@
                     <i class="material-icons">lock_outline</i>
                   </span>
                 </div>
-                <input type="password" name="password" id="password" class="form-control" placeholder="{{ __('Password...') }}" value="{{ !$errors->has('password') ? "secret" : "" }}" required>
+                <input type="password" name="password" id="password" class="form-control" placeholder="{{ __('Password...') }}" required>
               </div>
               @if ($errors->has('password'))
                 <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">
@@ -56,12 +56,12 @@
               @endif
             </div>
             <div class="form-check mr-auto ml-3 mt-3">
-              <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember me') }}
+               <!--<label class="form-check-label">
+               <input class="form-check-input" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember me') }}
                 <span class="form-check-sign">
                   <span class="check"></span>
                 </span>
-              </label>
+              </label>-->
             </div>
           </div>
           <div class="card-footer justify-content-center">
