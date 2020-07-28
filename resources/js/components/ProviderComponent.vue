@@ -147,7 +147,7 @@
                                                         v-if="!edit_mode"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(8)]"
+                                                        :rules="[required('telefono'), minimum_length(8)]"
                                                         v-model="editedItem.telefono"
                                                         :counter="15"
                                                         type="text"

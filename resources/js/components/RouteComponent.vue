@@ -231,7 +231,7 @@
                                                                     <v-text-field
                                                                         v-model="searchD"
                                                                         prepend-inner-icon="search"
-                                                                        label="Buscar productos"
+                                                                        label="Buscar repartidores"
                                                                         hide-details
                                                                         filled
                                                                         rounded

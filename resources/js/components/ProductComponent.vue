@@ -758,7 +758,7 @@
                 //this.$refs.form.reset()
                 this.dialogUnits=false
                 this.tipo=''
-                //this.editUnit.tipo=''
+                this.editUnit.tipo=''
             },
             async save () {
                 //Comprobacion para saber si estamos editando o creando un nuevo producto
@@ -872,6 +872,7 @@
                             })
                         }
                         this.dialogUnits=false
+                        this.editUnit.tipo=''
                     }
 
 

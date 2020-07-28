@@ -488,7 +488,7 @@
                     { text: 'Clave', value: 'id' }, /*align: 'start', sortable: false,*/
                     { text: 'Repartidor', value: 'nombre' },
                     { text: 'Fecha de salida', value: 'created_at'},
-                    { text: 'Total productos restantes', value: 'sum'},
+                    { text: 'Total de productos restantes', value: 'sum'},
                     { text: 'Lista de productos', value: 'actions', sortable: false },
                 ],
                 //Se asignan los títulos de las columnas de la tabla que se muestra en el dialogo
@@ -531,7 +531,7 @@
                 },
                  //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
-                    return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
+                    return v => v && v.length > 0 || `Debes ingresar una ${propertyName}`
                 },
                  //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
@@ -796,7 +796,7 @@
                         this.getResults();
                         Toast.fire({
                             icon: 'success',
-                            title: '¡Salida registrado!'
+                            title: '¡Salida registrada!'
                         })
                         console.log(response.data);
 

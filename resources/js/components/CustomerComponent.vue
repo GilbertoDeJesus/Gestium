@@ -195,7 +195,6 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                    :rules="[email_form()]"
                                                         v-model="editedItem.email"
                                                         label="E-mail"
                                                         prepend-icon="email"
@@ -244,7 +243,7 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('dirección'), minimum_length(4)]"
+                                                        :rules="[required_a('dirección'), minimum_length(4)]"
                                                         v-model="editedItem.direccion"
                                                         :counter="45"
                                                         label="Dirección"
@@ -394,6 +393,9 @@
                 //Verificamos que se ingrese el dato solicitado y no se deje vacío el campo
                 required( propertyName ) {
                     return v => v && v.length > 0 || `Debes ingresar un ${propertyName}`
+                },
+                required_a( propertyName ) {
+                    return v => v && v.length > 0 || `Debes ingresar una ${propertyName}`
                 },
                 //Se verifica que la cantidad de caracteres ingresados no sea menor a lo que se especificado
                 minimum_length( length ) {
