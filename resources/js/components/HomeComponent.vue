@@ -197,6 +197,7 @@
             return {
                 dialog: false,
                 search: '',
+                correo: '',
                 loading: true,
                 valid: false,
                 edit_mode: false,
@@ -276,6 +277,12 @@
                 }
             },
             async save () {
+                for (let index = 0; index < this.desserts.length; index++) {
+                    if (this.desserts[index].email == this.editedItem.email) {
+                        this.correo = this.desserts[index].email
+                    }
+
+                }
                 //Se verifica si se esta en modo de edicion o creacion
                 if (this.editedIndex > -1) {
                     const response = await axios.put(`api/users/${this.editedItem.id}`, this.editedItem)
@@ -296,24 +303,38 @@
                 } else {
                     //Si se encuentra en modo de creacion mediante la funcion post se indica la ruta del controlador a utilizar
                     //Y se pasan los datos que ingreso el usuario
-                    const response = await axios.post('/api/users',{
-                        'name': this.editedItem.name,
-                        'email' : this.editedItem.email,
-                        'password': this.editedItem.password
-                    }).catch(error => console.log("Error: " + error));//Si hay algun error al hacer el registro se muestra cual es en la consola
 
-                    if (response) {
-                        //Si no se presenta ningun error al hacer el registro se muestra un mensaje de operacion exitosa
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Usuario registrado!'
-                        })
-                        console.log(response.data);
+                    if (this.editedItem.email == this.correo) {
+                         Swal.fire({
+                            title: 'Alerta',
+                            text: "Este correo ya esta registrado!",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                            this.editedItem.email = ''
+                    }else{
+                        const response = await axios.post('/api/users',{
+                            'name': this.editedItem.name,
+                            'email' : this.editedItem.email,
+                            'password': this.editedItem.password
+                        }).catch(error => console.log("Error: " + error));//Si hay algun error al hacer el registro se muestra cual es en la consola
+
+                        if (response) {
+                            //Si no se presenta ningun error al hacer el registro se muestra un mensaje de operacion exitosa
+                            this.getResults();
+                            Toast.fire({
+                                icon: 'success',
+                                title: '¡Usuario registrado!'
+                            })
+                            console.log(response.data);
+                        }
+                        this.close();//Cierra el formulario
                     }
+
                 }
 
-                this.close();//Cierra el formulario
+
             },
             async deleteItem (item) {
                 this.editedIndex = this.desserts.indexOf(item)//Para eliminar un objeto se indica la posicion que este ocupa en el arreglo
