@@ -37,7 +37,7 @@
         "vuetify": "^2.2.28",
         "vuetify-loader": "^1.4.3"
     },
-    "name": "gestium-e",
+    "name": "e-gestium-e",
     "description": "a really cool app",
     "version": "1.0.0",
     "engines": {
