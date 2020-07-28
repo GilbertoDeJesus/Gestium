@@ -8,15 +8,15 @@
                         cols="12"
                         md="12"
                         sm="12">
-                            <p style="text-align: center; font-size:30px; font-weight:700; margin-bottom: -5px;"><strong>Ventas</strong></p>
+                            <p style="text-align: center; font-size:30px; font-weight:700; margin-bottom: 5px;"><strong>Ventas realizadas</strong></p>
                          </v-col>
                     </v-container>
-                    <v-col cols="10" sm="12" md="10">
+                    <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="sales"
                             sort-by="calories"
-                            class="elevation-3"
+                            class="elevation-4"
                             :search="search"
                             :loading="loading" loading-text="Estamos cargando tu información"
                             :items-per-page="6"
@@ -24,7 +24,12 @@
                                 'items-per-page-options': [7, 10, 20]
                             }">
                             <template v-slot:item.created_at="{ item }">
-                               {{item.created_at | formatDateTime | formatUpperCase}}
+                                <v-chip class="ma-2">
+                                    <v-avatar left color="#ff4500">
+                                        <v-icon color="#ffffff" small>mdi-calendar</v-icon>
+                                    </v-avatar>
+                                    {{item.created_at | formatDateTime | formatUpperCase}}
+                                </v-chip>
                             </template>
                             <template v-slot:item.fecha_salida="{ item }">
                                {{item.fecha_salida | formatDateTimeShort | formatUpperCase}}
@@ -36,8 +41,9 @@
                                     </v-avatar>{{item.customer.nombre | formatUpperCase}}
                                 </v-chip>
                             </template>
+
                             <template v-slot:item.monto="{item}">
-                                <v-chip color="orange" dark>
+                                <v-chip color="green" dark>
                                     <v-avatar left color="green">
                                         <v-icon color="white">monetization_on</v-icon>
                                     </v-avatar>{{item.monto}}
