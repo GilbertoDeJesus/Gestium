@@ -52,7 +52,7 @@ class EntryController extends Controller
           ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
           ->where('provider_id', "=", $id)
-          ->get();    
+          ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
           $entries = EntryProduct::join('products',
           'entry_product.product_id', '=', 'products.id')
@@ -63,7 +63,7 @@ class EntryController extends Controller
         'products.provider_id', 'entries.observacion', 'entries.fecha_entrada')
           ->where("created_at",">=",$fechai)
           ->where('created_at',"<=", $fechaf)
-          ->get();    
+          ->get();
         }elseif(!empty($id)){
           $entries = EntryProduct::join('products',
           'entry_product.product_id', '=', 'products.id')
@@ -73,7 +73,7 @@ class EntryController extends Controller
         'entry_product.cantidad', 'entries.id', 'entry_product.precio_compra',
         'products.provider_id', 'entries.observacion', 'entries.fecha_entrada')
           ->where("provider_id","=",$id)
-          ->get(); 
+          ->get();
         }else{
           $entries =EntryProduct::join('products',
           'entry_product.product_id', '=', 'products.id')
