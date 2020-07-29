@@ -216,8 +216,6 @@
                                                         clearable
                                                         label="Telefono"
                                                         prepend-icon="phone"
-                                                        hint="*Solo si está seguro, min. 8 caracteres"
-                                                        persistent-hint
                                                     ></v-text-field>
                                                     </v-col>
 
