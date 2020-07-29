@@ -689,8 +689,31 @@
             },
             //Eliminamos de la tabla y de la lista de productos para realizar la venta el producto seleccionado
             deleteItemProducts(item) {
+
                 const index = this.productosS.indexOf(item)
-                confirm('¿Estas seguro de eliminar este producto de la lista?') && this.productosS.splice(index, 1)
+
+                Swal.fire({
+                    title: '¿Esta seguro de eliminar este producto de la lista?',
+                    text: "Esta acción no es reversible!",
+                    type: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminalo!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.value) {
+                        this.productosS.splice(index, 1)
+                            Swal.fire(
+                            'Eliminado!',
+                            'El producto ha sido eliminado de la lista.',
+                            'success'
+                            )
+                            console.log(this.productosS)
+                    } else {
+                        this.productosS = Object.assign({}, this.defaultItem)
+                    }
+                });
             },
             //Cerramos el dialogo para cambiar la cantidad de producto a vender
             cancelarEditar(){

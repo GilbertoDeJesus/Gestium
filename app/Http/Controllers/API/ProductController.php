@@ -49,7 +49,7 @@ class ProductController extends Controller
         $entry= Entry::create([
             'provider_id' => $request['provider_id'],
             'observacion' => $request['descripcion'],
-            'fecha_entrada' =>date("d-m-y")
+            'fecha_entrada' =>date("Y-m-d")
         ]);
 
         //Llenamos la tabla formada por entradas y productos
@@ -195,7 +195,7 @@ class ProductController extends Controller
         $idp = $request->input('idp');
         $nombre = $request->input('id');
         $meta = $request->input('meta');
-        
+
         if(!empty($fechai) && !empty($fechaf) && !empty($nombre) && !empty($meta)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)

@@ -179,7 +179,7 @@
                                                     sm="4"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('nombre'), minimum_length(4)]"
+                                                        :rules="[required('nombre'), minimum_length(3)]"
                                                         v-model="editedItem.nombre"
                                                         :counter="25"
                                                         label="Nombre"
@@ -250,8 +250,6 @@
                                                         clearable
                                                         label="Telefono"
                                                         prepend-icon="phone"
-                                                        hint="*Solo si está seguro, min. 8 caracteres"
-                                                        persistent-hint
                                                     ></v-text-field>
                                                     </v-col>
 

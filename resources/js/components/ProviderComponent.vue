@@ -134,9 +134,7 @@
                                                         type="text"
                                                         clearable
                                                         label="Telefono"
-                                                        hint="*Solo si está seguro, min. 8 caracteres"
-                                                        persistent-hint
-                                                         prepend-icon="phone"
+                                                        prepend-icon="phone"
                                                     ></v-text-field>
                                                     </v-col>
 
