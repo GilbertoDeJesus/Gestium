@@ -195,7 +195,7 @@
                                                     sm="4"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('Apellido paterno'), minimum_length(4)]"
+                                                        :rules="[required('Apellido paterno'), minimum_length(3)]"
                                                         v-model="editedItem.aPaterno"
                                                         :counter="15"
                                                         label="Apellido paterno"
@@ -211,7 +211,7 @@
                                                     sm="4"
                                                     >
                                                     <v-text-field
-                                                        :rules="[required('Apellido materno'), minimum_length(4)]"
+                                                        :rules="[required('Apellido materno'), minimum_length(3)]"
                                                         v-model="editedItem.aMaterno"
                                                         :counter="15"
                                                         label="Apellido materno"
@@ -227,7 +227,6 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                    :rules="[required('email'), email_form()]"
                                                         v-model="editedItem.email"
                                                         label="E-mail"
                                                         type="text"
@@ -346,7 +345,9 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn outlined color="#ff5300" @click="close">Cancelar</v-btn>
+                                    <v-spacer></v-spacer>
                                     <v-btn dark class="ma-2" color="#ff5300" :disabled="!valid" @click="save">Guardar</v-btn>
+                                    <v-spacer></v-spacer>
                                 </v-card-actions>
                                 </v-card>
                                 </v-dialog>

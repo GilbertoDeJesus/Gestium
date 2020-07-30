@@ -112,7 +112,6 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
-                                                    :rules="[required('email'), email_form()]"
                                                         v-model="editedItem.email"
                                                         label="E-mail"
                                                         type="text"
