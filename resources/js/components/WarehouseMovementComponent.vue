@@ -11,7 +11,7 @@
                             <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;"><strong>Listado de salidas de productos registradas</strong></p>
                          </v-col>
                     </v-container>
-                    <v-col cols="10" sm="12" md="10">
+                    <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="salidas"
@@ -119,22 +119,6 @@
                                                         >
                                                         <h4 style="line-height: 3.5em; font-size: 1.025rem;"><v-icon>mdi-calendar</v-icon>&nbsp;<b>Fecha:</b>&nbsp;&nbsp;{{fecha}}</h4>
                                                         </v-col>
-                                                       <!--<v-col
-                                                        cols="12"
-                                                        md="12"
-                                                        sm="6"
-                                                        >
-                                                        <v-select
-                                                            v-model="select_tipoM"
-                                                            :items="tipoMovimiento"
-                                                            item-text="nombre"
-                                                            item-value="id"
-                                                            label="Seleccione el tipo de movimiento"
-                                                            prepend-icon="local_shipping"
-                                                            persistent-hint
-                                                            return-object
-                                                            ></v-select>
-                                                        </v-col>-->
 
                                                         <v-col
                                                         cols="12"

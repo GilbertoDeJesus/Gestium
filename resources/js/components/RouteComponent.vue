@@ -11,7 +11,7 @@
                             <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;"><strong>Listado de rutas activas</strong></p>
                          </v-col>
                     </v-container>
-                    <v-col cols="10" sm="12" md="10">
+                    <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"

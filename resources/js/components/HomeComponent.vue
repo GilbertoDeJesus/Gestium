@@ -11,7 +11,7 @@
                             <p style="text-align: center; font-size:25px; font-weight:700; margin-bottom: -10px;"><strong>Listado de Usuarios registrados</strong></p>
                          </v-col>
                     </v-container>
-                    <v-col cols="10" sm="12" md="10">
+                    <v-col cols="12" sm="12" md="11">
                         <v-data-table
                             :headers="headers"
                             :items="desserts"
@@ -33,6 +33,13 @@
                             </template>
                             <template v-slot:item.created_at="{ item }">
                                 {{item.created_at | formatDateTime | formatUpperCase}}
+                            </template>
+                            <template v-slot:item.email="{ item }">
+                               <v-chip class="ma-1" color="teal" dark>
+                                    <v-avatar left>
+                                        <v-icon color="white">mdi-email</v-icon>
+                                    </v-avatar>{{item.email}}
+                                </v-chip>
                             </template>
                             <template v-slot:top>
                             <v-toolbar flat color="white">

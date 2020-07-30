@@ -11,7 +11,7 @@
                             <p style="text-align: center; font-size:28px; font-weight:700; margin-bottom: -10px;"><strong>Listado de proveedores activos</strong></p>
                          </v-col>
                     </v-container>
-                    <v-col cols="10" sm="12" md="10">
+                    <v-col cols="12" sm="12" md="12">
                         <v-data-table
                             :headers="headers"
                             :items="providers"
@@ -112,6 +112,7 @@
                                                     sm="6"
                                                     >
                                                     <v-text-field
+                                                        :rules="[required('email'), email_form()]"
                                                         v-model="editedItem.email"
                                                         label="E-mail"
                                                         type="text"
@@ -214,6 +215,7 @@
                 loading: true,
                 valid: false,
                 edit_mode: false,
+                correo: '',
                 //Se asignan los títulos de las columnas de la tabla principal,
                  //así como su valor correspondiente.
                 headers: [
@@ -295,6 +297,12 @@
                 }
             },
             async save () {
+                for (let index = 0; index < this.providers.length; index++) {
+                    if (this.providers[index].email == this.editedItem.email) {
+                        this.correo = this.providers[index].email
+                    }
+
+                }
                 //Comprobamos si estamos agregando o editando un proveedor
                 if (this.editedIndex > -1) {
                     //Cuando se selecciona la opción de guardar se insertar los nuevos
@@ -319,24 +327,34 @@
                     }
                 } else {
                      //Enviamos los datos a nuestro controlador para insertarlo en la bd
-                    const response = await axios.post('/api/providers',{
-                        'nombre': this.editedItem.nombre,
-                        'telefono': this.editedItem.telefono,
-                        'email' : this.editedItem.email,
-                        'status': this.editedItem.status
-                    }).catch(error => console.log("Error: " + error));
+                     if (this.editedItem.email == this.correo) {
+                         Swal.fire({
+                            title: 'Alerta',
+                            text: "Este correo ya esta registrado!",
+                            type: 'error',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Entendido'
+                            });
+                            this.editedItem.email = ''
+                    }else{
+                        const response = await axios.post('/api/providers',{
+                            'nombre': this.editedItem.nombre,
+                            'telefono': this.editedItem.telefono,
+                            'email' : this.editedItem.email,
+                            'status': this.editedItem.status
+                        }).catch(error => console.log("Error: " + error));
 
-                    if (response) {
-                        this.getResults();
-                        Toast.fire({
-                            icon: 'success',
-                            title: '¡Proveedor registrado!'
-                        })
-                        console.log(response.data);
+                        if (response) {
+                            this.getResults();
+                            Toast.fire({
+                                icon: 'success',
+                                title: '¡Proveedor registrado!'
+                            })
+                            console.log(response.data);
+                        }
+                        this.close();
                     }
                 }
-
-                this.close();
             },
             //Eliminamos de la tabla al proveedores seleccionado y cambiamos su "status"
             async deleteItem (item) {
