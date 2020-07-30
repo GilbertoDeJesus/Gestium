@@ -196,19 +196,7 @@ class ProductController extends Controller
         $nombre = $request->input('id');
         $meta = $request->input('meta');
 
-        if(!empty($fechai) && !empty($fechaf) && !empty($nombre) && !empty($meta)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('nombre',"=", $nombre)
-            ->where('meta',"=", $meta)
-            ->get();
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp) && !empty($meta)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('provider_id',"=", $idp)
-            ->where('meta',"=", $meta)
-            ->get();
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($idp)){
+        if(!empty($fechai) && !empty($fechaf) && !empty($idp)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('provider_id',"=", $idp)
@@ -218,24 +206,12 @@ class ProductController extends Controller
             ->where('created_at',"<=", $fechaf)
             ->where('id',"=", $nombre)
             ->get();
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($meta)){
-            $products = Product::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('meta',"=", $meta)
-            ->get();
-        }elseif(!empty($meta) && !empty($idp)){
-            $products = Product::where("meta","=",$meta)
-            ->where('provider_id',"=", $idp)
-            ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
             $products = Product::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->get();
         }elseif(!empty($idp)){
             $products = Product::where("provider_id","=",$idp)
-            ->get();
-        }elseif(!empty($meta)){
-            $products = Product::where("meta","=",$meta)
             ->get();
         }elseif(!empty($nombre)){
             $products = Product::where("id","=",$nombre)

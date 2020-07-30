@@ -99,22 +99,13 @@ class ProviderController extends Controller
         $fechai = $request->input('fechai');
         $fechaf = $request->input('fechaf');
         $id = $request->input('id');
-        $status = $request->input('status');
-        if(!empty($fechai) && !empty($fechaf) && !empty($status)){
-            $providers = Provider::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('status', "=", $status)
-            ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($id)){
+        if(!empty($fechai) && !empty($fechaf) && !empty($id)){
             $providers = Provider::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('id', "=", $id)
             ->get();    
         }elseif(!empty($id)){
             $providers = Provider::where("id","=",$id)
-            ->get(); 
-        }elseif(!empty($status)){
-            $providers = Provider::where("status","=",$status)
             ->get(); 
         }elseif(!empty($fechai) && !empty($fechaf)){
             $providers = Provider::where("created_at",">=",$fechai)

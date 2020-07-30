@@ -117,7 +117,6 @@ class CustomerController extends Controller
         $fechaf = $request->input('fechaf');
         $nombre = $request->input('nombre');
         $id = $request->input('id');
-        $status = $request->input('status');
         if(!empty($fechai) && !empty($fechaf) && !empty($id) && !empty($nombre)){
             $customers = Customer::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
@@ -134,11 +133,6 @@ class CustomerController extends Controller
             ->where('created_at',"<=", $fechaf)
             ->where('nombre', "=", $nombre)
             ->get();    
-        }elseif(!empty($fechai) && !empty($fechaf) && !empty($status)){
-            $customers = Customer::where("created_at",">=",$fechai)
-            ->where('created_at',"<=", $fechaf)
-            ->where('status', "=", $status)
-            ->get();    
         }elseif(!empty($nombre) && !empty($id)){
             $customers = Customer::where("nombre","=",$nombre)
             ->where('route_id',"=", $id)
@@ -148,9 +142,6 @@ class CustomerController extends Controller
             ->get(); 
         }elseif(!empty($nombre)){
             $customers = Customer::where("nombre","=",$nombre)
-            ->get(); 
-        }elseif(!empty($status)){
-            $customers = Customer::where("status","=",$status)
             ->get(); 
         }elseif(!empty($fechai) && !empty($fechaf)){
             $customers = Customer::where("created_at",">=",$fechai)

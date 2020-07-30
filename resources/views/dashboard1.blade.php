@@ -35,12 +35,6 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <label for="name">BUSCAR POR STATUS</label>
-                  <select name="status" id="input" class="form-control">
-                      <option value="" selected>-- Seleccione un status --</option>
-                      <option value="1">Activos</option>
-                      <option [ngValue]="0">Inactivos</option>
-                  </select>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA FINAL</label>
@@ -69,12 +63,6 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <label for="name">BUSCAR POR STATUS</label>
-                  <select name="status" id="input" class="form-control">
-                      <option value="" selected>-- Seleccione un status --</option>
-                      <option value="1">Activos</option>
-                      <option [ngValue]="0">Inactivos</option>
-                  </select>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA FINAL</label>
@@ -110,12 +98,6 @@
                       <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
                     @endforeach
                   </select>
-                  <label for="name">BUSCAR POR META</label>
-                  <select name="meta" id="input" class="form-control">
-                    <option value="" selected>-- Elija una opcion --</option>
-                    <option value="1">Activos</option>
-                    <option [ngValue]="0">Inactivos</option>
-                </select>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA FINAL</label>
@@ -244,12 +226,6 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <label for="name">BUSCAR POR STATUS</label>
-                  <select name="status" id="input" class="form-control">
-                      <option value="" selected>-- Inserte un status --</option>
-                      <option value="1">Activos</option>
-                      <option [ngValue]="0">Inactivos</option>
-                  </select>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA FINAL</label>
@@ -284,12 +260,6 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                  <label for="name">BUSCAR POR STATUS</label>
-                  <select name="status" id="input" class="form-control">
-                      <option value="" selected>-- Inserte un status --</option>
-                      <option value="1">Activos</option>
-                      <option [ngValue]="0">Inactivos</option>
-                  </select>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA FINAL</label>

@@ -142,7 +142,6 @@ class CreditController extends Controller
         $fechai = $request->input('fechai');
         $fechaf = $request->input('fechaf');
         $id = $request->input('id');
-        $status = $request->input('status');
         if(!empty($fechai) && !empty($fechaf) && !empty($id)){
             $credits = Credit::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
@@ -150,9 +149,6 @@ class CreditController extends Controller
             ->get();
         }elseif(!empty($id)){
             $credits = Credit::where("customer_id","=",$id)
-            ->get();
-        }elseif(!empty($status)){
-            $credits = Credit::where("status","==",$status)
             ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
             $credits = Credit::where("created_at",">=",$fechai)
