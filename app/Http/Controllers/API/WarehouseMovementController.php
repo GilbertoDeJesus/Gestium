@@ -158,8 +158,8 @@ class WarehouseMovementController extends Controller
           ->select('products.id', 'products.nombre',  'products.precio_venta',
         'product_warehouse_movement.cantidad', 'product_warehouse_movement.id as pw_id',
         'warehouse_movements.fecha_salida')
-          ->where("created_at",">=",$fechai)
-          ->where('created_at',"<=", $fechaf)
+          ->where("warehouse_movements.fecha_salida",">=",$fechai)
+          ->where('warehouse_movements.fecha_salida',"<=", $fechaf)
           ->where('deliverer_id', "=", $id)
           ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
@@ -170,8 +170,8 @@ class WarehouseMovementController extends Controller
           ->select('products.id', 'products.nombre',  'products.precio_venta',
         'product_warehouse_movement.cantidad', 'product_warehouse_movement.tipoMovimiento',
         'warehouse_movements.fecha_salida')
-          ->where("created_at",">=",$fechai)
-          ->where('created_at',"<=", $fechaf)
+          ->where("warehouse_movements.fecha_salida",">=",$fechai)
+          ->where('warehouse_movements.fecha_salida',"<=", $fechaf)
           ->get();
         }elseif(!empty($id)){
           $warehousemovements = ProductWarehouseMovement::join('products',
