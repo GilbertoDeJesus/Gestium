@@ -158,7 +158,7 @@
                   <input type="date" id="picker" name="fechaf" class="form-control">
                   <label for="name">BUSCAR POR REPARTIDOR</label>
                   <select name="id" id="input" class="form-control">
-                    <option value="" selected>-- Escoja un Proveedor--</option>
+                    <option value="" selected>-- Escoja un Repartidor--</option>
                     @foreach ($deliverers as $item)
                       <option value="{{$item['id']}}">{{ $item['nombre']}}</option>
                     @endforeach
@@ -226,17 +226,18 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                   <label for="name">FECHA INICIAL</label>
                   <input type="date" id="picker" name="fechai" class="form-control">
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                  <label for="name">FECHA FINAL</label>
-                  <input type="date" id="picker" name="fechaf" class="form-control">
                   <label for="name">BUSCAR POR RUTA</label>
                   <select name="id" id="input" class="form-control">
                     <option value="" selected>-- Escoja una Ruta--</option>
                     @foreach ($route as $item)
                       <option value="{{$item['id']}}">{{ $item['municipio']}}</option>
                     @endforeach
-                  </select> 
+                  </select>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <label for="name">FECHA FINAL</label>
+                  <input type="date" id="picker" name="fechaf" class="form-control">
+
                   <label for="name">BUSCAR POR NOMBRE</label>
                   <select name="nombre" id="input" class="form-control">
                     <option value="" selected>-- Escoja un Cliente--</option>

@@ -129,18 +129,18 @@ class DelivererController extends Controller
             $deliverers = Deliverer::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
             ->where('id', "=", $id)
-            ->get();    
+            ->get();
         }elseif(!empty($id)){
             $deliverers = Deliverer::where("id","=",$id)
-            ->get(); 
+            ->get();
         }elseif(!empty($fechai) && !empty($fechaf)){
             $deliverers = Deliverer::where("created_at",">=",$fechai)
             ->where('created_at',"<=", $fechaf)
-            ->get();    
+            ->get();
         }else{
             $deliverers =Deliverer::all();
         }
-        $pdf = PDF::loadView('deliverers', compact('deliverers', 'fechai', 'fechaf', 'id', 'status'));
+        $pdf = PDF::loadView('deliverers', compact('deliverers', 'fechai', 'fechaf', 'id'));
         return $pdf->setPaper('a4', 'landscape')->stream('deliverers.pdf');
     }
 
